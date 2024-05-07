@@ -1,0 +1,551 @@
+# Here you can define all your data sets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://docs.kedro.org/en/stable/data/data_catalog.html
+
+basic_API:
+  type: api.APIDataSet
+  url: https://jsonplaceholder.typicode.com/posts/1
+
+_rss_feed_extract: &rss_ingest
+  type: kedro_workbench.extras.datasets.RSSDataSet.RSSFeedExtract
+
+rss_1_feed_extract: 
+  <<: *rss_ingest
+  url: https://api.msrc.microsoft.com/update-guide/rss
+  collection: "msrc_security_update"
+
+rss_2_feed_extract: 
+  <<: *rss_ingest
+  url: https://support.microsoft.com/en-us/feed/rss/8006984f-11e7-355b-5a81-fb46edef60fa
+  collection: "windows_update"
+
+rss_3_feed_extract: 
+  <<: *rss_ingest
+  url: https://support.microsoft.com/en-us/feed/rss/6ae59d69-36fc-8e4d-23dd-631d98bf74a9
+  collection: "windows_10"
+
+rss_4_feed_extract: 
+  <<: *rss_ingest
+  url: https://support.microsoft.com/en-us/feed/rss/4ec863cc-2ecd-e187-6cb3-b50c6545db92
+  collection: "windows_11"
+
+_rss_intermediate: &rss_intermediate
+  type: kedro_workbench.extras.datasets.RSSDataSet.RSSDocuments
+  mongo_db: "technical_notes_intermediate"
+  credentials: mongo_atlas
+
+rss_1_intermediate:
+  <<: *rss_intermediate
+  mongo_collection: "msrc_security_update"
+
+rss_2_intermediate:
+  <<: *rss_intermediate
+  mongo_collection: "windows_update"
+
+rss_3_intermediate:
+  <<: *rss_intermediate
+  mongo_collection: "windows_10"
+
+rss_4_intermediate:
+  <<: *rss_intermediate
+  mongo_collection: "windows_11"
+
+_rss_augmented: &rss_augmented
+  type: kedro_workbench.extras.datasets.RSSDataSet.RSSDocuments
+  mongo_db: "technical_notes_augmented"
+  credentials: mongo_atlas
+
+rss_1_augmented:
+  <<: *rss_augmented
+  mongo_collection: "msrc_security_update"
+
+rss_2_augmented:
+  <<: *rss_augmented
+  mongo_collection: "windows_update"
+
+rss_3_augmented:
+  <<: *rss_augmented
+  mongo_collection: "windows_10"
+
+rss_4_augmented:
+  <<: *rss_augmented
+  mongo_collection: "windows_11"
+
+_rss_primary: &rss_primary
+  type: kedro_workbench.extras.datasets.LangChainDocs.LangChainDocs
+  mongo_db: "technical_notes_primary"
+  credentials: mongo_atlas
+
+rss_1_primary:
+  <<: *rss_primary
+  mongo_collection: "msrc_security_update"
+
+rss_2_primary:
+  <<: *rss_primary
+  mongo_collection: "windows_update"
+
+rss_3_primary:
+  <<: *rss_primary
+  mongo_collection: "windows_10"
+
+rss_4_primary:
+  <<: *rss_primary
+  mongo_collection: "windows_11"
+
+LlamaIndex_source_json:
+  type: json.JSONDataSet
+  filepath: "abfs://report-data/index_source_main.jsonl"
+  credentials: azure_blob_credentials
+
+partitioned_email_json:
+  type: PartitionedDataSet
+  path: data\01_raw\patchmgmt\cleaned-emails
+  filename_suffix: ".json"
+  dataset: json.JSONDataSet
+
+partitioned_cleaned_emails:
+  type: PartitionedDataSet
+  path: "abfs://cleaned-emails/"
+  dataset:
+    type: pandas.JSONDataSet
+    load_args: {}
+  credentials: azure_blob_credentials
+
+partitioned_cleaned_emails_json:
+  type: PartitionedDataSet
+  path: "abfs://cleaned-emails/"
+  dataset:
+    type: json.JSONDataSet
+  credentials: azure_blob_credentials
+
+incremental_email_json:
+  type: IncrementalDataSet
+  path: data\01_raw\patchmgmt\cleaned-emails
+  filename_suffix: ".json"
+  dataset: json.JSONDataSet
+
+_email_jsons_interm: &email_jsons_interm
+  type: kedro_workbench.extras.datasets.EmailDataSet.EmailDocuments
+  mongo_db: "google_groups_intermediate"
+  credentials: mongo_atlas
+
+email_jsons_interm_1:
+  <<: *email_jsons_interm
+  mongo_collection: "patch_management"
+
+_email_jsons_augmented: &email_jsons_augmented
+  type: kedro_workbench.extras.datasets.EmailDataSet.EmailDocuments
+  mongo_db: "google_groups_augmented"
+  credentials: mongo_atlas
+
+email_jsons_augmented_1:
+  <<: *email_jsons_augmented
+  mongo_collection: "patch_management"
+
+_html_extract: &html_extract
+  type: kedro_workbench.extras.datasets.HTMLDataSet.HTMLExtract
+
+html_1_extract:
+  <<: *html_extract
+  url: https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel
+  collection: "stable_channel_notes"
+
+html_2_extract:
+  <<: *html_extract
+  url: https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-beta-channel
+  collection: "beta_channel_notes"
+
+html_3_extract:
+  <<: *html_extract
+  url: https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-archive-stable-channel
+  collection: "archive_stable_channel_notes"
+
+html_4_extract:
+  <<: *html_extract
+  url: https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-mobile-stable-channel
+  collection: "mobile_stable_channel_notes"
+
+html_5_extract:
+  <<: *html_extract
+  url: https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnotes-security
+  collection: "security_update_notes"
+
+_edge_release_intermediate: &edge_release_intermediate
+  type: kedro_workbench.extras.datasets.HTMLDataSet.HTMLDocuments
+  mongo_db: "edge_releases_intermediate"
+  credentials: mongo_atlas
+
+edge_release_intermediate_1:
+  <<: *edge_release_intermediate
+  mongo_collection: "stable_channel_notes"
+
+edge_release_intermediate_2:
+  <<: *edge_release_intermediate
+  mongo_collection: "beta_channel_notes"
+
+edge_release_intermediate_3:
+  <<: *edge_release_intermediate
+  mongo_collection: "archive_stable_channel_notes"
+
+edge_release_intermediate_4:
+  <<: *edge_release_intermediate
+  mongo_collection: "mobile_stable_channel_notes"
+
+edge_release_intermediate_5:
+  <<: *edge_release_intermediate
+  mongo_collection: "security_update_notes"
+
+_edge_release_augmented: &edge_release_augmented
+  type: kedro_workbench.extras.datasets.HTMLDataSet.HTMLDocuments
+  mongo_db: "edge_releases_augmented"
+  credentials: mongo_atlas
+
+edge_release_augmented_1:
+  <<: *edge_release_augmented
+  mongo_collection: "stable_channel_notes"
+
+edge_release_augmented_2:
+  <<: *edge_release_augmented
+  mongo_collection: "beta_channel_notes"
+
+edge_release_augmented_3:
+  <<: *edge_release_augmented
+  mongo_collection: "archive_stable_channel_notes"
+
+edge_release_augmented_4:
+  <<: *edge_release_augmented
+  mongo_collection: "mobile_stable_channel_notes"
+
+edge_release_augmented_5:
+  <<: *edge_release_augmented
+  mongo_collection: "security_update_notes"
+
+_edge_release_primary: &edge_release_primary
+  type: kedro_workbench.extras.datasets.LangChainDocs.LangChainDocs
+  mongo_db: "edge_releases_primary"
+  credentials: mongo_atlas
+
+edge_primary_1:
+  <<: *edge_release_primary
+  mongo_collection: "stable_channel_notes"
+
+edge_primary_2:
+  <<: *edge_release_primary
+  mongo_collection: "beta_channel_notes"
+
+edge_primary_3:
+  <<: *edge_release_primary
+  mongo_collection: "archive_stable_channel_notes"
+
+edge_primary_4:
+  <<: *edge_release_primary
+  mongo_collection: "mobile_stable_channel_notes"
+
+edge_primary_5:
+  <<: *edge_release_primary
+  mongo_collection: "security_update_notes"
+
+_patchmanagement_primary: &patchmanagement_primary
+  type: kedro_workbench.extras.datasets.LangChainDocs.LangChainDocs
+  mongo_db: "google_groups_primary"
+  credentials: mongo_atlas
+
+patchmanagement_primary:
+  <<: *patchmanagement_primary
+  mongo_collection: "patch_management"
+
+_partitioned_index_source: &write_jsons_to_store
+  type: PartitionedDataSet
+  path: "abfs://report-data/"
+  dataset:
+    type: json.JSONDataSet
+  credentials: azure_blob_credentials
+  filename_suffix: ".json"
+
+partitioned_index_source_1:
+  <<: *write_jsons_to_store
+
+partitioned_index_source_2:
+  <<: *write_jsons_to_store
+
+partitioned_index_source_3:
+  <<: *write_jsons_to_store
+
+partitioned_index_source_4:
+  <<: *write_jsons_to_store
+
+partitioned_index_source_5:
+  <<: *write_jsons_to_store
+
+partitioned_index_source_6:
+  <<: *write_jsons_to_store
+
+partitioned_index_source_7:
+  <<: *write_jsons_to_store
+
+partitioned_index_source_8:
+  <<: *write_jsons_to_store
+
+partitioned_index_source_9:
+  <<: *write_jsons_to_store
+
+partitioned_index_source_10:
+  <<: *write_jsons_to_store
+
+partitioned_index_source:
+  <<: *write_jsons_to_store
+
+get_partioned_index_source:
+  type: kedro_workbench.extras.datasets.SafePartitionedDataSet.SafePartitionedDataSet
+  path: "abfs://report-data/"
+  dataset:
+    type: json.JSONDataSet
+  credentials: azure_blob_credentials
+  filename_suffix: ".json"
+
+validation_metrics:
+  type: pandas.CSVDataSet
+  filepath: "data/08_reporting/validation_metrics.csv"
+  load_args:
+
+  save_args:
+    index: False
+    na_rep: "NaN"
+    mode: a
+
+vectordb_client:
+  type: MemoryDataset
+  copy_mode: assign
+
+vectordb_collections:
+  type: MemoryDataset
+  copy_mode: assign
+
+vector_stores:
+  type: MemoryDataset
+  copy_mode: assign
+
+vector_storage_contexts:
+  type: MemoryDataset
+  copy_mode: assign
+
+llama_text_splitter:
+  type: MemoryDataset
+  copy_mode: assign
+
+llama_node_parser:
+  type: MemoryDataset
+  copy_mode: assign
+
+llm_embedding_model:
+  type: MemoryDataset
+  copy_mode: assign
+
+llama_llm:
+  type: MemoryDataset
+  copy_mode: assign
+
+llama_service_context:
+  type: MemoryDataset
+  copy_mode: assign
+
+llama_vector_index:
+  type: MemoryDataset
+  copy_mode: assign
+
+valid_documents_for_index:
+  type: pickle.PickleDataSet
+  filepath: "C:/projects/technical-notes-llm-report/data/05_model_input/valid_documents.pkl"
+  backend: pickle
+
+invalid_documents_for_index:
+  type: pickle.PickleDataSet
+  filepath: "C:/projects/technical-notes-llm-report/data/05_model_input/invalid_documents.pkl"
+  backend: pickle
+
+all_documents_for_index_pkl:
+  type: pickle.PickleDataSet
+  filepath: "C:/projects/technical-notes-llm-report/data/05_model_input/all_documents.pkl"
+  backend: pickle
+
+load_index_documents_to_mongo:
+  type: kedro_workbench.extras.datasets.MongoDataset.MongoDBDocs
+  mongo_db: "report_docstore"
+  mongo_collection: "docstore"
+  credentials: mongo_atlas
+
+vector_indices_to_refresh:
+  type: MemoryDataset
+  copy_mode: assign
+
+llama_vector_index_to_persist:
+  type: MemoryDataset
+  copy_mode: assign
+
+updated_mongo_dataset:
+  type: kedro_workbench.extras.datasets.MongoDataset.MongoDataset
+  mongo_db: report_docstore
+  mongo_collection: docstore
+  credentials: mongo_atlas
+
+knowledge_graph_entities:
+  type: json.JSONDataSet
+  filepath: "data/03_primary/knowledge_graph_entities.json"
+  versioned: true
+
+cypher_statements_intermediate:
+  type: text.TextDataSet
+  filepath: "data/02_intermediate/cypher_statements.txt"
+  versioned: true
+
+cypher_statements_primary:
+  type: text.TextDataSet
+  filepath: "data/03_primary/cypher_statements.txt"
+  versioned: true
+
+classification_data_msrc:
+  type: pandas.CSVDataSet
+  filepath: "data/07_model_output/classification_data_msrc.csv"
+  versioned: true
+
+noun_chunks_data_intermediate_patch:
+  type: pandas.CSVDataSet
+  filepath: "data/07_model_output/noun_chunks_data_patch.csv"
+  versioned: true
+
+keywords_generated_data_patch:
+  type: pandas.CSVDataSet
+  filepath: "data/07_model_output/keywords_generated_data_patch.csv"
+  versioned: true
+
+keywords_evaluated_data_intermediate_patch:
+  type: pandas.CSVDataSet
+  filepath: "data/07_model_output/keywords_evaluated_data_patch.csv"
+  versioned: true
+
+keywords_filtered_data_intermediate_patch:
+  type: pandas.CSVDataSet
+  filepath: "data/07_model_output/keywords_filtered_data_patch.csv"
+  versioned: true
+
+feature_engineering_data_patch:
+  type: pandas.CSVDataSet
+  filepath: "data/07_model_output/feature_engineering_data_patch.csv"
+  versioned: true
+
+kg_extraction_llm_results_patch:
+  type: pandas.CSVDataSet
+  filepath: "data/07_model_output/kg_extraction_llm_results_patch.csv"
+  versioned: true
+
+kg_extraction_llm_results_msrc:
+  type: pandas.CSVDataSet
+  filepath: "data/07_model_output/kg_extraction_llm_results_msrc.csv"
+  versioned: true
+
+# periodic_report_CVE_WEEKLY_v1_section_1_data_df:
+#   type: pandas.CSVDataSet
+#   filepath: "data/08_reporting/periodic_report_CVE_WEEKLY_v1/report_section_1_data.csv"
+#   versioned: true
+
+periodic_report_CVE_WEEKLY_v1_section_1_metadata_df:
+  type: kedro_workbench.extras.datasets.AppendablePandasCSVDataSet.AppendablePandasCSVDataSet
+  filepath: "data/08_reporting/periodic_report_CVE_WEEKLY_v1/report_section_1_metadata.csv"
+
+periodic_report_CVE_WEEKLY_v1_section_1_data_summary_df:
+  type: pandas.CSVDataSet
+  filepath: "data/08_reporting/periodic_report_CVE_WEEKLY_v1/report_section_1_data_summary.csv"
+  versioned: true
+
+periodic_report_CVE_WEEKLY_v1_section_1_data_fitted_df:
+  type: pandas.CSVDataSet
+  filepath: "data/08_reporting/periodic_report_CVE_WEEKLY_v1/report_section_1_data_fitted.csv"
+  versioned: true
+  
+periodic_report_CVE_WEEKLY_v1_vector_db_client:
+  type: MemoryDataset
+  copy_mode: assign
+
+periodic_report_CVE_WEEKLY_v1_vector_db_collection:
+  type: MemoryDataset
+  copy_mode: assign
+
+periodic_report_CVE_WEEKLY_v1_vector_store_index:
+  type: MemoryDataset
+  copy_mode: assign
+
+periodic_report_CVE_WEEKLY_v1_query_engine:
+  type: MemoryDataset
+  copy_mode: assign
+
+periodic_report_CVE_WEEKLY_v1_section_1_data_primary:
+  type: MemoryDataset
+  copy_mode: assign
+
+periodic_report_CVE_WEEKLY_v1_section_2_data_primary:
+  type: MemoryDataset
+  copy_mode: assign
+
+periodic_report_CVE_WEEKLY_v1_section_3_data_primary:
+  type: MemoryDataset
+  copy_mode: assign
+
+periodic_report_CVE_WEEKLY_v1_section_4_data_primary:
+  type: MemoryDataset
+  copy_mode: assign
+
+periodic_report_CVE_WEEKLY_v1_section_5_data_primary:
+  type: MemoryDataset
+  copy_mode: assign
+
+periodic_report_CVE_WEEKLY_v1_data_container_primary:
+  type: MemoryDataset
+  copy_mode: assign
+
+extract_product_build_cve_windows_10:
+  type: kedro_workbench.extras.datasets.ExcelDataSet.LatestExcelDataSet
+  filepath: data/01_raw/windows_10/
+  load_args:
+    sheet_name: 'Security Updates'
+
+extract_product_build_cve_windows_11:
+  type: kedro_workbench.extras.datasets.ExcelDataSet.LatestExcelDataSet
+  filepath: data/01_raw/windows_11/
+  load_args:
+    sheet_name: 'Security Updates'
+
+extract_product_build_cve_edge:
+  type: kedro_workbench.extras.datasets.ExcelDataSet.LatestExcelDataSet
+  filepath: data/01_raw/edge/
+  load_args:
+    sheet_name: 'Security Updates'
+
+raw_product_build_cve_windows_10_df:
+  type: MemoryDataset
+  copy_mode: assign
+
+raw_product_build_cve_windows_11_df:
+  type: MemoryDataset
+  copy_mode: assign
+
+raw_product_build_cve_edge_df:
+  type: MemoryDataset
+  copy_mode: assign
+
+prepped_product_build_cve_windows_10_df:
+  type: MemoryDataset
+  copy_mode: assign
+
+prepped_product_build_cve_windows_11_df:
+  type: MemoryDataset
+  copy_mode: assign
+
+prepped_product_build_cve_edge_df:
+  type: MemoryDataset
+  copy_mode: assign
+
+
+# sftp_weekly_report_loader:
+#   type: kedro_workbench.extras.datasets.SFTPSiteGround.SftpDataset
+#   credentials: sftp_website

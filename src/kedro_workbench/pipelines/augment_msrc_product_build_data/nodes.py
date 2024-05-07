@@ -1,0 +1,364 @@
+"""
+This is a boilerplate pipeline 'augment_msrc_product_build_data'
+generated using Kedro 0.18.11
+"""
+from kedro_workbench.extras.datasets.MongoDataset import MongoDBDocs
+from kedro_workbench.utils.kedro_utils import convert_to_actual_type
+from kedro_workbench.utils.update_packages_utils import (process_downloadable_package_additional_details, display_execution_time, extract_html_and_update_downloadable_packages, generate_hash_from_dict, fetch_existing_update_packages)
+from kedro.config import ConfigLoader
+from kedro.framework.project import settings
+# from kedro.framework.session import KedroSession
+# from kedro.framework.startup import bootstrap_project
+from datetime import datetime, timedelta, timezone
+import pandas as pd
+# import re
+import time
+# from selenium import webdriver
+# from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.common.exceptions import (TimeoutException, InvalidArgumentException)
+# from selenium.webdriver.support import expected_conditions as EC
+# import pymongo
+# from pymongo import MongoClient
+# from pymongo.errors import PyMongoError
+# import hashlib
+import logging
+
+logger = logging.getLogger(__name__)
+
+conf_path = str(settings.CONF_SOURCE)
+conf_loader = ConfigLoader(conf_source=conf_path)
+credentials = conf_loader["credentials"]
+mongo_creds = credentials["mongo_atlas"]
+
+
+def check_for_product_build_ingestion_complete(ingestion_complete):
+    print(f"product build ingestion complete: {ingestion_complete}")
+    return ingestion_complete
+
+def extract_existing_cve_docs_to_augment(day_interval, begin_augmenting=True):
+    if not begin_augmenting:
+        logger.warning("Product Build data ingestion didn't complete.")
+        
+    # end_date = datetime.now()
+    # start_date = end_date - timedelta(days=day_interval)
+    end_date = datetime.now(timezone.utc)
+    start_date = end_date - timedelta(days=day_interval)
+    mongo_to_fetch_existing_cves = MongoDBDocs(
+        mongo_db="report_docstore",
+        mongo_collection="docstore",
+        credentials={
+            "username": mongo_creds["username"],
+            "password": mongo_creds["password"],
+        },
+    )
+    
+    query = {"$and": [
+        { "metadata.published": { "$gte": start_date, "$lte": end_date } },
+        { "metadata.collection": "msrc_security_update" }
+    ]
+    }
+    projection = {"_id": 0}
+    result = mongo_to_fetch_existing_cves.collection.find(query, projection)
+    list_of_dicts_to_augment = list(result)
+    logger.info(f"Num msrc docs to augment: {len(list_of_dicts_to_augment)}")
+        
+    return list_of_dicts_to_augment
+
+def extract_existing_product_build_data(day_interval, products_to_keep, columns_to_extract, begin_augmenting=True):
+    if not begin_augmenting:
+        logger.warning("Could not extract product build data from document store.")
+    # end_date = datetime.now(datetime.UTC)
+    end_date = datetime.now(timezone.utc)
+    start_date = end_date - timedelta(days=day_interval+30)
+    # print(f"start_date: {start_date}, end_date: {end_date}")
+    mongo_to_fetch_existing_cves = MongoDBDocs(
+        mongo_db="report_docstore",
+        mongo_collection="microsoft_product_builds",
+        credentials={
+            "username": mongo_creds["username"],
+            "password": mongo_creds["password"],
+        },
+    )
+    products_to_keep = [item for sublist in products_to_keep.values() for item in sublist]
+    # for item in products_to_keep:
+    #     print(item)
+    # escaped_products_to_keep = [re.escape(product) for product in products_to_keep]
+    query = {
+        "published": {"$gte": start_date, "$lte": end_date},
+        "product": {"$in": products_to_keep}  
+    }
+    projection = {"_id": 0}
+    result = mongo_to_fetch_existing_cves.collection.find(query, projection)
+    list_of_product_builds = list(result)
+    product_build_data_df = pd.DataFrame(list_of_product_builds)
+    # for idx, row in product_build_data_df.iterrows():
+    #     print(f"{row['cve_id']} - {row['build_number']} - {row['product']}")
+    logger.info(f"Num product build records to augment with: {product_build_data_df.shape}")
+    return product_build_data_df[columns_to_extract]
+
+
+def merge_product_build_data_with_msrc_docs(new_product_build_data, existing_docs_to_augment, columns_to_keep):
+    # new_product_build_data is the downloaded product build data extracted from xlsx
+    # existing_docs_to_augment is the list of existing cve docs extracted from mongo to augment
+    if len(existing_docs_to_augment) == 0 or new_product_build_data.empty:
+        logger.info("no product build data to merge with existing msrc docs")
+        return []
+    # new_product_build_data['build_number'] = new_product_build_data['build_number'].apply(convert_to_tuple)
+    dev_limit = None
+    for cve in existing_docs_to_augment[:dev_limit]:
+        cve_id = cve.get('metadata', {}).get('post_id')
+
+        # Filter DataFrame rows where 'cve_id' matches the current cve_id
+        filtered_rows = new_product_build_data[new_product_build_data['cve_id'] == cve_id]
+        for column in columns_to_keep:
+            if column not in filtered_rows.columns:
+                filtered_rows[column] = None
+        
+        if filtered_rows.empty:
+            product_build_ids = []
+            build_numbers_lists = []
+            kb_articles_list = []
+            products = []
+            impact_type_mode = None
+            severity_type_mode = None
+        else:
+            # print(filtered_rows)
+            # Now you can work with filtered_rows, which is a DataFrame containing only relevant rows
+            product_build_ids = filtered_rows['product_build_id'].tolist()
+            build_number_tuples = {tuple(bn) for bn in filtered_rows['build_number']}
+            # kb_articles_list = [{"kb" + str(kb_id): url} for kb_id, url in zip(filtered_rows['kb_id'], filtered_rows['article_url'])]
+            kb_articles_list = [{("kb" + str(kb_id) if not str(kb_id).startswith("kb") else str(kb_id)): url} for kb_id, url in zip(filtered_rows['kb_id'], filtered_rows['article_url'])]
+
+            unique_product_strs = {f"{row['product_name'].replace('_', ' ')} {row['product_version']} {row['product_architecture']}" for _, row in filtered_rows.iterrows()}
+            products = list(unique_product_strs)
+            # Sort build number tuples and convert them back into the desired format
+            sorted_build_number_tuples = sorted(build_number_tuples)
+            build_numbers_lists = [list(bn_tuple) for bn_tuple in sorted_build_number_tuples]
+            # For 'impact_type'
+            if filtered_rows['impact_type'].mode().empty:
+                impact_type_mode = None
+            else:
+                impact_type_mode = filtered_rows['impact_type'].mode()[0]
+
+            # For 'severity_type'
+            if filtered_rows['severity_type'].mode().empty:
+                severity_type_mode = None
+            else:
+                severity_type_mode = filtered_rows['severity_type'].mode()[0]
+            # print(f"should be adding impact: {impact_type_mode} and severity: {severity_type_mode}")
+
+        # Update the cve metadata
+        if 'metadata' not in cve:
+            cve['metadata'] = {}
+        cve['metadata'].update({
+            'product_build_ids': product_build_ids,
+            'build_numbers': build_numbers_lists,
+            'kb_articles': kb_articles_list,
+            'products': products,
+            'impact_type': impact_type_mode,
+            'severity_type': severity_type_mode,
+        })
+    # for item in existing_docs_to_augment[:dev_limit]:
+    #     print(f"{item['metadata']['id']} - {item['metadata']['source']} - {item['metadata']['products']} - {item['metadata']['kb_articles']}\n")
+    return existing_docs_to_augment
+
+
+# ------------------ Load augmented existing cve docs to mongo
+
+def load_augmented_msrc_posts_product_build_docs(updated_msrc_docs):
+    if len(updated_msrc_docs) == 0:
+        logger.info("no augmented msrc docs to load to mongo")
+        return False
+    logger.info(f"Processing {len(updated_msrc_docs)} MSRC docs...")
+    mongo_to_load_augmented_cves = MongoDBDocs(
+        mongo_db="report_docstore",
+        mongo_collection="docstore",
+        credentials={
+            "username": mongo_creds["username"],
+            "password": mongo_creds["password"],
+        },
+    )
+    for cve in updated_msrc_docs:
+        # The cve_id is used to identify the documents to update
+        cve_id = cve.get('metadata', {}).get('post_id')
+
+        # Retrieve all documents with the matching post_id
+        existing_docs = mongo_to_load_augmented_cves.collection.find({'metadata.post_id': cve_id})
+        
+        for existing_doc in existing_docs:
+            update_data = {}
+            # Handle 'product_build_ids'
+            existing_product_build_ids = set(existing_doc['metadata'].get('product_build_ids', []))
+            new_product_build_ids = set(cve['metadata'].get('product_build_ids', []))
+            product_build_ids_to_add = list(new_product_build_ids - existing_product_build_ids)
+            if len(product_build_ids_to_add) > 0:
+                update_data.setdefault('$addToSet', {}).setdefault('metadata.product_build_ids', {}).setdefault('$each', []).extend(product_build_ids_to_add)
+
+            # Handle 'build_numbers' (adjusted approach for handling lists)
+            existing_build_numbers = {tuple(bn) for bn in existing_doc['metadata'].get('build_numbers', [])}
+            new_build_numbers = {tuple(bn) for bn in cve['metadata'].get('build_numbers', [])}
+            build_numbers_to_add_tuples = new_build_numbers - existing_build_numbers
+            build_numbers_to_add = [list(bn) for bn in build_numbers_to_add_tuples]
+            if len(build_numbers_to_add) > 0:
+                update_data.setdefault('$addToSet', {}).setdefault('metadata.build_numbers', {}).setdefault('$each', []).extend(build_numbers_to_add)
+
+            # Handle 'products' (assuming these are now stored as strings)
+            existing_products = set(existing_doc['metadata'].get('products', []))
+            new_products = set(cve['metadata'].get('products', []))
+            products_to_add = list(new_products - existing_products)
+            if len(products_to_add) > 0:
+                update_data.setdefault('$addToSet', {}).setdefault('metadata.products', {}).setdefault('$each', []).extend(products_to_add)
+            
+            severity_type = cve['metadata'].get('severity_type')
+            impact_type = cve['metadata'].get('impact_type')
+            # print(f"should be loading impact: {impact_type} and severity: {severity_type}")
+            # Directly set 'severity_type' and 'impact_type', allowing None values
+            update_data.setdefault('$set', {})['metadata.severity_type'] = severity_type
+            update_data.setdefault('$set', {})['metadata.impact_type'] = impact_type
+
+            # Perform the update on the current document
+            if len(update_data) > 0:
+                update_result = mongo_to_load_augmented_cves.collection.update_one({'id_': existing_doc['id_']}, {'$addToSet': update_data.get('$addToSet', {}), '$set': update_data.get('$set', {})})
+
+                # Check if the update was successful
+                if update_result.matched_count > 0:
+                    if update_result.modified_count > 0:
+                        # logger.info(f"Update successful for MSRC document with id_: {existing_doc['id_']}")
+                        pass
+                    else:
+                        # logger.info(f"MSRC Document with id_: {existing_doc['id_']} matched but was not modified.")
+                        pass
+                else:
+                    logger.info(f"No MSRC document found with id_: {existing_doc['id_']} to update.")
+    mongo_to_load_augmented_cves.client.close()
+    return True
+
+
+def extract_update_packages_for_augmenting(begin_extracting=True):
+    # augment the update package docs from the install details at the package_url
+    update_packages_db_conn = MongoDBDocs(
+        mongo_db="report_docstore",
+        mongo_collection="microsoft_update_packages",
+        credentials={
+            "username": mongo_creds["username"],
+            "password": mongo_creds["password"],
+        },
+    )
+    collection = update_packages_db_conn.collection
+    query = {
+        "$or": [
+            {"downloadable_packages": {"$exists": False}},
+            {"downloadable_packages": {"$size": 0}}
+        ]
+    }
+    projection_fields = {
+        '_id': 0, 
+    }
+
+    update_package_docs = list(collection.find(query, projection=projection_fields))
+    logger.info(f"Augmenting {len(update_package_docs)} update packages with install instructions")
+    # print(update_package_docs[0])
+    update_packages_db_conn.client.close()
+    # product_build_ids = [doc['product_build_id'] for doc in update_package_docs if doc.get('product_build_id')]
+    # print(f"{product_build_ids}")
+    return update_package_docs
+    
+def augment_update_packages_additional_details(update_package_docs, search_criteria):
+    """
+    Processes each document in the given list by fetching package details from specified URLs.
+    
+    For each document, it attempts to access the 'package_url', and if successful,
+    searches for downloadable package details matching the given search criteria.
+    It updates the document with the list of downloadable packages found.
+    
+    Args:
+    - update_package_docs: A list of document dictionaries, each containing at least an 'id' and a 'package_url'.
+    - search_criteria: A list of dictionaries specifying the search criteria for package details.
+    """
+    
+    start_time = time.time()
+    # fetch() returns a filtered dictionary of package_urls for keys
+    # There are no empty url keys so we must handle empty package_urls independently of the lookup table
+    existing_update_packages = fetch_existing_update_packages(update_package_docs)
+
+    sorted_list = sorted(update_package_docs, key=lambda x: x['package_url'])
+    num_new_update_packages = 0
+    
+    for j, doc in enumerate(sorted_list):
+        package_url = doc.get('package_url')
+        if not package_url:
+            # Directly assign an empty list to 'downloadable_packages' for empty package_urls
+            doc['downloadable_packages'] = []
+        elif package_url in existing_update_packages:
+            # If the package_url is in the cache, copy the downloadable_packages
+            cached_downloadable_packages = existing_update_packages[package_url].get('downloadable_packages', [])
+            doc['downloadable_packages'] = cached_downloadable_packages
+            # print(f"{j}:doc assigned downloadable_packages from cache\n{doc['downloadable_packages']}")
+        else:
+            # extract the additional details from the html field and create new fields with the data
+            downloadable_packages = process_downloadable_package_additional_details(doc, search_criteria, True)
+            
+            downloadable_packages = [
+                package for package in downloadable_packages
+                if 'product_name' in package and 'none' not in package['product_name'].lower()
+            ]
+            
+            # We need to generate a hash for each downloadable package to prevent duplicates
+            # in the monitoring collection 
+            keys_to_keep = ['parent_id', 'product_name', 'product_version','product_architecture','update_type']
+           
+            # loop over each downloadable_package item
+            for item in downloadable_packages:
+                item['parent_id'] = doc['id']
+                item['hash'] = generate_hash_from_dict(item, keys_to_keep)
+                
+            doc['downloadable_packages'] = downloadable_packages
+            
+            existing_update_packages[package_url] = doc
+            num_new_update_packages += 1
+    
+    logger.info(f"Augmented {len(sorted_list)} Update Packages. {num_new_update_packages} new Update Package(s) encountered this run.\n")
+    display_execution_time(start_time)
+    
+    return sorted_list
+
+def load_augmented_update_packages_to_db(augmented_update_package_docs):
+    update_packages_db_conn = MongoDBDocs(
+        mongo_db="report_docstore",
+        mongo_collection="microsoft_update_packages",
+        credentials={
+            "username": mongo_creds["username"],
+            "password": mongo_creds["password"],
+        },
+    )
+    collection = update_packages_db_conn.collection
+    for doc in augmented_update_package_docs:
+        
+        query = {'id': doc['id']}
+        value = doc.get('downloadable_packages')
+        
+        update_values = {"$set": {"downloadable_packages": value}}
+        
+        result = collection.update_one(query, update_values)
+        # if result.matched_count > 0:
+        #     print(f"Update package with id {doc['id']} updated successfully.")
+    update_packages_db_conn.client.close()
+    logger.info(f"Updated {len(augmented_update_package_docs)} update packages with additional details.")
+    return True
+
+def parse_restructure_installation_details(augmented_update_package_docs):
+    for update_package in augmented_update_package_docs:
+        update_package = extract_html_and_update_downloadable_packages(update_package)
+        
+    logger.info(f"Parsed downloadable packages installation details into keys.")
+    return augmented_update_package_docs
+
+    
+def begin_feature_engineering_pipeline_connector(augment_load_status):
+    
+    logger.info("\n=====================\nAugmenting product build data completed\n=====================\n")
+    return True
+    

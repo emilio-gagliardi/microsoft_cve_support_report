@@ -1,0 +1,25 @@
+# This is a boilerplate parameters config generated for pipeline 'ingest_rss_data'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+
+#Update Guide
+rss_1:
+  keys_to_keep: ['id', 'revision', 'post_id', 'link', 'category', 'published', 'description', 'title', 'collection']
+  keys_to_hash: ['revision', 'source', 'category', 'published', 'description', 'title', 'collection']
+
+#Windows update
+rss_2:
+  keys_to_keep: ['id', 'post_id', 'link', 'published', 'summary', 'title', 'collection', 'description']
+  keys_to_hash: ['source', 'summary', 'published', 'description', 'title', 'collection']
+
+#Windows 10
+rss_3:
+  keys_to_keep: ['id', 'post_id', 'link', 'published', 'summary', 'title', 'collection', 'description']
+  keys_to_hash: ['source', 'summary', 'published', 'description', 'title', 'collection']
+
+#Windows 11
+rss_4:
+  keys_to_keep: ['id', 'post_id', 'link', 'published', 'summary', 'title', 'collection', 'description']
+  keys_to_hash: ['source', 'summary', 'published', 'description', 'title', 'collection']

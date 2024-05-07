@@ -1,0 +1,28 @@
+# This is a boilerplate parameters config generated for pipeline 'augment_rss_data'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+rss_1_augmented:
+  elements: ['div', 'div', 'div']
+  attributes: ['class', 'id', 'id']
+  values: ['root-144', 'faq', 'securityUpdates']
+  catalog: "rss_1_augmented"
+
+rss_2_augmented:
+  elements: ['div']
+  attributes: ['id']
+  values: ['supArticleContent']
+  catalog: "rss_2_augmented"
+
+rss_3_augmented:
+  elements: ['div']
+  attributes: ['id']
+  values: ['supArticleContent']
+  catalog: "rss_3_augmented"
+
+rss_4_augmented:
+  elements: ['div']
+  attributes: ['id']
+  values: ['supArticleContent']
+  catalog: "rss_4_augmented"
