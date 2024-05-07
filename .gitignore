@@ -12,7 +12,12 @@ conf/**/*credentials*
 # ignore everything in the following folders
 data/**
 logs/**
-
+docs/**
+notebooks/**
+!notebooks/7dayvectorindices.ipynb
+!notebooks/fetch_msrc_build_KB_data.ipynb
+!notebooks/postprocessors_retrievers_v1.ipynb
+!notebooks/preprocess_emails.ipynb
 # except their sub-folders
 !data/**/
 !logs/**/
@@ -160,3 +165,5 @@ venv.bak/
 
 # VSCode
 kedro-workbench.code-workspace
+.vscode/settings.json
+src/kedro_workbench/extras/datasets/dummy_dataset.py
