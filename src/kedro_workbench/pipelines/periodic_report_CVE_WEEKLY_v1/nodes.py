@@ -2,6 +2,7 @@
 This is a boilerplate pipeline 'periodic_report_CVE_WEEKLY_v1'
 generated using Kedro 0.18.11
 """
+import base64
 from kedro_workbench.extras.datasets.MongoDataset import MongoDBDocs
 from kedro_workbench.extras.datasets.SFTPSiteGround import SftpDataset
 from kedro_workbench.utils.json_utils import mongo_docs_to_dataframe
@@ -11,7 +12,7 @@ from kedro_workbench.utils.periodic_report_CVE_WEEKLY_v1_prompts import seven_da
 from kedro_workbench.utils.report_utils import (format_build_numbers, sort_products, fetch_and_merge_kb_data, fetch_package_pairs, record_report_total, plot_running_average, clean_appendix_title, split_product_name_string, filter_source_documents, prepare_plot_data, generate_and_save_plot, collect_metadata, build_mongo_pipeline, fetch_documents, add_category_to_documents, convert_to_utc_datetime, fetch_cve_documents_by_product_patterns, identify_exclusive_cve_documents, fetch_product_build_documents_by_product_patterns, annotate_package_pairs, remove_empty_package_pairs, create_thumbnail)
 from kedro_workbench.utils.llm_utils import (create_metadata_string_for_user_prompt, fit_prompt_to_window,  apply_summarization)
 from kedro_workbench.utils.sftp_utils import build_file_mappings
-
+from kedro_workbench.utils.sendgrid_utils import (get_all_lists, get_recipients_from_sendgrid_list)
 # import kedro_workbench.utils.yaml_utils as yaml_utils
 from kedro.config import ConfigLoader
 from kedro.framework.project import settings
@@ -28,6 +29,8 @@ from jinja2 import Environment, FileSystemLoader
 import os
 import subprocess
 import pytz
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import (Mail, Email, To, Content, Attachment, FileContent, FileName, FileType, Disposition,TrackingSettings, ClickTracking)
 
 logger = logging.getLogger(__name__)
 conf_loader = ConfigLoader(settings.CONF_SOURCE)
@@ -37,6 +40,10 @@ username = mongo_atlas["username"]
 password = mongo_atlas["password"]
 open_ai_credentials = credentials["OPENAI"]
 openai.api_key = open_ai_credentials["api_key"]
+sendgrid_credentials = credentials["sendgrid"]
+sendgrid_username = sendgrid_credentials["username"]
+sendgrid_password = sendgrid_credentials["password"]
+sendgrid_api_key = sendgrid_credentials["api_key"]
 
 def clean_bad_build_data(report_end_date, day_interval, document_limit):
     # convert 'None' string to None type 
@@ -1080,7 +1087,64 @@ def generate_periodic_report_CVE_WEEKLY_v1_html(report_data_container):
     else:
         return {}
 
+def send_notification_to_sendgrid_list(report_data_container, params):
+    # Extract the path for the PNG file
+    all_file_paths = report_data_container['sftp']
+    thumbnail_path = next((path for path in all_file_paths if 'thumbnails' in path), None)
+    thumbnail_file_name = thumbnail_path.rsplit('/', 1)[-1]
+    html_path = next((path for path in all_file_paths if 'html' in path), None)
+    html_file_name = html_path.rsplit('/', 1)[-1]
+    # print(f"thumbnail_Path: {thumbnail_path} - {thumbnail_file_name}\nhtml_path: {html_path} - {html_file_name}")
+    
+    if thumbnail_path is None:
+        raise ValueError("No thumbnail path found in the provided paths.")
 
+    # Load the PNG file content
+    with open(thumbnail_path, 'rb') as f:
+        data = f.read()
+        report_thumbnail = base64.b64encode(data).decode()
+    
+    all_lists = get_all_lists(sendgrid_api_key)
+    report_qa_sendgrid_list = next((d for d in all_lists if d['name'] == 'msrc_weekly_report_qa_team'), None)
+    report_qa_sendgrid_list_id = report_qa_sendgrid_list['id']
+    print(f"SendGrid List Id: {report_qa_sendgrid_list_id}")
+    notification_from = params['report_qa']['from']
+    notification_subject = params['report_qa']['subject']
+    notification_body_template = params['report_qa']['body']
+    notification_to = get_recipients_from_sendgrid_list(sendgrid_api_key, report_qa_sendgrid_list_id)
+    # notification_to = "emilio.gagliardi@portalfuse.io"
+    report_base_url = params['report_qa']['base_url']
+    report_end_date = report_data_container['report_end_date']
+    contact_email = params['report_qa']['contact']
+    notification_body = notification_body_template.format(report_end_date=report_end_date, base_url=report_base_url, html_file_name=html_file_name, contact_email=contact_email)
+    # print(f"{notification_from}\n{notification_to}\n{notification_subject}\n{report_base_url}{html_file_name}\n{notification_body}")
+    # Create the email object
+    email = Mail(
+        from_email=notification_from,
+        to_emails=notification_to,
+        subject=notification_subject,
+        plain_text_content=notification_body
+    )
+
+    # # Add attachment
+    attachment = Attachment()
+    attachment.file_content = FileContent(report_thumbnail)
+    attachment.file_type = FileType('image/png')
+    attachment.file_name = FileName(os.path.basename(thumbnail_path))
+    attachment.disposition = Disposition('attachment')
+    email.attachment = attachment
+
+    tracking_settings = TrackingSettings()
+    click_tracking = ClickTracking(enable=False, enable_text=False)
+    tracking_settings.click_tracking = click_tracking
+    email.tracking_settings = tracking_settings
+    # # Send the email
+    try:
+        sg = SendGridAPIClient(sendgrid_api_key)
+        response = sg.send(email)
+        print(f"Email sent with status code: {response.status_code}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 def move_cve_weekly_report_assets_to_blob(report_data_container):
     

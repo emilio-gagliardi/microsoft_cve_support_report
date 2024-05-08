@@ -84,3 +84,13 @@ report_params_periodic_report_CVE_WEEKLY_v1:
   sftp:
     local_base_path: "data/08_reporting/periodic_report_CVE_WEEKLY_v1"
     remote_base_path: "www/portalfuse.io/public_html/wp-content/uploads/msrc_weekly"
+  sendgrid:
+    report_qa:
+      subject: "New report generated and pushed to production."
+      body: >
+        Here is the latest report generated for {report_end_date}.
+        The report URL is {base_url}{html_file_name}.
+        Contact {contact_email} if there are any issues.
+      base_url: "https://portalfuse.io/wp-content/uploads/msrc_weekly/html/"
+      from: "webmaster@portalfuse.io"
+      contact: "emilio.gagliardi@portalfuse.io"

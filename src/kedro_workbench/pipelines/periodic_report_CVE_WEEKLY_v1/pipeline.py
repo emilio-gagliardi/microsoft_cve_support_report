@@ -4,7 +4,7 @@ generated using Kedro 0.18.11
 """
 
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import (fetch_section_1_periodic_report_CVE_WEEKLY_v1_data,transform_section_1_periodic_report_CVE_WEEKLY_v1_data, fetch_section_1_periodic_report_CVE_WEEKLY_v1_product_build_data, fetch_section_1_periodic_report_CVE_WEEKLY_v1_update_packages_data, build_user_prompt_data_periodic_report_CVE_WEEKLY_v1,  build_periodic_report_CVE_WEEKLY_v1_data_container, fit_prompt_data_periodic_report_CVE_WEEKLY_v1, summarize_section_1_periodic_report_CVE_WEEKLY_v1, calculate_section_1_periodic_report_CVE_WEEKLY_v1, fetch_section_2_periodic_report_CVE_WEEKLY_v1_data, fetch_section_3_periodic_report_CVE_WEEKLY_v1_data, fetch_section_4_periodic_report_CVE_WEEKLY_v1_data, fetch_section_5_periodic_report_CVE_WEEKLY_v1_data,calculate_section_2_periodic_report_CVE_WEEKLY_v1,calculate_section_3_periodic_report_CVE_WEEKLY_v1, calculate_section_4_periodic_report_CVE_WEEKLY_v1,calculate_section_5_periodic_report_CVE_WEEKLY_v1, compile_periodic_report_CVE_WEEKLY_v1, fetch_section_6_periodic_report_CVE_WEEKLY_v1_data, calculate_section_6_periodic_report_CVE_WEEKLY_v1, save_periodic_report_CVE_WEEKLY_v1_data, generate_periodic_report_CVE_WEEKLY_v1_html, move_cve_weekly_report_assets_to_blob, load_report_assets_to_webserver)
+from .nodes import (fetch_section_1_periodic_report_CVE_WEEKLY_v1_data,transform_section_1_periodic_report_CVE_WEEKLY_v1_data, fetch_section_1_periodic_report_CVE_WEEKLY_v1_product_build_data, fetch_section_1_periodic_report_CVE_WEEKLY_v1_update_packages_data, build_user_prompt_data_periodic_report_CVE_WEEKLY_v1,  build_periodic_report_CVE_WEEKLY_v1_data_container, fit_prompt_data_periodic_report_CVE_WEEKLY_v1, summarize_section_1_periodic_report_CVE_WEEKLY_v1, calculate_section_1_periodic_report_CVE_WEEKLY_v1, fetch_section_2_periodic_report_CVE_WEEKLY_v1_data, fetch_section_3_periodic_report_CVE_WEEKLY_v1_data, fetch_section_4_periodic_report_CVE_WEEKLY_v1_data, fetch_section_5_periodic_report_CVE_WEEKLY_v1_data,calculate_section_2_periodic_report_CVE_WEEKLY_v1,calculate_section_3_periodic_report_CVE_WEEKLY_v1, calculate_section_4_periodic_report_CVE_WEEKLY_v1,calculate_section_5_periodic_report_CVE_WEEKLY_v1, compile_periodic_report_CVE_WEEKLY_v1, fetch_section_6_periodic_report_CVE_WEEKLY_v1_data, calculate_section_6_periodic_report_CVE_WEEKLY_v1, save_periodic_report_CVE_WEEKLY_v1_data, generate_periodic_report_CVE_WEEKLY_v1_html, move_cve_weekly_report_assets_to_blob, load_report_assets_to_webserver, send_notification_to_sendgrid_list)
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline([
@@ -153,6 +153,12 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=["periodic_report_generated", "params:report_params_periodic_report_CVE_WEEKLY_v1"],
                 outputs=None,
                 name="load_report_assets_to_webserver",
+            ),
+        node(
+                func=send_notification_to_sendgrid_list,
+                inputs=["periodic_report_generated", "params:report_params_periodic_report_CVE_WEEKLY_v1.sendgrid"],
+                outputs=None,
+                name="send_notification_to_sendgrid_list",
             ),
         
     ])

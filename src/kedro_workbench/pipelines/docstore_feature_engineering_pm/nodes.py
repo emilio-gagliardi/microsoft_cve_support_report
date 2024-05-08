@@ -47,7 +47,7 @@ def check_for_classification_msrc_complete(msrc_classification_status):
     print(f"Proceed with feature engineering")
     return True
 
-def extract_patch_managment_to_clean(document_limit, begin_docstore_feature_engineering):
+def extract_patch_managment_to_clean(document_limit, begin_docstore_feature_engineering=True):
     if not begin_docstore_feature_engineering:
         logger.warning("MSRC classification didn't complete.")
     

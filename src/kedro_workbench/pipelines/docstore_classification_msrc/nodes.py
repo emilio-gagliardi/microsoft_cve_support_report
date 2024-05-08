@@ -154,7 +154,7 @@ def batch_update_post_types_msrc(data):
             num_affected += update_result.modified_count
     
         logger.info(f"msrc post_type Mongo load complete. {num_matched} records matched and {num_affected} records affected.")
-        mongo.client.close()
+        
         return True
         
 def remove_mongo_duplicates_msrc(update_flag):
@@ -186,7 +186,7 @@ def remove_mongo_duplicates_msrc(update_flag):
             print(f"found {len(dups_list)} duplicates in docstore...")
             deletion_summary = remove_duplicates(mongo.collection, dups_list)
             print(f"Deletion Summary: {deletion_summary}")
-    mongo.client.close()
+    
     
     return True
     
