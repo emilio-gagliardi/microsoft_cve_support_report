@@ -9,7 +9,7 @@ from sendgrid import SendGridAPIClient
 # from kedro.config import ConfigLoader
 # from kedro.framework.project import settings
 import json
-
+import base64
 # conf_loader = ConfigLoader(settings.CONF_SOURCE)
 # credentials = conf_loader["credentials"]
 # sendgrid_credentials = credentials["sendgrid"]
@@ -44,3 +44,8 @@ def get_recipients_from_sendgrid_list(api_key, list_id):
         return recipients
     else:
         raise Exception(f"Failed to fetch contacts from SendGrid list: {response.status_code}")
+    
+def load_encoded_file(file_path):
+    """Load and encode the file content."""
+    with open(file_path, 'rb') as file:
+        return base64.b64encode(file.read()).decode()

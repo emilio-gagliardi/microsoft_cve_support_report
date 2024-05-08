@@ -2,6 +2,7 @@ from kedro_workbench.extras.datasets.MongoDataset import MongoDBDocs
 from kedro.config import ConfigLoader
 from kedro.framework.project import settings
 from kedro_workbench.utils.feed_utils import split_product_name
+import os
 import pymongo
 from pymongo import MongoClient
 import re
@@ -691,3 +692,15 @@ def create_thumbnail(html_file_path, thumbnail_path, width_cm=6, headless=True):
 
 # Example usage:
 # create_thumbnail('/path/to/report.html', '/path/to/thumbnail.png')
+
+def find_file_path(paths, keyword):
+    """Extract a file path containing a specific keyword."""
+    path = next((path for path in paths if keyword in path), None)
+    if path is None:
+        raise ValueError(f"No {keyword} path found in the provided paths.")
+    return path
+
+def extract_file_name(file_path):
+    """Extract file name from a file path."""
+    return os.path.basename(file_path)
+
