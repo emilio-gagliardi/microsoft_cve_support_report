@@ -9,7 +9,7 @@ from kedro_workbench.utils.json_utils import mongo_docs_to_dataframe
 from kedro_workbench.utils.kedro_utils import convert_to_actual_type
 import kedro_workbench.utils.feature_engineering as feat_eng
 from kedro_workbench.utils.periodic_report_CVE_WEEKLY_v1_prompts import seven_day_periodic_report_CVE_WEEKLY_v1_prompt_strings as prompt_strings
-from kedro_workbench.utils.report_utils import (format_build_numbers, sort_products, fetch_and_merge_kb_data, fetch_package_pairs, record_report_total, plot_running_average, clean_appendix_title, split_product_name_string, filter_source_documents, prepare_plot_data, generate_and_save_plot, collect_metadata, build_mongo_pipeline, fetch_documents, add_category_to_documents, convert_to_utc_datetime, fetch_cve_documents_by_product_patterns, identify_exclusive_cve_documents, fetch_product_build_documents_by_product_patterns, annotate_package_pairs, remove_empty_package_pairs, create_thumbnail, find_file_path, extract_file_name)
+from kedro_workbench.utils.report_utils import (format_build_numbers, sort_products, fetch_and_merge_kb_data, fetch_package_pairs, record_report_total, plot_running_average, clean_appendix_title, split_product_name_string, filter_source_documents, prepare_plot_data, generate_and_save_plot, collect_metadata, build_mongo_pipeline, fetch_documents, add_category_to_documents, convert_to_utc_datetime, fetch_cve_documents_by_product_patterns, identify_exclusive_cve_documents, fetch_product_build_documents_by_product_patterns, annotate_package_pairs, remove_empty_package_pairs, create_thumbnail, find_file_path, extract_file_name, is_second_tuesday)
 from kedro_workbench.utils.llm_utils import (create_metadata_string_for_user_prompt, fit_prompt_to_window,  apply_summarization)
 from kedro_workbench.utils.sftp_utils import build_file_mappings
 from kedro_workbench.utils.sendgrid_utils import (get_all_lists, get_recipients_from_sendgrid_list, load_encoded_file)
@@ -31,6 +31,7 @@ import subprocess
 import pytz
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (Mail, Email, To, Content, Attachment, FileContent, FileName, FileType, Disposition,TrackingSettings, ClickTracking)
+
 
 logger = logging.getLogger(__name__)
 conf_loader = ConfigLoader(settings.CONF_SOURCE)
@@ -1087,7 +1088,7 @@ def generate_periodic_report_CVE_WEEKLY_v1_html(report_data_container):
     else:
         return {}
 
-def send_notification_to_sendgrid_list(report_data_container, params):
+def send_notification_to_sendgrid_qa_list(report_data_container, params):
     # Extract the path for the PNG and HTML files
     all_file_paths = report_data_container['sftp']
     thumbnail_path = find_file_path(all_file_paths, 'thumbnails')
@@ -1134,6 +1135,85 @@ def send_notification_to_sendgrid_list(report_data_container, params):
         print(f"Email sent with status code: {response.status_code}")
     except Exception as e:
         print(f"An error occurred: {e}")
+
+def create_draft_campaign_cve_weekly(report_data_container, params):
+    # Extract the path for the PNG and HTML files
+    all_file_paths = report_data_container['sftp']
+    thumbnail_path = find_file_path(all_file_paths, 'thumbnails')
+    html_path = find_file_path(all_file_paths, 'html')
+
+    # Load the PNG file content and encode it
+    # report_thumbnail = load_encoded_file(thumbnail_path)
+
+    # Fetch configuration and list details
+    all_lists = get_all_lists(sendgrid_api_key)
+    report_subscriber_sendgrid_list = next((d for d in all_lists if d['name'] == 'msrc_weekly_report'), None)
+    report_subscriber_sendgrid_list_id = report_subscriber_sendgrid_list['id']
+    # print(f"report_subscriber_sendgrid_list: {report_subscriber_sendgrid_list}")
+    # print(f"report_subscriber_sendgrid_list_id: {report_subscriber_sendgrid_list_id}")
+    # Construct email details
+    campaign_from = params['subscriber_campaign']['from']
+    campaign_subject_template = params['subscriber_campaign']['subject']
+    campaign_body_template = params['subscriber_campaign']['body']
+    # campaign_to = get_recipients_from_sendgrid_list(sendgrid_api_key, report_subscriber_sendgrid_list_id)
+    report_end_date = report_data_container['report_end_date']
+    # print(f"report end date: {report_end_date}")
+    report_base_url = params['subscriber_campaign']['base_url']
+    # print(f"report_base_url: {report_base_url}")
+    html_file_name = extract_file_name(html_path)
+    # print(f"html_file_name: {html_file_name}")
+    thumbnail_file_name = extract_file_name(thumbnail_path)
+    # print(f"thumbnail_file_name: {thumbnail_file_name}")
+    patch_tuesday = "[Patch Tuesday]" if is_second_tuesday(datetime.strptime(report_end_date, "%Y_%m_%d")) else ""
+    # print(f"patch_tuesday: {patch_tuesday}")
+    campaign_subject = campaign_subject_template.format(
+        report_end_date=report_end_date,
+        patch_tuesday=patch_tuesday
+    )
+    # print(f"rendered subject: {campaign_subject}")
+    campaign_body = campaign_body_template.format(
+        report_end_date=report_end_date,
+        base_url=report_base_url,
+        html_file_name=html_file_name,
+        thumbnail_file_name=thumbnail_file_name
+    )
+    # print(f"rendered body: {campaign_body}")
+    
+    sender_id = "5660513"
+    # # Create the campaign draft
+    # data = {
+    #     "title": f"CVE Weekly Report Draft for {report_end_date}",
+    #     "subject": campaign_subject,
+    #     "sender_id": sender_id,
+    #     "list_ids": [report_subscriber_sendgrid_list_id],
+    #     "html_content": campaign_body,
+    #     "custom_unsubscribe_url": ""
+    # }
+    data = {
+        # minimal data example
+        'title': 'Test Campaign',
+        'subject': 'Test Subject',
+        'sender_id': '5660513',
+        'list_ids': ['eb0237f5-2814-49b1-a8d3-265e0b949a60'],
+        'html_content': '<p>Simple content</p>'
+    }
+    print(data)
+    
+    sg = SendGridAPIClient(sendgrid_api_key)
+    try:
+        response = sg.client.campaigns.post(request_body=data)
+        print(f"Campaign created successfully, Status Code: {response.status_code}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+        # Inspect the exception object for more information
+        if hasattr(e, 'body'):
+            print(f"Error Body: {e.body}")  # Assuming the body might provide some JSON-like error message
+        if hasattr(e, 'status_code'):
+            print(f"HTTP Status Code: {e.status_code}")
+        if hasattr(e, 'headers'):
+            print(f"Response Headers: {e.headers}")
+
 
 def move_cve_weekly_report_assets_to_blob(report_data_container):
     

@@ -704,3 +704,35 @@ def extract_file_name(file_path):
     """Extract file name from a file path."""
     return os.path.basename(file_path)
 
+def is_second_tuesday(date=None):
+    """
+    Returns True if the given date is the second Tuesday of the month, False otherwise.
+    If no date is provided, the function uses the current date.
+    
+    Args:
+        date (datetime.date, optional): The date to check. If not provided, the current date is used.
+    
+    Returns:
+        bool: True if the date is the second Tuesday of the month, False otherwise.
+    """
+    # If no date is provided, use the current date
+    if date is None:
+        date = datetime.date.today()
+    
+    # Get the weekday and the day of the month
+    weekday = date.weekday()
+    day = date.day
+    
+    # Check if the date is a Tuesday (weekday == 1)
+    if weekday == 1:
+        # Check if the day is between 8 and 14 (inclusive)
+        if 8 <= day <= 14:
+            # If the day is 8, it's the first Tuesday
+            if day == 8:
+                return False
+            # Otherwise, it's the second Tuesday
+            else:
+                return True
+    
+    # If it's not a Tuesday or not between the 8th and 14th, it's not the second Tuesday
+    return False

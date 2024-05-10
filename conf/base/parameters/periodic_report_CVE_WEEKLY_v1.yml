@@ -94,3 +94,23 @@ report_params_periodic_report_CVE_WEEKLY_v1:
       base_url: "https://portalfuse.io/wp-content/uploads/msrc_weekly/html/"
       from: "webmaster@portalfuse.io"
       contact: "emilio.gagliardi@portalfuse.io"
+    subscriber_campaign:
+      subject: "New PortalFuse Security Update Report for {report_end_date}{patch_tuesday}"
+      body: >
+        Dear {{first_name}},<br /><br />
+        Our latest Weekly Security Update Report is now available. This report provides a concise summary of the latest Microsoft Security Response Center posts and support documentation, helping you stay up-to-date with critical security issues and new features.<br /><br />
+        **Report Details:**<br />
+        Date: {report_end_date}<br />
+        URL: <a href='{base_url}html/{html_file_name}' title='Click to open report' target='_blank'>Report {report_end_date}</a><br /><br />
+        As a reminder, the second Tuesday of every month is when Microsoft typically releases a large number of CVEs. Make sure to mark your calendar to stay on top of these critical updates.<br /><br />
+        Below is a sneak peek of this week's report:<br />
+        <img src='{base_url}thumbnails/{thumbnail_file_name}' alt='Report Thumbnail for {report_end_date}' style='max-width: 100%; height: auto;'><br /><br />
+        The PortalFuse Weekly Security Update Report is designed to help System Administrators and Security Professionals like you keep their systems secure. With this report, you can easily access critical KB articles and update packages for your Windows devices, saving you time and effort.<br />
+
+        Click the URL above to access the full report. If you have any questions or feedback, please don't hesitate to reach out.<br /><br />
+
+        Best regards,<br />
+        PortalFuse Data Team<br />
+      base_url: "https://portalfuse.io/wp-content/uploads/msrc_weekly/"
+      from: "webmaster@portalfuse.io"
+      
