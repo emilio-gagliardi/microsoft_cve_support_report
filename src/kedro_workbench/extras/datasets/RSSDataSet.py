@@ -13,15 +13,16 @@ from pymongo.errors import PyMongoError
 import hashlib
 import logging
 from icecream import ic
-import datetime
+from datetime import datetime, timedelta
 ic.configureOutput(includeContext=True)
 logger = logging.getLogger("kedro")
 
 
 class RSSFeedExtract(AbstractDataSet):
-    def __init__(self, url, collection, output_format="text", output_dir=None):
+    def __init__(self, url, collection, day_interval=None, output_format="text", output_dir=None):
         self._url = url
         self._collection = collection
+        self._day_interval = day_interval
         self._schema_format = output_format
         self._schema_dir = output_dir
         self._feed_name = None
@@ -51,27 +52,19 @@ class RSSFeedExtract(AbstractDataSet):
         self._schema_dir = value
 
     def _load(self):
-        """parsed_feed = feedparser.parse(self.url)
-        self.feed_name = parsed_feed.feed.get("title", "unknown_feed_name")
-
-        if self._schema_format == "text":
-            generate_feed_structure_text(self.url, self.feed_name, self.schema_dir)
-        elif self._schema_format == "yaml":
-            generate_feed_structure_yaml(self.url, self.feed_name, self.schema_dir)"""
+        """ Load data from RSS feed, filtering items based on publication date. """
         response = requests.get(self.url)
         xml_content = response.text
         soup = BeautifulSoup(xml_content, "xml")
         items = soup.find_all("item")
 
+        if self._day_interval is not None:
+            cutoff_date = datetime.now() - timedelta(days=self._day_interval)
+
         parsed_feed = []
         collection = self._collection
         for item in items:
-            # print(f"item: {item}")
             item_dict = {}
-
-            revision = item.get("Revision")
-            if revision:
-                item_dict["revision"] = revision
 
             guid = item.find("guid")
             if guid:
@@ -92,14 +85,22 @@ class RSSFeedExtract(AbstractDataSet):
             description = item.find("description")
             if description:
                 item_dict["description"] = description.text
-            
+
             pub_date = item.find("pubDate")
             if pub_date:
                 item_dict["published"] = pub_date.text
-            item_dict["collection"] = collection
+                # Convert pubDate to datetime object for comparison
+                # print(f"raw date string: {pub_date.text}")
+                pub_date_dt = datetime.strptime(pub_date.text.replace('Z', 'UTC'), '%a, %d %b %Y %H:%M:%S %Z')
 
+                # Filter based on the cutoff_date if days_ago is not None
+                if self._day_interval is not None and pub_date_dt < cutoff_date:
+                    continue
+
+            item_dict["collection"] = collection
             parsed_feed.append(item_dict)
-        # print(parsed_feed[0])
+        # for item in parsed_feed:
+        #     print(f"{item}")
         return parsed_feed
 
     def _save(self, data: Any) -> None:

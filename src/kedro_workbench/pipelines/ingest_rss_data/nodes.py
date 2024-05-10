@@ -157,7 +157,7 @@ def transform_rss_1_feed(
         
         # print(f"fetching: {source_url}")
         driver.get(source_url)
-        
+        time.sleep(1)
         header_element = wait_for_selenium_element(driver, "h1.ms-fontWeight-semibold.css-196")
         # print(f"header_element {header_element}")
         header_text = execute_js_on_element(driver, header_element,
@@ -223,6 +223,8 @@ def transform_rss_1_feed(
     driver.close()
     time.sleep(3)
     driver.quit()
+    # for rss_1 in sorted_transformed_rss_feed:
+    #     print(rss_1)
     logger.info(f"RSS Ingestion of MSRC posts found {len(transformed_rss_feed)} MSRC posts.\nExcel Ingestion found {len(sorted_downloaded_cves)} MSRC posts.")
     logger.info(f"Final MSRC Ingestion total: {len(sorted_transformed_rss_feed)}.\nNOTE. RSS ingestion fetches all MSRC posts from RSS feed, so the total doesn't reflect how many posts will be inserted.")
     return sorted_transformed_rss_feed
@@ -294,7 +296,8 @@ def transform_rss_3_feed(
             str(sorted(subset_dict.items())).encode()
         ).hexdigest()
         item["hash"] = dict_hash
-    
+    # for item in transformed_rss_feed:
+    #     print(item)
     return transformed_rss_feed
 
 
@@ -329,7 +332,8 @@ def transform_rss_4_feed(
             str(sorted(subset_dict.items())).encode()
         ).hexdigest()
         item["hash"] = dict_hash
-    
+    # for item in transformed_rss_feed:
+    #     print(item)
     return transformed_rss_feed
 
 

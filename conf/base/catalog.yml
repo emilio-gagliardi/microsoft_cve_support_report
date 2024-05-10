@@ -9,6 +9,7 @@ basic_API:
 
 _rss_feed_extract: &rss_ingest
   type: kedro_workbench.extras.datasets.RSSDataSet.RSSFeedExtract
+  day_interval: 14
 
 rss_1_feed_extract: 
   <<: *rss_ingest
