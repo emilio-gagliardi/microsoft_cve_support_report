@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from pymongo.errors import PyMongoError
 import hashlib
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 logger = logging.getLogger(__name__)
 import requests
 from bs4 import BeautifulSoup
@@ -28,39 +28,43 @@ chrome_options.add_argument("--headless")
 
 
 class HTMLExtract(AbstractDataSet):
-    def __init__(self, url: str, collection: str):
+    def __init__(self, url: str, collection: str, day_interval=None):
         self._url = url
         self._collection = collection
-
+        self._day_interval = day_interval
+        
     def _load(self) -> dict:
+        # Initialize WebDriver to fetch page content
         driver = webdriver.Chrome(options=chrome_options)
         try:
+            # Retrieve the HTML content from the specified URL
             driver.get(self._url)
-        
+            # print(self._url)
+            logger.info(f"Extracting content from URL: {self._url}")
             html_content = driver.page_source
             soup = BeautifulSoup(html_content, "html.parser")
+
+            # Find all H2 headings within the specified div tags
+            h2_divs = soup.find_all("div", class_="heading-wrapper", attrs={"data-heading-level": "h2"})
+
+            # Calculate cutoff date from the current date based on the specified day_interval
+            cutoff_date = datetime.now() - timedelta(days=self._day_interval) if self._day_interval is not None else None
+
+            # Initialize list to store processed data chunks
             chunks = []
-            h2_divs = soup.find_all(
-                "div", class_="heading-wrapper", attrs={"data-heading-level": "h2"}
-            )
-            # ADDED JAn 18, 2024. page format changed for Channel Notes
-            time_tag = soup.find('time', attrs={'datetime': True})
-            # print(f"beautiful soup found the datetime tag: {time_tag}")
-            # Extract the 'datetime' attribute value if the element is found
-            post_published_date = time_tag['datetime'] if time_tag else None
-            # print(f"post_published_date: {post_published_date}")
+
+            # Iterate through found H2 divs to extract and process information
             for i in range(len(h2_divs)):
-                chunk = []
                 current_div = h2_divs[i]
                 next_div = h2_divs[i + 1] if i + 1 < len(h2_divs) else None
+                chunk = []
 
-                # Extract the h2 element and add it to the chunk
+                # Capture the link and H2 element details
                 entry_url = current_div.find("a")
-                chunk.append(entry_url)
                 h2_element = current_div.find("h2")
-                chunk.append(h2_element)
+                chunk.extend([entry_url, h2_element])
 
-                # Find all elements after the current div until the next div
+                # Gather all relevant sibling elements till the next div
                 sibling = current_div.find_next_sibling()
                 while sibling and sibling != next_div:
                     chunk.append(sibling)
@@ -68,40 +72,33 @@ class HTMLExtract(AbstractDataSet):
 
                 chunks.append(chunk)
 
-            for chunk in chunks:
-                for element in chunk:
-                    if element.name in ("p", "div", "a", "ul", "li"):
-                        self.process_a_tags(element, self._url)
-
+            # Process each chunk to extract and format required information into JSON objects
             json_objects = []
             current_year = datetime.now().year
-            
             for chunk in chunks:
-                # print(f"chunk from edge page: {chunk}")
-                a_tag = chunk[0]
+                a_tag, h2_element = chunk[0], chunk[1]
                 link = a_tag.get("href")
-                h2_element = chunk[1]
                 raw_id = h2_element.get("id")
-                # ic(f"h2.id value: {raw_id}")
                 date_published_raw = self.parse_date_string(raw_id)
-                # ic(f"parsed from h2.id: {date_published_raw}")
+                # print(f"date_published_raw is: {date_published_raw}")
                 version = self.parse_version_string(raw_id)
-                # ic(f"found version: {version}")
-                date_published = convert_date_string(date_published_raw, current_year)
-                
-                # ic(f"converted date string: {date_published}")
-                if date_published == "NaT":
-                    continue
-                    # ic(f"converted date string: {date_published}")
-                published_dt = datetime.strptime(date_published, "%d-%m-%Y")
-                if published_dt.year != current_year:
-                    current_year = published_dt.year
-                id = generate_custom_uuid(url=link, date_str=date_published)
 
+                # Validate complete date; skip processing if 'NaT' or incomplete
+                if date_published_raw == "NaT" or not re.search(r'\d{4}', date_published_raw):
+                    continue
+
+                # date_published = convert_date_string(date_published_raw, current_year)
+                published_dt = datetime.strptime(date_published_raw, "%B-%d-%Y")
+
+                # Filter data based on the cutoff date if day_interval is specified
+                if cutoff_date is not None and published_dt < cutoff_date:
+                    continue
+
+                id = generate_custom_uuid(url=link, date_str=date_published_raw)
                 subject = h2_element.get_text()
                 content = "".join(str(element) for element in chunk)
 
-                # Create the JSON object
+                # Create JSON object with extracted and formatted data
                 json_object = {
                     "id": id,
                     "published": published_dt,
@@ -111,13 +108,16 @@ class HTMLExtract(AbstractDataSet):
                     "collection": self._collection,
                     "version": version,
                 }
-
-                # Append the JSON object to the list
                 json_objects.append(json_object)
+
         finally:
+            # Ensure the WebDriver is closed properly
             driver.close()
             time.sleep(3)
             driver.quit()
+        # for item in json_objects:
+        #     print(item)
+        logger.info(f"Finished extracting {len(json_objects)} items for ingestion.")
         return json_objects
 
     def _save(self, data: dict):
@@ -162,9 +162,10 @@ class HTMLExtract(AbstractDataSet):
             return partial_date_match.group(1)
 
         # Check for an integer
+        # not sure what this portion is needed for...
         integer_pattern = r"\b(\d+)\b"
         integer_match = re.search(integer_pattern, input_string)
-        ic(f"integer match: {integer_match}")
+        
         if integer_match and not input_string.isdigit():
             return "NaT"
         # ic(f"couldnt parse a date from {input_string}")
@@ -230,7 +231,7 @@ class HTMLDocuments(AbstractDataSet):
         # ic(existing_hashs)
         new_entries = [doc for doc in data if doc["hash"] not in existing_hashs]
         ids_to_insert = [doc["id"] for doc in new_entries]
-        ic(f"new entries: {len(new_entries)}")
+        logger.info(f"Loaded {len(new_entries)} new entries in {self._mongo_collection}")
         if len(new_entries):
             # print(f"new entries: {ids_to_insert}")
             collection.insert_many(new_entries)

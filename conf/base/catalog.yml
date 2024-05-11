@@ -146,6 +146,7 @@ email_jsons_augmented_1:
 
 _html_extract: &html_extract
   type: kedro_workbench.extras.datasets.HTMLDataSet.HTMLExtract
+  day_interval: 14
 
 html_1_extract:
   <<: *html_extract
