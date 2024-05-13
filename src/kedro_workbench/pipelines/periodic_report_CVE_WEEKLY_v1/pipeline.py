@@ -154,17 +154,17 @@ def create_pipeline(**kwargs) -> Pipeline:
         #         outputs=None,
         #         name="load_report_assets_to_webserver",
         #     ),
-        # node(
-        #         func=send_notification_to_sendgrid_qa_list,
-        #         inputs=["periodic_report_generated", "params:report_params_periodic_report_CVE_WEEKLY_v1.sendgrid"],
-        #         outputs=None,
-        #         name="send_notification_to_sendgrid_qa_list",
-        #     ),
         node(
-                func=create_draft_campaign_cve_weekly,
+                func=send_notification_to_sendgrid_qa_list,
                 inputs=["periodic_report_generated", "params:report_params_periodic_report_CVE_WEEKLY_v1.sendgrid"],
                 outputs=None,
-                name="create_draft_campaign_cve_weekly",
+                name="send_notification_to_sendgrid_qa_list",
             ),
+        # node(
+        #         func=create_draft_campaign_cve_weekly,
+        #         inputs=["periodic_report_generated", "params:report_params_periodic_report_CVE_WEEKLY_v1.sendgrid"],
+        #         outputs=None,
+        #         name="create_draft_campaign_cve_weekly",
+        #     ),
         
     ])

@@ -28,8 +28,8 @@ def get_all_lists(api_key):
     
 def get_recipients_from_sendgrid_list(api_key, list_id):
     sg = SendGridAPIClient(api_key)
-    # Ensuring that the list_id is passed as a list or appropriately formatted string
-    query_params = {'list_ids': list_id}
+    # Ensuring that the list_id is passed as a list
+    query_params = {'list_ids': [list_id]}
     response = sg.client.marketing.contacts.get(query_params=query_params)
         
     if response.status_code == 200:
