@@ -17,6 +17,9 @@ from tenacity import retry, wait_exponential, stop_after_attempt
 import tiktoken
 import json
 import logging
+# from athina_logger.api_key import AthinaApiKey
+# from athina_logger.openai_wrapper import openai
+# from athina_logger import inference_logger
 
 logger = logging.getLogger(__name__)
 encoding = tiktoken.get_encoding("cl100k_base")
@@ -27,6 +30,10 @@ conf_loader = ConfigLoader(conf_source=conf_path)
 parameters = conf_loader["parameters"]
 credentials = conf_loader["credentials"]
 openai_api_key = credentials["OPENAI"]["api_key"]
+
+athina_credentials = credentials["athina"]
+athina_api_key = athina_credentials['api_key']
+# AthinaApiKey.set_api_key(athina_api_key)
 
 def get_num_tokens(text):
     num_tokens = len(encoding.encode(text))
@@ -445,24 +452,40 @@ def fit_prompt_to_window(text, max_tokens):
 
 # @retry(wait=wait_exponential(multiplier=1, min=4, max=20), stop=stop_after_attempt(3))
 def call_llm_completion(model, system_prompt, input_prompt, max_tokens, temperature):
+    # from athina_logger.athina_meta import AthinaMeta
+    # from athina_logger.inference_logger import InferenceLogger
     client = OpenAI(
         api_key=openai_api_key,
     )
     response_msg = ""
     payload = {
-    "model": model,
-    "messages": [
-            {
-                "role": "system",
-                "content": system_prompt
-            },
-            {
-                "role": "user",
-                "content": input_prompt
-            }
-        ],
+        "model": model,
+        "messages": [
+                {
+                    "role": "system",
+                    "content": system_prompt
+                },
+                {
+                    "role": "user",
+                    "content": input_prompt
+                }
+            ],
         "max_tokens": max_tokens,
         "temperature": temperature,
+        # "athina_meta": AthinaMeta(
+        #     prompt_slug="yc_rag_v1",
+        #     context={"information": input_prompt}, # Your retrieved documents
+        #     session_id="session_id_1", # Conversation ID
+        #     customer_id="customer_id_1", # Your Customer's ID
+        #     customer_user_id="customer_user_id_1", # Your End User's ID
+        #     environment="production", # Environment (production, staging, dev, etc)
+        #     external_reference_id="ext_ref_123456",
+        #     custom_attributes={
+        #         "name": "John",
+        #         "age": 30,
+        #         "city": "New York"
+        #         } 
+        # )
     }
     
     # print(payload)
@@ -470,6 +493,8 @@ def call_llm_completion(model, system_prompt, input_prompt, max_tokens, temperat
         response = client.chat.completions.create(**payload)
         choice = response.choices[0]
         response_msg = choice.message.content
+        # added for athina
+        response = response.model_dump()
     except HTTPError as e:
         # If an HTTPError is caught, print out the error and the data sent
         print(f"HTTPError occurred: {e}")
@@ -477,7 +502,22 @@ def call_llm_completion(model, system_prompt, input_prompt, max_tokens, temperat
     except Exception as e:
         # Catch other exceptions
         print(f"An exception occurred: {e}")
-    
+    # try:
+    #     InferenceLogger.log_inference(
+    #         prompt_slug="weekly_report_post_summary",
+    #         prompt=payload['messages'],
+    #         language_model_id=model,
+    #         response=response,
+    #         external_reference_id="ext_ref_id_str",
+    #         cost=0.0123,
+    #         custom_attributes={
+    #             "report_end_date": "2024_05_07",
+    #             "post_count": 3,
+    #             "patch_tuesday": False
+    #         }
+    #     )
+    # except Exception as e:
+    #     print(e)
     sleep(3.5)
     return response_msg
 

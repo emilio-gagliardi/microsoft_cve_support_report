@@ -46,6 +46,7 @@ sendgrid_username = sendgrid_credentials["username"]
 sendgrid_password = sendgrid_credentials["password"]
 sendgrid_api_key = sendgrid_credentials["api_key"]
 
+
 def clean_bad_build_data(report_end_date, day_interval, document_limit):
     # convert 'None' string to None type 
     document_limit = convert_to_actual_type(document_limit)
@@ -1108,7 +1109,7 @@ def send_notification_to_sendgrid_qa_list(report_data_container, params):
     notification_body_template = params['report_qa']['body']
     notification_to = get_recipients_from_sendgrid_list(sendgrid_api_key, report_qa_sendgrid_list_id)
     # print(f"Updated get_recipients() -> {notification_to}")
-    # notification_to = "emilio.gagliardi@portalfuse.io"
+    notification_to = "emilio.gagliardi@portalfuse.io"
     report_end_date = report_data_container['report_end_date']
     contact_email = params['report_qa']['contact']
     report_base_url = params['report_qa']['base_url']
