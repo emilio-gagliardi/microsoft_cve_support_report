@@ -61,16 +61,17 @@ def load_collection_details(collection_names_params, collection_descriptions_par
 
 def load_vectordb_client(chroma_store_params):
 
-    chroma_client = chromadb.PersistentClient(path=chroma_store_params["persist_dir"])
-
+    # chroma_client = chromadb.PersistentClient(path=chroma_store_params["persist_dir"])
+    chroma_client = None
     return chroma_client
 
 
 def load_vectordb_embedding_function(embedding_function_params):
-    embedding_function = embedding_functions.OpenAIEmbeddingFunction(
-        model_name=embedding_function_params["model_name"],
-        api_key=openai.api_key,
-    )
+    # embedding_function = embedding_functions.OpenAIEmbeddingFunction(
+    #     model_name=embedding_function_params["model_name"],
+    #     api_key=openai.api_key,
+    # )
+    embedding_function = None
     return embedding_function
 
 
