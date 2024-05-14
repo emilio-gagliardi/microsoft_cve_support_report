@@ -23,8 +23,8 @@ from llama_index.storage.storage_context import StorageContext
 from llama_index.text_splitter import TokenTextSplitter, SentenceSplitter
 from llama_index.vector_stores import ChromaVectorStore
 import tiktoken
-import chromadb
-from chromadb.utils import embedding_functions
+# import chromadb
+# from chromadb.utils import embedding_functions
 import openai
 from icecream import ic
 
