@@ -29,13 +29,13 @@ def get_all_lists(api_key):
 def get_recipients_from_sendgrid_list(api_key, list_id):
     sg = SendGridAPIClient(api_key)
     # Ensuring that the list_id is passed as a list
-    # query_params = {'list_ids': [list_id]}
-    # response = sg.client.marketing.contacts.get(query_params=query_params)
-    url = f"https://api.sendgrid.com/v3/marketing/contacts?list_ids={list_id}"
-    response = sg.client.get(url)
+    query_params = {'list_ids': [list_id]}
+    response = sg.client.marketing.contacts.get(query_params=query_params)
+    # url = f"https://api.sendgrid.com/v3/marketing/contacts?list_ids={list_id}"
+    # response = sg.client.get(url)
     if response.status_code == 200:
         data = json.loads(response.body)
-        print(f"API response data:\n{json.dumps(data, indent=4)}")
+        # print(f"API response data:\n{json.dumps(data, indent=4)}")
         # Filter recipients based on list_id
         recipients = [
             contact['email'] 

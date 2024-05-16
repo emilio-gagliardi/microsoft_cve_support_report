@@ -729,10 +729,13 @@ def is_second_tuesday(date=None):
         if 8 <= day <= 14:
             # If the day is 8, it's the first Tuesday
             if day == 8:
+                # print(f"weekday {weekday} day {day}")
                 return False
             # Otherwise, it's the second Tuesday
             else:
+                # print(f"weekday {weekday} day {day}")
                 return True
     
     # If it's not a Tuesday or not between the 8th and 14th, it's not the second Tuesday
+    # print(f"weekday {weekday} day {day}")
     return False

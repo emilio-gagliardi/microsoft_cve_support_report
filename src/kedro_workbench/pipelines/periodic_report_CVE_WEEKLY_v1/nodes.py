@@ -1216,6 +1216,67 @@ def create_draft_campaign_cve_weekly(report_data_container, params):
         if hasattr(e, 'headers'):
             print(f"Response Headers: {e.headers}")
 
+def create_draft_campaign_cve_weekly_workaround(report_data_container, params):
+    # the report data container contains a list of file paths for assets generated during generation. 
+    # the order is arbitrary, so the list is extracted and then each asset's path is retreived
+    all_file_paths = report_data_container['sftp']
+    thumbnail_path = find_file_path(all_file_paths, 'thumbnails')
+    html_path = find_file_path(all_file_paths, 'html')
+
+    # Load the PNG file content and encode it
+    # report_thumbnail = load_encoded_file(thumbnail_path)
+
+    # SendGrid SDK is used to grab all list details
+    # Fetch configuration and list details
+    all_lists = get_all_lists(sendgrid_api_key)
+    # We only want to send the report to subscribers, iterate over lists until report subscribers is found
+    # this string should be parameterized in yaml and passed at runtime.
+    report_subscriber_sendgrid_list = next((d for d in all_lists if d['name'] == 'msrc_weekly_report'), None)
+    report_subscriber_sendgrid_list_id = report_subscriber_sendgrid_list['id']
+    # print(f"report_subscriber_sendgrid_list: {report_subscriber_sendgrid_list}")
+    # print(f"report_subscriber_sendgrid_list_id: {report_subscriber_sendgrid_list_id}")
+    # Construct email details
+    campaign_from = params['subscriber_campaign']['from']
+    campaign_subject_template = params['subscriber_campaign']['subject']
+    campaign_body_template = params['subscriber_campaign']['body']
+    # campaign_to = get_recipients_from_sendgrid_list(sendgrid_api_key, report_subscriber_sendgrid_list_id)
+    report_end_date = report_data_container['report_end_date']
+    # print(f"report end date: {report_end_date}")
+    report_base_url = params['subscriber_campaign']['base_url']
+    # print(f"report_base_url: {report_base_url}")
+    html_file_name = extract_file_name(html_path)
+    # print(f"html_file_name: {html_file_name}")
+    thumbnail_file_name = extract_file_name(thumbnail_path)
+    # print(f"thumbnail_file_name: {thumbnail_file_name}")
+    date_to_check = datetime.strptime(report_end_date, "%Y_%m_%d")
+    patch_tuesday = " [Patch Tuesday]" if is_second_tuesday(date_to_check) else ""
+    # print(f"patch_tuesday: {patch_tuesday}")
+    campaign_subject = campaign_subject_template.format(
+        report_end_date=report_end_date,
+        patch_tuesday=patch_tuesday
+    )
+    # print(f"rendered subject: {campaign_subject}")
+    campaign_body = campaign_body_template.format(
+        report_end_date=report_end_date,
+        base_url=report_base_url,
+        html_file_name=html_file_name,
+        thumbnail_file_name=thumbnail_file_name
+    )
+    # print(f"rendered body: {campaign_body}")
+    
+    message = Mail(
+        from_email='webmaster@portalfuse.io',
+        to_emails='emilio.gagliardi@portalfuse.io',
+        subject=campaign_subject,
+        html_content=campaign_body)
+    try:
+        sg = SendGridAPIClient(sendgrid_api_key)
+        response = sg.send(message)
+        # print(response.status_code)
+        # print(response.body)
+        # print(response.headers)
+    except Exception as e:
+        print(e.message)
 
 def move_cve_weekly_report_assets_to_blob(report_data_container):
     
