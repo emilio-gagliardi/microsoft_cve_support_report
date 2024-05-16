@@ -1,22 +1,36 @@
-from typing import Dict, Any, List, Tuple
-import feedparser
-from bs4 import BeautifulSoup
-import requests
-import pprint
-import logging
 import hashlib
+import logging
+# import pprint
+import time
+from typing import Any, Dict, List
+import re
+from datetime import datetime
+# import feedparser
 import pandas as pd
-from kedro_workbench.pipelines.ingest_product_build_cve_data.nodes import (download_windows10_product_build_data, download_windows11_product_build_data, download_edge_product_build_data, extract_product_build_cve_windows_10_node, extract_product_build_cve_edge_node, extract_product_build_cve_windows_11_node)
-from kedro_workbench.utils.kedro_utils import make_row_hash
-from kedro_workbench.utils.feed_utils import extract_filter_product_build_data
-from kedro_workbench.extras.datasets.ExcelDataSet import LatestExcelDataSet
-from kedro_workbench.utils.feed_utils import (setup_selenium_browser, wait_for_selenium_element, execute_js_on_element)
+# import requests
+# from bs4 import BeautifulSoup
 from kedro.config import ConfigLoader
 from kedro.framework.project import settings
-import time
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.support import expected_conditions as EC
+# from selenium.webdriver.support.ui import WebDriverWait
+
+from kedro_workbench.extras.datasets.ExcelDataSet import LatestExcelDataSet
+from kedro_workbench.pipelines.ingest_product_build_cve_data.nodes import (
+    download_edge_product_build_data,
+    download_windows10_product_build_data,
+    download_windows11_product_build_data,
+    extract_product_build_cve_edge_node,
+    extract_product_build_cve_windows_10_node,
+    extract_product_build_cve_windows_11_node,
+)
+from kedro_workbench.utils.feed_utils import (
+    execute_js_on_element,
+    extract_filter_product_build_data,
+    setup_selenium_browser,
+    wait_for_selenium_element,
+)
+# from kedro_workbench.utils.kedro_utils import make_row_hash
 
 conf_path = str(settings.CONF_SOURCE)
 conf_loader = ConfigLoader(conf_source=conf_path)
@@ -43,13 +57,11 @@ def transform_published_parsed(d):
         d["published_parsed"] = transformed_timestamp
     return d
 
-import re
-from datetime import datetime
 
 def extract_published_from_title(s):
     # Regex pattern to find date in the format "Month DD, YYYY"
     date_pattern = r'(\bJanuary|\bFebruary|\bMarch|\bApril|\bMay|\bJune|\bJuly|\bAugust|\bSeptember|\bOctober|\bNovember|\bDecember) \d{1,2}, \d{4}'
-    
+
     # Try to find a date in the string
     match = re.search(date_pattern, s)
     if match:
@@ -61,6 +73,7 @@ def extract_published_from_title(s):
         return formatted_date
     else:
         return None
+
 
 def extract_rss_1_feed(feed) -> Dict[str, Any]:
     # no processing required
@@ -89,7 +102,6 @@ def transform_rss_1_feed(
         ).hexdigest()
         item["hash"] = dict_hash
     
-    
     download_params = all_params['product_build_ingestion_params']
     product_patterns_windows_10 = all_params['product_build_product_patterns']['windows_10']
     product_patterns_windows_11 = all_params['product_build_product_patterns']['windows_11']
@@ -100,15 +112,15 @@ def transform_rss_1_feed(
     node_status = download_windows11_product_build_data(skip_download, download_params, headless=True, begin_ingestion=True)
     node_status = download_edge_product_build_data(skip_download, download_params, headless=True, begin_ingestion=True)
     
-    csv_data_windows_10 =  LatestExcelDataSet(
+    csv_data_windows_10 = LatestExcelDataSet(
         filepath="data/01_raw/windows_10/",
         load_args={"sheet_name": "Security Updates"}
     )
-    csv_data_windows_11 =  LatestExcelDataSet(
+    csv_data_windows_11 = LatestExcelDataSet(
         filepath="data/01_raw/windows_11/",
         load_args={"sheet_name": "Security Updates"}
     )
-    csv_data_edge =  LatestExcelDataSet(
+    csv_data_edge = LatestExcelDataSet(
         filepath="data/01_raw/edge/",
         load_args={"sheet_name": "Security Updates"}
     )
@@ -187,9 +199,9 @@ def transform_rss_1_feed(
         else:
             version_text = "0.9"
             description_text = "Information published."
-        
+
         version_padded = "{:.10f}".format(float(version_text))
-        
+
         temp_dict = {
             'post_id': post_id,
             'collection': collection,
@@ -205,17 +217,17 @@ def transform_rss_1_feed(
         ).hexdigest()
         # print(f"alternate ingestion found a title -> {temp_dict['title']}")
         downloaded_cves.append(temp_dict)
-    
+
     # print("RSS CVEs")
     sorted_transformed_rss_feed = sorted(transformed_rss_feed, key=lambda x: x['post_id'], reverse=True)
     # for item in sorted_transformed_rss_feed:
     #     print(f"{item['post_id']} - {item['source']}")
-        
+
     sorted_downloaded_cves = sorted(downloaded_cves, key=lambda x: x['post_id'], reverse=True)
     # print("EXCEL CVEs")
     # for item in sorted_downloaded_cves:
     #     print(f"{item['post_id']} - {item['source']}")
-    
+
     for dict2 in sorted_downloaded_cves:
         if not any(dict1['post_id'] == dict2['post_id'] for dict1 in sorted_transformed_rss_feed):
             # print(f"adding EXCEL CVE to RSS CVE {dict2['post_id']}")
@@ -234,11 +246,13 @@ def load_rss_1_feed(preprocessed_rss_feed):
 
     return preprocessed_rss_feed
 
+
 # rss_2 is windows update
 def extract_rss_2_feed(feed) -> Dict[str, Any]:
     # no processing required
 
     return feed
+
 
 def transform_rss_2_feed(
     raw_rss_feed: List[Dict[str, Any]], params: Dict[Any, Any]
@@ -304,6 +318,7 @@ def transform_rss_3_feed(
 def load_rss_3_feed(preprocessed_rss_feed):
 
     return preprocessed_rss_feed
+
 
 # rss_3 is windows 11
 def extract_rss_4_feed(feed) -> Dict[str, Any]:

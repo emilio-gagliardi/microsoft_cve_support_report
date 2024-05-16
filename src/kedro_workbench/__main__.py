@@ -1,11 +1,16 @@
 """kedro workbench file for ensuring the package is executable
 as `kedro-workbench` and `python -m kedro_workbench`
 """
-import importlib
-from pathlib import Path
 
+import importlib
+import warnings
+from pathlib import Path
 from kedro.framework.cli.utils import KedroCliError, load_entry_points
 from kedro.framework.project import configure_project
+from kedro.io.core import KedroDeprecationWarning
+# filter kedro deprecation warnings
+warnings.filterwarnings("ignore", category=KedroDeprecationWarning)
+warnings.simplefilter("ignore", KedroDeprecationWarning)
 
 
 def _find_run_command(package_name):
