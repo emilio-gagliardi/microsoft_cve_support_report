@@ -1,0 +1,22 @@
+# This is a boilerplate parameters config generated for pipeline 'preprocess_docs_llama_index'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+
+validate_new_nodes:
+  WORD_COUNT_OUTLIER_CUTOFF: 500
+  SentenceWindowNodeParser:
+    window_size: 5
+    window_metadata_key: "window"
+    original_text_metadata_key: "original_text"
+    include_metadata: True
+    include_prev_next_rel: True
+    show_progress: True
+  SentenceSplitter:
+    separator: " "
+    chunk_size: 512
+    chunk_overlap: 125
+    paragraph_separator: "\n\n"
+    secondary_chunking_regex: "[^,.;。]+[,.;。]?"
+    tokenizer: "tiktoken.encoding_for_model('text-davinci-002').encode"

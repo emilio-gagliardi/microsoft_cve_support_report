@@ -1,0 +1,49 @@
+# This is a boilerplate parameters config generated for pipeline 'consolidate_stage_index_data'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+
+index_source_location:
+  dir_path: "abfs://report-data/"
+  file_path: "abfs://report-data/index_source_main.jsonl"
+
+filename_parts_rss_1:
+  prefix: "msrc"
+  base: "index_source"
+
+filename_parts_rss_2:
+  prefix: "winupdt"
+  base: "index_source"
+
+filename_parts_rss_3:
+  prefix: "w10"
+  base: "index_source"
+
+filename_parts_rss_4:
+  prefix: "w11"
+  base: "index_source"
+
+filename_parts_edge_1:
+  prefix: "stable"
+  base: "index_source"
+
+filename_parts_edge_2:
+  prefix: "beta"
+  base: "index_source"
+
+filename_parts_edge_3:
+  prefix: "archive"
+  base: "index_source"
+
+filename_parts_edge_4:
+  prefix: "mobile"
+  base: "index_source"
+
+filename_parts_edge_5:
+  prefix: "security"
+  base: "index_source"
+
+filename_parts_patch:
+  prefix: "patch_management"
+  base: "index_source"

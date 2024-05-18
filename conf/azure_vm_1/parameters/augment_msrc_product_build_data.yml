@@ -1,0 +1,65 @@
+# This is a boilerplate parameters config generated for pipeline 'augment_msrc_product_build_data'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+
+product_build_augment_params:
+    columns_to_keep:
+    - 'product_name'
+    - 'product_version'
+    - 'product_architecture'
+    - 'impact_type'
+    - 'severity_type'
+    - 'build_number'
+    - 'cve_id'
+    - 'kb_id'
+    - 'product_build_id'
+    - 'article_url'
+
+update_package_install_search_criteria:
+  - product: "Windows 10"
+    version: null
+    architecture: "x64-based"
+  - product: "Windows 10"
+    version: null
+    architecture: "x86-based"
+  - product: "Windows 10"
+    version: "20H2"
+    architecture: "x64-based"
+  - product: "Windows 10"
+    version: "20H2"
+    architecture: "x86-based"
+  - product: "Windows 10"
+    version: "21H1"
+    architecture: "x64-based"
+  - product: "Windows 10"
+    version: "21H1"
+    architecture: "x86-based"
+  - product: "Windows 10"
+    version: "21H2"
+    architecture: "x64-based"
+  - product: "Windows 10"
+    version: "21H2"
+    architecture: "x86-based"
+  - product: "Windows 10"
+    version: "22H2"
+    architecture: "x64-based"
+  - product: "Windows 10"
+    version: "22H2"
+    architecture: "x86-based"
+  - product: "Windows 11"
+    version: "21H2"
+    architecture: "x64-based"
+  - product: "Windows 11"
+    version: "22H2"
+    architecture: "x64-based"
+  - product: "Windows 11"
+    version: "23H2"
+    architecture: "x64-based"
+  - product: "Windows 11"
+    version: null
+    architecture: "x64-based"
+  - product: "Windows 11"
+    version: null
+    architecture: "x86-based"

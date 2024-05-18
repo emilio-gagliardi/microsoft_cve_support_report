@@ -8,9 +8,22 @@ conf/local/**
 
 # ignore potentially sensitive credentials files
 conf/**/*credentials*
-
+conf/**/key*
+conf/**/keys*
 # ignore everything in the following folders
 data/**
+!data/01_raw/
+!data/02_intermediate/
+!data/03_primary/
+!data/04_feature/
+!data/05_model_input/
+!data/06_models/
+!data/07_model_output/
+!data/08_reporting/
+!data/08_reporting/**
+!data/09_templates/
+!data/09_templates/**
+
 logs/**
 docs/**
 notebooks/**

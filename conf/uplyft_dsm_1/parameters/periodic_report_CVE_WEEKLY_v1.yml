@@ -1,0 +1,116 @@
+# This is a boilerplate parameters config generated for pipeline 'periodic_report_CVE_WEEKLY_v1'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+
+user_prompt_metadata_keys_periodic_report_CVE_WEEKLY_v1:
+  - id
+  - post_id
+  - revision
+  - published
+  - post_type
+  - title
+  - description
+  - source
+
+cve_metadata_keys_to_keep:
+  - id
+  - post_id
+  - published
+  - revision
+  - post_type
+  - title
+  - description
+  - source
+  - related_posts
+  - summary
+  - summarization_payload
+  - build_numbers
+  - product_build_ids
+  - products
+  - report_category 
+
+transformed_columns_to_keep:
+  - id
+  - post_id
+  - published
+  - revision
+  - post_type
+  - title
+  - description
+  - source
+  - related_posts
+  - summary
+  - summarization_payload
+  - build_numbers
+  - product_build_ids
+  - products
+  - report_category
+  - text
+  - build_number_str
+  - core_products
+  - kb_article_pairs
+  - package_pairs
+max_prompt_tokens_periodic_report_CVE_WEEKLY_v1: 5600
+max_llm_output_tokens_periodic_report_CVE_WEEKLY_v1: 3900
+llm_temperature_periodic_report_CVE_WEEKLY_v1: 0.2
+
+periodic_report_CVE_WEEKLY_v1_summarization_models:
+  custom: 
+  default: 'gpt-3.5-turbo-1106'
+
+graph_index_params_periodic_report_CVE_WEEKLY_v1':
+  persist_dir: 'data/06_models/graph_db/periodic_report_CVE_WEEKLY_v1'
+  graph_id: "periodic_report_CVE_WEEKLY_v1"
+
+source_docstore_periodic_report_CVE_WEEKLY_v1:
+  db: report_docstore
+  collection: docstore
+
+section_1_periodic_report_CVE_WEEKLY_v1:
+  weekdays_order: ['Wednesday', 'Thursday', 'Friday', 'Monday', 'Tuesday']
+  
+report_params_periodic_report_CVE_WEEKLY_v1:
+  report_title: PortalFuse Weekly Security Update Report
+  report_subtitle: (Windows and Edge Edition)
+  report_description: "The PortalFuse Weekly Security Update Report is a resource for System Administrators and Security Professionals looking to keep their systems secure. With a comprehensive compilation of Microsoft Security Response Center posts and Microsoft Support documentation, users can easily access critical KB articles and update packages for their Windows devices without having to spend time searching across multiple sources. This report helps busy Microsoft professionals to stay up-to-date with security issues and new features." 
+  plot_path: "../plots/"
+  section_labels:
+    section_1: MSRC Posts
+    section_2: Products
+    section_3: Tooling Support
+    section_4: Appendix
+  sftp:
+    local_base_path: "data/08_reporting/periodic_report_CVE_WEEKLY_v1"
+    remote_base_path: "www/portalfuse.io/public_html/wp-content/uploads/msrc_weekly"
+  sendgrid:
+    report_qa:
+      subject: "New report generated and pushed to production."
+      body: >
+        Here is the latest report generated for {report_end_date}.
+        The report URL is {base_url}{html_file_name}.
+        Contact {contact_email} if there are any issues.
+      base_url: "https://portalfuse.io/wp-content/uploads/msrc_weekly/html/"
+      from: "webmaster@portalfuse.io"
+      contact: "emilio.gagliardi@portalfuse.io"
+    subscriber_campaign:
+      subject: "New PortalFuse Security Update Report for {report_end_date}{patch_tuesday}"
+      body: >
+        Dear {{first_name}},<br /><br />
+        Our latest Weekly Security Update Report is now available. This report provides a concise summary of the latest Microsoft Security Response Center posts and support documentation, helping you stay up-to-date with critical security issues and new features.<br /><br />
+        **Report Details:**<br />
+        Date: {report_end_date}<br />
+        URL: <a href='{base_url}html/{html_file_name}' title='Click to open report' target='_blank'>Report {report_end_date}</a><br /><br />
+        As a reminder, the second Tuesday of every month is when Microsoft typically releases a large number of CVEs. Make sure to mark your calendar to stay on top of these critical updates.<br /><br />
+        Below is a sneak peek of this week's report:<br />
+        <img src='{base_url}thumbnails/{thumbnail_file_name}' alt='Report Thumbnail for {report_end_date}' style='max-width: 100%; height: auto;'><br /><br />
+        The PortalFuse Weekly Security Update Report is designed to help System Administrators and Security Professionals like you keep their systems secure. With this report, you can easily access critical KB articles and update packages for your Windows devices, saving you time and effort.<br />
+
+        Click the URL above to access the full report. If you have any questions or feedback, please don't hesitate to reach out.<br /><br />
+
+        Best regards,<br />
+        PortalFuse Data Team<br />
+      base_url: "https://portalfuse.io/wp-content/uploads/msrc_weekly/"
+      from: "webmaster@portalfuse.io"
+      

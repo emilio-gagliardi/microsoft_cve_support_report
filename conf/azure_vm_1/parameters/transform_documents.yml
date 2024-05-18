@@ -1,0 +1,58 @@
+# This is a boilerplate parameters config generated for pipeline 'transform_documents'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+
+rss_1_keys:
+  keys_for_content: ["description"]
+  keys_for_metadata: ["revision", "id", "published", "title", "description", "source", "collection", "post_id"]
+  catalog: rss_1_primary
+
+#Windows update
+rss_2_keys:
+  keys_for_content: ["description"]
+  keys_for_metadata: ["id", "source","title", "description", "collection", "published", "post_id"]
+  catalog: rss_2_primary
+
+#Windows 10
+rss_3_keys:
+  keys_for_content: ["description"]
+  keys_for_metadata: ["id", "source","title", "description", "collection", "published", "post_id"]
+  catalog: rss_3_primary
+
+#Windows 11
+rss_4_keys:
+  keys_for_content: ["description"]
+  keys_for_metadata: ["id", "source","title", "description", "collection", "published", "post_id"]
+  catalog: rss_4_primary
+
+edge_1_keys:  
+  keys_for_content: ["subject"]
+  keys_for_metadata: ["id", "source", "subject", "collection", "published", "post_id", "version"]
+  catalog: edge_primary_1
+
+edge_2_keys:
+  keys_for_content: ["subject"]
+  keys_for_metadata: ["id", "source", "subject", "collection", "published", "post_id"]
+  catalog: edge_primary_2
+
+edge_3_keys:
+  keys_for_content: ["subject"]
+  keys_for_metadata: ["id", "source", "subject", "collection", "published", "post_id"]
+  catalog: edge_primary_3
+
+edge_4_keys:
+  keys_for_content: ["subject"]
+  keys_for_metadata: ["id", "source", "subject", "collection", "published", "post_id"]
+  catalog: edge_primary_4
+
+edge_5_keys:
+  keys_for_content: ["subject"]
+  keys_for_metadata: ["id", "source", "subject", "collection", "published", "post_id"]
+  catalog: edge_primary_5
+
+patchmanagement_keys:
+  keys_for_content: ["body"]
+  keys_for_metadata: ["id", "receivedDateTime", "topic", "subject", "published"]
+  catalog: patchmanagement_primary

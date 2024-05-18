@@ -1,0 +1,17 @@
+
+collection_names:
+  - "msrc_security_update"
+  - "windows_10"
+  - "windows_11"
+  - "windows_update"
+  - "stable_channel_notes"
+  - "security_update_notes"
+  - "mobile_stable_channel_notes"
+  - "beta_channel_notes"
+  - "archive_stable_channel_notes"
+  - "patch_management"
+
+report_start_date: None
+report_end_date: None
+day_interval: 7
+document_limit: None
