@@ -1,0 +1,25 @@
+# This is a boilerplate parameters config generated for pipeline 'augment_edge_releases'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+
+filter_tags_1:
+  elements: ['a']
+  attributes: ['class']
+  values: ['root-144']
+
+edge_1_augmented:
+  catalog: edge_release_augmented_1
+
+edge_2_augmented:
+  catalog: edge_release_augmented_2
+
+edge_3_augmented:
+  catalog: edge_release_augmented_3
+
+edge_4_augmented:
+  catalog: edge_release_augmented_4
+
+edge_5_augmented:
+  catalog: edge_release_augmented_5

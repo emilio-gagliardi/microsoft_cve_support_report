@@ -1,0 +1,96 @@
+# This is a boilerplate parameters config generated for pipeline 'refresh_llama_indices'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+
+# This is a boilerplate parameters config generated for pipeline 'preprocess_docs_llama_index'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+
+
+WORD_COUNT_OUTLIER_CUTOFF: 500
+
+collection_descriptions:
+  msrc_security_update: Important announcements, updates, and fixes for microsoft secruity updates. A high priority, frequently updated collection of resources for triaging security issues.
+  windows_10: Annoucements and updates related to Windows 10 issues, products and services.
+  windows_11: Annoucements and updates related to Windows 11 issues, products and services.
+  windows_update: A collection of issues, bugs, errors, and solutions published by microsoft support. A broad collection that spans many products and services in the Microsoft ecosystem.
+  stable_channel_notes: Microsoft Edge Release Notes for the Stable version channel.
+  security_update_notes: Microsoft Edge Release Notes speficially covering security updates and fixes.
+  mobile_stable_channel_notes: Microsoft Edge Release Notes for the Mobile Stable version channel.
+  beta_channel_notes: Microsoft Edge Release Notes for the Beta version (not yet public, may contain bugs) channel.
+  archive_stable_channel_notes: Microsoft Edge Release Notes for the Archive channel. Once notes are 6-12 months old, they get recategorized as archive. Search here when 'published' date is older than 12 months.
+  patch_management: The conversations between expert microsoft system admins and architects. Text is noisy, unstructured and often contains email signitures unrelated to the topic. source material covers the wideest range of topics. May contain fixes to security issues or bugs.
+
+chroma_store:
+  persist_dir: 'C:/projects/technical-notes-llm-report/data/06_models/chroma_db'
+
+chroma_embedding_function:
+  model_name: text-embedding-ada-002
+
+storage_context:
+  persist_dir: 'C:/projects/technical-notes-llm-report/data/06_models/chroma_db'
+  docstore_path: 'C:/projects/technical-notes-llm-report/data/06_models/chroma_db/docstore.json'
+  indexstore_path: 'C:/projects/technical-notes-llm-report/data/06_models/chroma_db/index_store.json'
+
+text_splitter:
+  default: SentenceSplitter
+  TokenTextSplitter:
+    chunk_size: 512
+    chunk_overlap: 200
+    separator: " "
+    backup_separators: ["\n", "."]
+  SentenceSplitter:
+    separator: " "
+    chunk_size: 1024
+    chunk_overlap: 200
+    paragraph_separator: "\n\n"
+    secondary_chunking_regex: "[^,.;。]+[,.;。]?"
+    tokenizer: "tiktoken.encoding_for_model('gpt-3.5-turbo').encode"
+
+node_parser:
+  default: SentenceWindowNodeParser
+  SentenceWindowNodeParser:
+    window_size: 5
+    window_metadata_key: "window"
+    original_text_metadata_key: "original_text"
+    include_metadata: True
+    include_prev_next_rel: True
+    show_progress: True
+  SimpleNodeParser:
+    include_metadata: True
+    include_prev_next_rel: True
+
+llm:
+  openai:
+    temperature: 0.2
+    model: "gpt-3.5-turbo"
+    max_tokens: 3000
+
+llm_embedding_model:
+  OpenAIEmbedding:
+    model: text-embedding-ada-002
+    batch_size: 50
+
+service_context:
+  params: False
+
+vector_index_params:
+  persist_dir: 'C:/projects/technical-notes-llm-report/data/06_models'
+  vector_id: "technical_notes_vector_index"
+  store_nodes_override: True
+
+summary_index_params:
+  persist_dir: 'C:/projects/technical-notes-llm-report/data/06_models'
+  summary_id: "technical_notes_list_index"
+
+graph_index_params:
+  persist_dir: 'C:/projects/technical-notes-llm-report/data/06_models'
+  graph_id: "technical_notes_graph_index"
+
+source_docstore:
+  db: report_docstore
+  collection: docstore
