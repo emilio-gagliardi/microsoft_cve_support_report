@@ -31,7 +31,11 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=transform_rss_1_feed,
-                inputs=["rss_1_feed_for_transforming", "params:rss_1", "params:skip_download"],
+                inputs=[
+                    "rss_1_feed_for_transforming",
+                    "params:rss_1",
+                    "params:skip_download"
+                ],
                 outputs="rss_1_feed_for_loading",
                 name="transform_rss_1_feed",
             ),
@@ -49,7 +53,10 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=transform_rss_2_feed,
-                inputs=["rss_2_feed_for_transforming", "params:rss_2"],
+                inputs=[
+                    "rss_2_feed_for_transforming",
+                    "params:rss_2"
+                ],
                 outputs="rss_2_feed_for_loading",
                 name="transform_rss_2_feed",
             ),
@@ -67,7 +74,10 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=transform_rss_3_feed,
-                inputs=["rss_3_feed_for_transforming", "params:rss_3"],
+                inputs=[
+                    "rss_3_feed_for_transforming",
+                    "params:rss_3"
+                ],
                 outputs="rss_3_feed_for_loading",
                 name="transform_rss_3_feed",
             ),
@@ -85,7 +95,10 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=transform_rss_4_feed,
-                inputs=["rss_4_feed_for_transforming", "params:rss_4"],
+                inputs=[
+                    "rss_4_feed_for_transforming",
+                    "params:rss_4"
+                ],
                 outputs="rss_4_feed_for_loading",
                 name="transform_rss_4_feed",
             ),
