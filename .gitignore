@@ -12,6 +12,7 @@ conf/**/key*
 conf/**/keys*
 # ignore everything in the following folders
 data/**
+!data/**/
 !data/01_raw/
 !data/02_intermediate/
 !data/03_primary/
