@@ -9,13 +9,13 @@ overwrite: False
 scrape_build_data_headless: True
 product_build_ingestion_params:
   windows10:
-    download_path: 'C:\projects\kedro-workbench\data\01_raw\windows_10'
+    download_path: 'C:\Users\emili\PycharmProjects\microsoft_cve_support_report\data\01_raw\windows_10'
     source_url: 'https://msrc.microsoft.com/update-guide'
   windows11:
-    download_path: 'C:\projects\kedro-workbench\data\01_raw\windows_11'
+    download_path: 'C:\Users\emili\PycharmProjects\microsoft_cve_support_report\data\01_raw\windows_11'
     source_url: 'https://msrc.microsoft.com/update-guide'
   edge:
-    download_path: 'C:\projects\kedro-workbench\data\01_raw\edge'
+    download_path: 'C:\Users\emili\PycharmProjects\microsoft_cve_support_report\data\01_raw\edge'
     source_url: 'https://msrc.microsoft.com/update-guide'
 
 product_build_product_patterns:
