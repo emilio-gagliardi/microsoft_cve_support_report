@@ -1,27 +1,28 @@
-from kedro.io import AbstractDataSet
-from typing import Any, Dict, List
-import time
-import pprint
-from pymongo import MongoClient
-from pymongo.errors import PyMongoError
 import hashlib
 import logging
-from datetime import datetime, timedelta
-logger = logging.getLogger(__name__)
-import requests
-from bs4 import BeautifulSoup
-from kedro.io import AbstractDataSet
-from urllib.parse import urljoin
+# import pprint
 import re
+import time
+from datetime import datetime, timedelta
+from urllib.parse import urljoin
+
+# import requests
+from bs4 import BeautifulSoup
+# from icecream import ic
+from pymongo import MongoClient
+from pymongo.errors import PyMongoError
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-from icecream import ic
+# from selenium.webdriver.common.keys import Keys
+from typing import Any, Dict
+
+from kedro.io import AbstractDataSet
 from kedro_workbench.utils.feed_utils import (
     generate_custom_uuid,
-    convert_date_string,
     remove_day_suffix,
 )
+
+logger = logging.getLogger(__name__)
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
@@ -32,7 +33,7 @@ class HTMLExtract(AbstractDataSet):
         self._url = url
         self._collection = collection
         self._day_interval = day_interval
-        
+
     def _load(self) -> dict:
         # Initialize WebDriver to fetch page content
         driver = webdriver.Chrome(options=chrome_options)
@@ -45,10 +46,18 @@ class HTMLExtract(AbstractDataSet):
             soup = BeautifulSoup(html_content, "html.parser")
 
             # Find all H2 headings within the specified div tags
-            h2_divs = soup.find_all("div", class_="heading-wrapper", attrs={"data-heading-level": "h2"})
+            h2_divs = soup.find_all("div",
+                                    class_="heading-wrapper",
+                                    attrs={"data-heading-level": "h2"}
+                                    )
 
-            # Calculate cutoff date from the current date based on the specified day_interval
-            cutoff_date = datetime.now() - timedelta(days=self._day_interval) if self._day_interval is not None else None
+            # Calculate cutoff date from the current date
+            # based on the specified day_interval
+            cutoff_date = (
+                datetime.now() - timedelta(days=self._day_interval)
+                if self._day_interval is not None
+                else None
+            )
 
             # Initialize list to store processed data chunks
             chunks = []
@@ -72,9 +81,10 @@ class HTMLExtract(AbstractDataSet):
 
                 chunks.append(chunk)
 
-            # Process each chunk to extract and format required information into JSON objects
+            # Process each chunk to extract and format required 
+            # information into JSON objects
             json_objects = []
-            current_year = datetime.now().year
+            # current_year = datetime.now().year
             for chunk in chunks:
                 a_tag, h2_element = chunk[0], chunk[1]
                 link = a_tag.get("href")
@@ -156,7 +166,13 @@ class HTMLExtract(AbstractDataSet):
         partial_date_pattern = r"\b([a-zA-Z]+(?:-\d{1,2})+)\b"
         partial_date_match = re.search(partial_date_pattern, input_string)
         if partial_date_match:
-            if partial_date_match.group(1).split("-")[0] not in ["january", "february", "march", "april", "may", "june", "july", "august", "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]:
+            months = [
+                "january", "february", "march", "april", "may", "june", 
+                "july", "august", "september", "october", "november", "december",
+                "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep", "oct",
+                "nov", "dec"
+            ]
+            if partial_date_match.group(1).split("-")[0].lower() not in months:
                 return "NaT"
             # ic(f"partial match {partial_date_match.group(1)}")
             return partial_date_match.group(1)
@@ -165,18 +181,19 @@ class HTMLExtract(AbstractDataSet):
         # not sure what this portion is needed for...
         integer_pattern = r"\b(\d+)\b"
         integer_match = re.search(integer_pattern, input_string)
-        
+
         if integer_match and not input_string.isdigit():
             return "NaT"
         # ic(f"couldnt parse a date from {input_string}")
         return "NaT"
-    
+
     def parse_version_string(self, input_string):
         match = re.search(r'version-(\d+)-', input_string)
         if match:
             return match.group(1)
-        
+
         return None
+
 
 class HTMLDocuments(AbstractDataSet):
     def __init__(
@@ -191,7 +208,10 @@ class HTMLDocuments(AbstractDataSet):
         self._mongo_collection = mongo_collection
         self._username = credentials["username"]
         self._password = credentials["password"]
-        self._mongo_url = f"mongodb+srv://{self._username}:{self._password}@bighatcluster.wamzrdr.mongodb.net/"
+        self._mongo_url = (
+            f"mongodb+srv://{self._username}:"
+            f"{self._password}@bighatcluster.wamzrdr.mongodb.net/"
+            )
 
     def _load(self):
         # extract rss documents from mongo atlas
@@ -208,7 +228,7 @@ class HTMLDocuments(AbstractDataSet):
         return documents
 
     def _save(self, data: Any):
-        # logger.debug(self._mongo_url, '\n', self._mongo_db, '\n', self._mongo_collection)
+
         try:
             client = MongoClient(self._mongo_url)
         except PyMongoError as error:
@@ -230,7 +250,7 @@ class HTMLDocuments(AbstractDataSet):
         existing_hashs = [doc["hash"] for doc in mongo_cursor]
         # ic(existing_hashs)
         new_entries = [doc for doc in data if doc["hash"] not in existing_hashs]
-        ids_to_insert = [doc["id"] for doc in new_entries]
+        # ids_to_insert = [doc["id"] for doc in new_entries]
         logger.info(f"Loaded {len(new_entries)} new entries in {self._mongo_collection}")
         if len(new_entries):
             # print(f"new entries: {ids_to_insert}")
