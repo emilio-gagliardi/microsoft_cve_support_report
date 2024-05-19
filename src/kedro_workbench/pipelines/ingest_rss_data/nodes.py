@@ -57,7 +57,10 @@ def transform_published_parsed(d):
 
 def extract_published_from_title(s):
     # Regex pattern to find date in the format "Month DD, YYYY"
-    date_pattern = r'(\bJanuary|\bFebruary|\bMarch|\bApril|\bMay|\bJune|\bJuly|\bAugust|\bSeptember|\bOctober|\bNovember|\bDecember) \d{1,2}, \d{4}'
+    date_pattern = (
+        r'(\bJanuary|\bFebruary|\bMarch|\bApril|\bMay|\bJune|\bJuly|'
+        r'\bAugust|\bSeptember|\bOctober|\bNovember|\bDecember) \d{1,2}, \d{4}'
+    )
 
     # Try to find a date in the string
     match = re.search(date_pattern, s)
@@ -258,15 +261,18 @@ def transform_rss_1_feed(
                 # Locate and extract text from the version element within the first row
                 version_element = wait_for_selenium_element(
                     driver,
-                    "div[data-automationid='DetailsRowCell'][data-automation-key='version']",
+                    (
+                        "div[data-automationid='DetailsRowCell']"
+                        "[data-automation-key='version']"
+                    ),
                     parent=first_row
-                    )
+                )
                 if version_element:
                     version_text = execute_js_on_element(
                         driver,
                         version_element,
                         "return arguments[0].innerText;"
-                        )
+                    )
                 else:
                     version_text = "0.9"
 
@@ -274,15 +280,18 @@ def transform_rss_1_feed(
                 # within the first row
                 description_element = wait_for_selenium_element(
                     driver,
-                    "div[data-automationid='DetailsRowCell'][data-automation-key='description'] p",
+                    (
+                        "div[data-automationid='DetailsRowCell']"
+                        "[data-automation-key='description'] p"
+                    ),
                     parent=first_row
-                    )
+                )
                 if description_element:
                     description_text = execute_js_on_element(
                         driver,
                         description_element,
                         "return arguments[0].innerText;"
-                        )
+                    )
                 else:
                     description_text = "Information published."
             else:
