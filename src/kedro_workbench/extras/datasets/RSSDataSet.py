@@ -66,6 +66,9 @@ class RSSFeedExtract(AbstractDataSet):
         for item in items:
             item_dict = {}
 
+            revision = item.get("Revision")
+            if revision:
+                item_dict["revision"] = revision
             guid = item.find("guid")
             if guid:
                 item_dict["post_id"] = guid.text
