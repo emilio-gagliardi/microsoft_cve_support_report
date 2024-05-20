@@ -28,9 +28,9 @@ patch_classifications:
 
 patch_classification_models:
   custom: 'ft:gpt-3.5-turbo-1106:big-hat-group-inc:classifierpmv2:8dk94ZVn'
-  default: 'gpt-3.5-turbo-1106'
+  default: 'gpt-4o'
 
 patch_evaluation_models:
-  keywords: gpt-4
-  noun_chunks: gpt-4
-  summarization: gpt-3.5-turbo-1106
+  keywords: gpt-4o
+  noun_chunks: gpt-4o
+  summarization: gpt-4o
