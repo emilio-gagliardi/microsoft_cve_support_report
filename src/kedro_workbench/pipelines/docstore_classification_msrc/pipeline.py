@@ -64,24 +64,24 @@ def create_pipeline(**kwargs) -> Pipeline:
             outputs="docs_with_fit_prompts_msrc",
             name="fit_classification_prompt_msrc",
         ),
-        # node(
-        #     func=classify_post_msrc_node,
-        #     inputs=["params:msrc_classification_models.gpt4", "docs_with_fit_prompts_msrc", "params:max_llm_output_tokens_classification_msrc", "params:llm_temperature"],  
-        #     outputs="classification_data_msrc",
-        #     name="classify_post_msrc_node",
-        # ),
-        # node(
-        #     func=batch_update_post_types_msrc,
-        #     inputs=["classification_data_msrc"],  
-        #     outputs="batch_classification_update_flag_msrc",
-        #     name="batch_update_post_types_msrc",
-        # ),
-        # node(
-        #     func=remove_mongo_duplicates_msrc,
-        #     inputs=["batch_classification_update_flag_msrc"],  
-        #     outputs="classification_msrc_status",
-        #     name="remove_mongo_duplicates_msrc",
-        # ),
+        node(
+            func=classify_post_msrc_node,
+            inputs=["params:msrc_classification_models.gpt4", "docs_with_fit_prompts_msrc", "params:max_llm_output_tokens_classification_msrc", "params:llm_temperature"],  
+            outputs="classification_data_msrc",
+            name="classify_post_msrc_node",
+        ),
+        node(
+            func=batch_update_post_types_msrc,
+            inputs=["classification_data_msrc"],  
+            outputs="batch_classification_update_flag_msrc",
+            name="batch_update_post_types_msrc",
+        ),
+        node(
+            func=remove_mongo_duplicates_msrc,
+            inputs=["batch_classification_update_flag_msrc"],  
+            outputs="classification_msrc_status",
+            name="remove_mongo_duplicates_msrc",
+        ),
         # node(
         #     func=begin_classification_patch_pipeline_connector,
         #     inputs="classification_msrc_status",  

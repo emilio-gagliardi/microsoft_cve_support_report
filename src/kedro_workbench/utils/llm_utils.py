@@ -324,15 +324,16 @@ def convert_date_string(date_string: str, date_format: str = "%d-%m-%Y") -> str:
         Exception: If an error occurs during the conversion process.
     """
     pattern = r"^\d{2}-\d{2}-\d{4}$"
-    if re.match(pattern, date_string):
-        return date_string  # String matches the format
+    formatted_date = None
+    if isinstance(date_string, (str, bytes)):
+        if re.match(pattern, date_string):
+            return date_string
     else:
         try:
             date_object = parse(date_string)
             formatted_date = date_object.strftime(date_format)
         except Exception as e:
-            # print(str(e))
-            formatted_date = "NaT"
+            print(f"attempted to process date srtring {date_string}\n{str(e)}")
 
     return formatted_date
 

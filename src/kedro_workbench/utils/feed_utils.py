@@ -704,9 +704,13 @@ def preprocess_update_guide_product_build_data(data: pd.DataFrame, columns_to_ke
 
     # Sort by 'published' date in descending order
     prepped_df = prepped_df.sort_values(by='published', ascending=False)
-    # print(f"preprocessed build data:\n{prepped_df.sample(n=10)}")
+    # print(f"preprocessed build data from utility:\n{prepped_df.sample(n=10)}")
     # for i, row in prepped_df.iterrows():
-    #     print(f"row: {row}")
+    #     if i < 5:
+    #         print(f"row: {row}")
+    #     else:
+    #         break
+    # print(f"preprocessed build data from utility:\n{prepped_df.sample(n=10)}")
     return prepped_df
 
 
