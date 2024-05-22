@@ -5,12 +5,30 @@ generated using Kedro 0.18.11
 
 
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import (check_for_classification_msrc_complete, extract_patch_managment_to_clean, transform_feature_engineering_data_patch, clean_email_text, get_unique_token_count,generate_noun_phrases, build_lemmatized_tokens, generate_keywords, filter_keywords, evaluate_keywords_node, evaluate_noun_chunks_node, build_user_prompt_data_patch, fit_classification_prompt_patch, classify_emails_node, batch_update_new_features_patch, remove_mongo_duplicates_patch)
+from .nodes import (
+    check_for_classification_msrc_complete,
+    extract_patch_managment_to_clean,
+    transform_feature_engineering_data_patch,
+    clean_email_text,
+    get_unique_token_count,
+    generate_noun_phrases,
+    build_lemmatized_tokens,
+    generate_keywords,
+    filter_keywords,
+    evaluate_keywords_node,
+    evaluate_noun_chunks_node,
+    build_user_prompt_data_patch,
+    fit_classification_prompt_patch,
+    classify_emails_node,
+    batch_update_new_features_patch,
+    remove_mongo_duplicates_patch
+)
 
 # param
 # , "begin_docstore_feature_engineering_pm"
 # removed from:
 # extract_patch_managment_to_clean
+
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
@@ -23,13 +41,19 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_patch_managment_to_clean,
-                inputs=["params:document_limit", "begin_docstore_feature_engineering_pm"],
+                inputs=[
+                    "params:document_limit",
+                    "begin_docstore_feature_engineering_pm"
+                    ],
                 outputs="docstore_patch_data_to_transform",
                 name="extract_patch_managment_to_clean",
             ),
             node(
                 func=transform_feature_engineering_data_patch,
-                inputs=["docstore_patch_data_to_transform","params:mongo_metadata_keys_patch"],
+                inputs=[
+                    "docstore_patch_data_to_transform",
+                    "params:mongo_metadata_keys_patch"
+                    ],
                 outputs="docstore_patch_data_to_clean",
                 name="transform_feature_engineering_data_patch",
             ),
@@ -71,31 +95,52 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=evaluate_keywords_node,
-                inputs=["params:patch_evaluation_models.keywords", "keywords_filtered_data_intermediate_patch","params:max_llm_output_tokens_classification_patch","params:llm_temperature"],
+                inputs=[
+                    "params:patch_evaluation_models.keywords",
+                    "keywords_filtered_data_intermediate_patch",
+                    "params:max_llm_output_tokens_classification_patch",
+                    "params:llm_temperature"
+                    ],
                 outputs="keywords_evaluated_data_intermediate_patch",
                 name="evaluate_keywords_node",
             ),
             node(
                 func=evaluate_noun_chunks_node,
-                inputs=["params:patch_evaluation_models.noun_chunks", "keywords_evaluated_data_intermediate_patch","params:max_llm_output_tokens_classification_patch","params:llm_temperature"],
+                inputs=[
+                    "params:patch_evaluation_models.noun_chunks",
+                    "keywords_evaluated_data_intermediate_patch",
+                    "params:max_llm_output_tokens_classification_patch",
+                    "params:llm_temperature"
+                    ],
                 outputs="noun_chunks_data_intermediate_patch",
                 name="evaluate_noun_chunks_node",
             ),
             node(
                 func=build_user_prompt_data_patch,
-                inputs=["noun_chunks_data_intermediate_patch", "params:user_prompt_metadata_keys_patch"],
+                inputs=[
+                    "noun_chunks_data_intermediate_patch",
+                    "params:user_prompt_metadata_keys_patch"
+                    ],
                 outputs="emails_with_prompts",
                 name="build_user_prompt_data_patch",
             ),
             node(
                 func=fit_classification_prompt_patch,
-                inputs=["emails_with_prompts","params:max_prompt_tokens_classification_patch"],
+                inputs=[
+                    "emails_with_prompts",
+                    "params:max_prompt_tokens_classification_patch"
+                    ],
                 outputs="emails_with_fit_prompts",
                 name="fit_classification_prompt_patch",
             ),
             node(
                 func=classify_emails_node,
-                inputs=["params:patch_classification_models.custom", "emails_with_fit_prompts","params:max_prompt_tokens_classification_patch", "params:llm_temperature"],
+                inputs=[
+                    "params:patch_classification_models.default",
+                    "emails_with_fit_prompts",
+                    "params:max_prompt_tokens_classification_patch",
+                    "params:llm_temperature"
+                    ],
                 outputs="feature_engineering_data_patch",
                 name="classify_emails_node",
             ),
