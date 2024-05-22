@@ -4,12 +4,24 @@ generated using Kedro 0.18.11
 """
 
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import (check_for_product_build_ingestion_complete, extract_existing_cve_docs_to_augment, extract_existing_product_build_data, merge_product_build_data_with_msrc_docs, load_augmented_msrc_posts_product_build_docs, extract_update_packages_for_augmenting, augment_update_packages_additional_details, load_augmented_update_packages_to_db, parse_restructure_installation_details, begin_feature_engineering_pipeline_connector)
+from .nodes import (
+    check_for_product_build_ingestion_complete,
+    extract_existing_cve_docs_to_augment,
+    extract_existing_product_build_data,
+    merge_product_build_data_with_msrc_docs,
+    load_augmented_msrc_posts_product_build_docs,
+    extract_update_packages_for_augmenting,
+    augment_update_packages_additional_details,
+    load_augmented_update_packages_to_db,
+    parse_restructure_installation_details,
+    begin_feature_engineering_pipeline_connector
+    )
 
 # Note: removed dataset , "proceed_with_augmenting_product_build_data" from:
 # extract_existing_cve_docs_to_augment
 # extract_existing_product_build_data
 # extract_update_packages_for_augmenting
+
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline([
@@ -21,19 +33,31 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
         node(
             func=extract_existing_cve_docs_to_augment,
-            inputs=["params:day_interval", "proceed_with_augmenting_product_build_data"],
+            inputs=[
+                "params:day_interval",
+                "proceed_with_augmenting_product_build_data"
+                ],
             outputs="existing_cves_to_augment_df",
             name="extract_existing_cve_docs_to_augment",
             ),
         node(
             func=extract_existing_product_build_data,
-            inputs=["params:day_interval", "params:product_build_product_patterns", "params:product_build_augment_params.columns_to_keep", "proceed_with_augmenting_product_build_data"],
+            inputs=[
+                "params:day_interval",
+                "params:product_build_product_patterns",
+                "params:product_build_augment_params.columns_to_keep",
+                "proceed_with_augmenting_product_build_data"
+                ],
             outputs="existing_product_builds_to_augment_df",
             name="extract_existing_product_build_data",
             ),
         node(
             func=merge_product_build_data_with_msrc_docs,
-            inputs=["existing_product_builds_to_augment_df","existing_cves_to_augment_df", "params:product_build_augment_params.columns_to_keep"],
+            inputs=[
+                "existing_product_builds_to_augment_df",
+                "existing_cves_to_augment_df",
+                "params:product_build_augment_params.columns_to_keep"
+                ],
             outputs="augmented_cves_to_update",
             name="merge_product_build_data_with_msrc_docs",
             ),
@@ -51,7 +75,10 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
         node(
             func=augment_update_packages_additional_details,
-            inputs=["update_packages_to_augment", "params:update_package_install_search_criteria"],
+            inputs=[
+                "update_packages_to_augment",
+                "params:update_package_install_search_criteria"
+                ],
             outputs="augmented_update_packages",
             name="augment_update_packages_additional_details",
             ),

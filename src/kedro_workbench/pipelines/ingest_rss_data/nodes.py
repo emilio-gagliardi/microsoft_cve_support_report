@@ -1,19 +1,12 @@
 import hashlib
 import logging
-# import pprint
 import time
 from typing import Any, Dict, List
 import re
 from datetime import datetime
-# import feedparser
 import pandas as pd
-# import requests
-# from bs4 import BeautifulSoup
 from kedro.config import ConfigLoader
 from kedro.framework.project import settings
-# from selenium.webdriver.common.by import By
-# from selenium.webdriver.support import expected_conditions as EC
-# from selenium.webdriver.support.ui import WebDriverWait
 
 from kedro_workbench.extras.datasets.ExcelDataSet import LatestExcelDataSet
 from kedro_workbench.pipelines.ingest_product_build_cve_data.nodes import (
@@ -27,7 +20,6 @@ from kedro_workbench.utils.feed_utils import (
     setup_selenium_browser,
     wait_for_selenium_element,
 )
-# from kedro_workbench.utils.kedro_utils import make_row_hash
 
 conf_path = str(settings.CONF_SOURCE)
 conf_loader = ConfigLoader(conf_source=conf_path)
@@ -79,8 +71,7 @@ def extract_published_from_title(s):
 def extract_rss_1_feed(feed) -> Dict[str, Any]:
     # no processing required
     # data is extracted from custom dataset and returned to the node
-    # for item in feed:
-    #     print(item)
+
     return feed
 
 
@@ -114,12 +105,11 @@ def transform_rss_1_feed(
         )
     # for item in sorted_transformed_rss_feed:
     #     print(f"{item}")
-
+    #     print()
     # start heavy lifting incase RSS feed isn't updated on time
-    #
 
     if not skip_download:
-        print("skip_download: False")
+        logger.info("Download CVE posts via MSRC excel files by product type. ENABLED.")
         download_params = all_params['product_build_ingestion_params']
         product_patterns_windows_10 = (
             all_params['product_build_product_patterns']['windows_10']
@@ -147,6 +137,7 @@ def transform_rss_1_feed(
             headless=True,
             begin_ingestion=True
         )
+        node_status = True
         logger.info(f"Download of product data by product complete.{node_status}")
 
         csv_data_windows_10 = LatestExcelDataSet(
@@ -161,34 +152,45 @@ def transform_rss_1_feed(
             filepath="data/01_raw/edge/",
             load_args={"sheet_name": "Security Updates"}
         )
+        # load data with dataset
         data_win10 = csv_data_windows_10.load()
         data_win11 = csv_data_windows_11.load()
         data_edge = csv_data_edge.load()
 
+        # selects which rows are kept according to product patterns
         windows_10_df = extract_filter_product_build_data(
             data_win10,
             product_patterns_windows_10
         )
+
+        # We are only interested in cataloguing the unique CVEs here
+        # We only need unique cve data, so we drop duplicates
         windows_10_df.drop_duplicates(
             subset='Details',
             keep='first',
             inplace=True
             )
 
+        # selects which rows are kept according to product patterns
         windows_11_df = extract_filter_product_build_data(
             data_win11,
             product_patterns_windows_11
         )
+        # We are only interested in cataloguing the unique CVEs here
+        # We only need unique cve data, so we drop duplicates
         windows_11_df.drop_duplicates(
             subset='Details',
             keep='first',
             inplace=True
             )
 
+        # selects which rows are kept according to product patterns
         edge_df = extract_filter_product_build_data(
             data_edge,
             product_patterns_edge
         )
+        # We are only interested in cataloguing the unique CVEs here
+        # We only need unique cve data, so we drop duplicates
         edge_df.drop_duplicates(
             subset='Details',
             keep='first',
@@ -196,21 +198,26 @@ def transform_rss_1_feed(
         )
 
         # verified correct output to this point
+        # concatenate all the CVE data together from all product patterns
         concatenated_df = pd.concat(
             [windows_10_df,
-            windows_11_df,
-            edge_df
-            ],
+             windows_11_df,
+             edge_df
+             ],
             ignore_index=True
         )
+        # concatenated_df = windows_10_df
+        # probably not necessary, but another duplicate drop
         concatenated_df.drop_duplicates(subset='Details', keep='first', inplace=True)
 
-        columns_to_keep = ['Release date',
-                        'Article',
-                        'Article_URL',
-                        'Details',
-                        'Details_URL'
-                        ]
+        columns_to_keep = [
+            'Release date',
+            'Article',
+            'Article_URL',
+            'Details',
+            'Details_URL'
+            ]
+
         concatenated_df['Release date'] = pd.to_datetime(
             concatenated_df['Release date'],
             format='%b %d, %Y'
@@ -222,14 +229,12 @@ def transform_rss_1_feed(
 
         concatenated_df.rename(
             columns={'Release date': 'published',
-                    'Details': 'post_id',
-                    'Details_URL': 'source',
-                    'Article': 'kb_id',
-                    'Article_URL': 'article_url'
-                    },
+                     'Details': 'post_id',
+                     'Details_URL': 'source',
+                     'Article': 'kb_id',
+                     'Article_URL': 'article_url'
+                     },
             inplace=True)
-        # for idx, row in concatenated_df.iterrows():
-        #     print(f"{row}")
 
         driver = setup_selenium_browser(None, headless=True)
         driver.implicitly_wait(1)
@@ -275,7 +280,8 @@ def transform_rss_1_feed(
                     parent=revisions_grid
                     )
                 if first_row:
-                    # Locate and extract text from the version element within the first row
+                    # Locate and extract text from the version element
+                    # within the first row
                     version_element = wait_for_selenium_element(
                         driver,
                         (
@@ -335,7 +341,7 @@ def transform_rss_1_feed(
             ).hexdigest()
             # print(f"alternate ingestion found a title -> {temp_dict['title']}")
             downloaded_cves.append(temp_dict)
-            
+
             sorted_downloaded_cves = sorted(
                 downloaded_cves,
                 key=lambda x: x['post_id'],
@@ -345,7 +351,9 @@ def transform_rss_1_feed(
             # for item in sorted_downloaded_cves:
             #     print(f"{item['post_id']} - {item['source']}")
     else:
-        print("skip_download: True")
+        logger.info(
+            "Download CVE posts via MSRC excel files by product type. DISABLED."
+            )
         downloaded_cves = []
         sorted_downloaded_cves = []
 
@@ -362,7 +370,8 @@ def transform_rss_1_feed(
         time.sleep(3)
         driver.quit()
     # for rss_1 in sorted_transformed_rss_feed:
-    #     print(rss_1)
+    #     print(f"{rss_1['post_id']}-{rss_1['published']}-{rss_1['revision']}")
+    #     print()
     logger.info(
         f"RSS Ingestion of MSRC posts found {len(transformed_rss_feed)} MSRC posts.\n"
         f"Excel Ingestion found {len(sorted_downloaded_cves)} MSRC posts."

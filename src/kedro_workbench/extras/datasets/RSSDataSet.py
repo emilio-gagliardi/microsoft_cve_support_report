@@ -63,7 +63,8 @@ class RSSFeedExtract(AbstractDataSet):
 
         parsed_feed = []
         collection = self._collection
-        for item in items:
+        for idx, item in enumerate(items):
+            # print(f"Processing item {idx + 1}/{len(items)}")
             item_dict = {}
 
             revision = item.get("Revision")
@@ -92,18 +93,43 @@ class RSSFeedExtract(AbstractDataSet):
             pub_date = item.find("pubDate")
             if pub_date:
                 item_dict["published"] = pub_date.text
-                # Convert pubDate to datetime object for comparison
-                # print(f"raw date string: {pub_date.text}")
-                pub_date_dt = datetime.strptime(pub_date.text.replace('Z', 'UTC'), '%a, %d %b %Y %H:%M:%S %Z')
+                # print(f"Found pubDate: {pub_date.text}")
 
-                # Filter based on the cutoff_date if days_ago is not None
-                if self._day_interval is not None and pub_date_dt < cutoff_date:
+                try:
+                    # Convert pubDate to datetime object for comparison
+                    pub_date_dt = datetime.strptime(
+                        pub_date.text.replace('Z', 'UTC'),
+                        '%a, %d %b %Y %H:%M:%S %Z'
+                        )
+
+                    # Filter based on the cutoff_date if _day_interval is not None
+                    if self._day_interval is not None and pub_date_dt < cutoff_date:
+                        # print(f"Skipping item due to pubDate {pub_date_dt} being before cutoff_date {cutoff_date}")
+                        continue
+
+                except ValueError as e:
+                    logger.error(
+                        f"Error parsing date {pub_date.text} for item with title"
+                        f" {title} and description {description}: {e}")
                     continue
+
+                except Exception as e:
+                    logger.error(
+                        f"Error parsing date {pub_date.text} for item with"
+                        f" title '{title}' and description '{description}': {e}")
+                    continue
+
+            else:
+                logger.error(
+                    f"pubDate not found for item with title '{title}'"
+                    f"and description '{description}'"
+                    )
 
             item_dict["collection"] = collection
             parsed_feed.append(item_dict)
+        logger.info(f"Total RSS items extracted within threshold: {len(parsed_feed)}")
         # for item in parsed_feed:
-        #     print(f"{item}")
+        #     print(f"{item['post_id']}-{item['published']}")
         return parsed_feed
 
     def _save(self, data: Any) -> None:
@@ -139,7 +165,10 @@ class RSSDocuments(AbstractDataSet):
         collection = db[self._mongo_collection]
         cursor = collection.find({})
         documents = list(cursor)
-
+        logger.info(
+            f"Extracted {len(documents)} documents from mongo collection "
+            f"{self._mongo_collection}.")
+        print(f"num docs {len(documents)} extracted from {self._mongo_collection}")
         return documents
 
     def _save(self, data: Any):
@@ -166,10 +195,13 @@ class RSSDocuments(AbstractDataSet):
             print("adding those augmented documents.")
             try:
                 results = collection.insert_many(new_entries)
-                # print(f"Documents inserted, IDs: {results.inserted_ids}")
+                logger.info(f"RSS Documents inserted, IDs: {results.acknowledged}")
             except Exception as e:
                 print(f"Error occurred during insert_many: {e}")
-            
+        else:
+            logger.info(
+                f"No New RSS Data to store in Mongo collection {self._mongo_collection}"
+                )
         client.close()
 
     def _describe(self) -> Dict[str, Any]:

@@ -46,6 +46,8 @@ def extract_rss_1_data(data):
     """extract the data from the intermediate storage collection
         pass it to the pipeline. Kedro loads the dataset
         and passes it to the node function.
+        Note. All records are feteched, needs new feature to allow
+        passing of query filter.
     Args:
         data: List[json]
 
@@ -60,14 +62,19 @@ def augment_rss_1_data(data, params: Dict[Any, Any]):
     mongo_info = catalog[catalog_entry]
     mongo_db = mongo_info["mongo_db"]
     mongo_collection = mongo_info["mongo_collection"]
-
+    # print("Add id key to record")
     data_with_id = add_id_key(data)
+    # print("filter for just data that doesn't exist in mongo collection")
     new_data = get_new_data(mongo_url, mongo_db, mongo_collection, data_with_id)
     augmented_new_data = []
 
     if len(new_data):
+        print("There are new MSRC documents to augment")
         augmented_new_data = extract_link_content(new_data, params, chrome_options)
     print(f"num records to augment: {len(new_data)}")
+    # for item in new_data:
+    #     print(f"{item['post_id']}-{item['revision']}-{item['published']}")
+    #     print()
     return augmented_new_data
 
 

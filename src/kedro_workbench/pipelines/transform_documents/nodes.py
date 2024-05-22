@@ -4,12 +4,8 @@ generated using Kedro 0.18.11
 """
 from kedro_workbench.utils.json_utils import reshape_json
 from kedro_workbench.utils.feed_utils import get_new_data
-from bs4 import BeautifulSoup
-import json
 from kedro.config import ConfigLoader
 from kedro.framework.project import settings
-from pymongo import MongoClient
-from pymongo.errors import PyMongoError
 
 conf_loader = ConfigLoader(settings.CONF_SOURCE)
 credentials = conf_loader["credentials"]
@@ -34,7 +30,7 @@ def transform_rss_1(data, params):
     mongo_collection = mongo_info["mongo_collection"]
     new_data = get_new_data(mongo_url, mongo_db, mongo_collection, data, nested_id=True)
     transformed_new_data = []
-
+    print(f"Reshaping {len(new_data)} augmented docs into nested docs.")
     if len(new_data):
         transformed_new_data = reshape_json(
             new_data, keys_for_content, keys_for_metadata
@@ -301,6 +297,7 @@ def load_patchmanagement_docs(data):
 
     return data, True
 
+
 def begin_consolidating_pipeline_connector(consolidated_10):
-    
+
     return True

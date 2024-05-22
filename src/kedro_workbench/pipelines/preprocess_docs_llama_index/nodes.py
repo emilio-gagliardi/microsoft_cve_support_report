@@ -2,45 +2,26 @@
 This is a boilerplate pipeline 'update_index'
 generated using Kedro 0.18.11
 """
-from llama_index import ServiceContext, Document
+from llama_index import Document
 from llama_index.callbacks import CallbackManager, LlamaDebugHandler
+from llama_index.node_parser import SentenceWindowNodeParser
+from llama_index.text_splitter import SentenceSplitter
 
-# from llama_index.embeddings import OpenAIEmbedding
-# from llama_index.llms import OpenAI
-from llama_index.node_parser import SimpleNodeParser, SentenceWindowNodeParser
-
-# from llama_index.schema import MetadataMode
-# from llama_index.storage import StorageContext
-# from llama_index.storage.docstore import SimpleDocumentStore
-# from llama_index.storage.index_store import SimpleIndexStore
-# from llama_index.storage.storage_context import StorageContext
-from llama_index.text_splitter import TokenTextSplitter, SentenceSplitter
-
-# from llama_index.vector_stores import SimpleVectorStore, ChromaVectorStore
 import tiktoken
-
-# import chromadb
-# import openai
 from fsspec import filesystem
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from pathlib import Path
 from typing import List, Dict, Any, Tuple, Callable
-import re
 from kedro.config import ConfigLoader
 from kedro.framework.project import settings
 from kedro_workbench.utils.llm_utils import (
     find_matching_keys,
-    extract_entities,
-    extract_nouns,
     find_cve_patterns,
     convert_date_string,
-    remove_keywords,
-    clean_named_entities,
     prepare_for_sentence_parser_llama_sentence,
 )
-from kedro_workbench.utils.eda_utils import get_doc_keywords
+
 from kedro_workbench.utils.decorators import timing_decorator
 from tqdm import tqdm
 import logging
@@ -50,9 +31,11 @@ logger = logging.getLogger(__name__)
 llama_debug = LlamaDebugHandler(print_trace_on_end=True)
 callback_manager = CallbackManager([llama_debug])
 
+
 def check_for_loading_complete(loading_complete):
     print(f"indexed loading complete: {loading_complete}")
-    return loading_complete    
+    return loading_complete
+
 
 @timing_decorator
 def get_partitioned_index_data(data, proceed_with_preprocessing=True):
@@ -69,7 +52,6 @@ def get_partitioned_index_data(data, proceed_with_preprocessing=True):
     print(f"proceed_with_preprocessing: {proceed_with_preprocessing}")
     developing = False
     # print(len(data))
-    import random
 
     if developing:
         import itertools
@@ -99,7 +81,7 @@ def combine_callable_index_data(data: Dict[str, Callable[[], dict]]) -> List[dic
         print("Dictionary is empty. No data to preprocess.")
     else:
         print("Dictionary is not empty.")
-        
+
     for partition_key, partition_load_func in tqdm(
         sorted(data.items()), desc="Processing combinables..."
     ):
@@ -130,7 +112,7 @@ def create_documents_from_index_data(data: List[Dict[str, Any]]) -> List[Documen
     Returns:
         A list of langchain document objects created from the index data.
     """
-    
+
     documents = [
         Document(
             id_=data_dict["metadata"]["id"],
@@ -164,14 +146,17 @@ def create_documents_from_index_data(data: List[Dict[str, Any]]) -> List[Documen
         if document.metadata.get("published") is None:
             now = datetime.now()  # get current system time
             formatted_date = now.strftime("%d-%m-%Y")
-            document.metadata["published"] = formatted_date
+            document.metadata["published"] = None
         else:
             document.metadata["published"] = convert_date_string(
                 document.metadata["published"]
             )
-        published_dt = datetime.strptime(document.metadata["published"], "%d-%m-%Y")
-        document.metadata["published"] = published_dt
-        
+        if document.metadata["published"] is not None:
+            published_dt = datetime.strptime(document.metadata["published"], "%d-%m-%Y")
+            document.metadata["published"] = published_dt
+        else:
+            print(f"document {document.metadata['id']} has a bad date string")
+
         if document.metadata.get("collection") is None:
             document.metadata["collection"] = "patch_management"
         document.metadata["added_to_vector_store"] = False
@@ -304,7 +289,7 @@ def compute_validation_metrics(data: Tuple[List[Any], List[Any], List[Dict]]) ->
     """
     valid_nodes, invalid_nodes, validation_descriptives = data
     if len(valid_nodes) > 0 and len(invalid_nodes) > 0:
-        
+
         total_steps = 10
         utc_now = datetime.utcnow()
         utc_now_str = utc_now.strftime("%Y-%m-%dT%H-%M-%S")
@@ -496,9 +481,10 @@ def load_index_documents(data):
 
     return data
 
+
 def remove_docstore_source_files(files_to_remove):
     if len(files_to_remove) > 0:
-        
+
         conf_loader = ConfigLoader(settings.CONF_SOURCE)
         credentials = conf_loader["credentials"]
         azure_blob_credentials = credentials["azure_blob_credentials"]
@@ -524,13 +510,14 @@ def remove_docstore_source_files(files_to_remove):
                 print(f"Deleted file: {full_path}")
             else:
                 print(f"File not found: {full_path}")
-            
+
     return True
-            
-            
+
+
 def begin_ingest_proudct_build_pipeline_connector(preprocessing_complete):
     if preprocessing_complete:
-        logger.info("\n=====================\nPreprocessing pipeline completed\n=====================\n")
+        logger.info(
+            "\n=====================\nPreprocessing pipeline "
+            "completed\n=====================\n")
         return True
     return False
-

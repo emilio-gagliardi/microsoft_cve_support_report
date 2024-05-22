@@ -202,7 +202,7 @@ def find_downloadable_packages_for_update_package(driver, original_window, searc
             downloadable_dict = process_downloadable_package(link, driver, original_window, criterion)
             if downloadable_dict:
                 downloadable_packages.append(downloadable_dict)
-                
+    print(f"found {len(downloadable_packages)} downloadable packages at {link}")            
     return downloadable_packages
 
 
@@ -253,7 +253,7 @@ def process_downloadable_package_additional_details(doc, search_criteria, headle
     if not source_url:
         return []
 
-    print(f"accessing: {source_url}")
+    print(f"fetching downloadable package details from: {source_url}")
 
     driver = setup_selenium_browser(None, headless)
     if not navigate_to_url(driver, source_url):
@@ -274,6 +274,7 @@ def process_downloadable_package_additional_details(doc, search_criteria, headle
     
     downloadable_packages = find_downloadable_packages_for_update_package(driver, original_window, search_criteria, "td.resultsbottomBorder a.contentTextItemSpacerNoBreakLink")
     driver.quit()
+    
     return downloadable_packages
     
 def extract_html_and_update_downloadable_packages(doc):

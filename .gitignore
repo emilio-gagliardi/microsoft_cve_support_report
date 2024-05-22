@@ -21,10 +21,11 @@ data/**
 !data/06_models/
 !data/07_model_output/
 !data/08_reporting/
-!data/08_reporting/**
 !data/09_templates/
 !data/09_templates/**
-
+data/08_reporting/**
+!data/08_reporting/periodic_report_CVE_WEEKLY_v1/
+!data/08_reporting/periodic_report_CVE_WEEKLY_v1/**
 logs/**
 docs/**
 notebooks/**

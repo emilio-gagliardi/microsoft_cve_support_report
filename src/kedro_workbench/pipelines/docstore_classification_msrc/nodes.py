@@ -136,9 +136,9 @@ def fit_classification_prompt_msrc(data, max_prompt_tokens):
         axis=1)
     logger.info("User prompt fit to model token limit.")
     # print(f"new column added by fit_classification_prompt\n")
-    for index, row in data.iterrows():
-        print(f"{row}\n")
-    mongo.client.close()
+    # for index, row in data.iterrows():
+    #     print(f"{row}\n")
+    # mongo.client.close()
     return data
 
 
@@ -245,7 +245,7 @@ def remove_mongo_duplicates_msrc(update_flag):
             print(f"found {len(dups_list)} duplicates in docstore...")
             deletion_summary = remove_duplicates(mongo.collection, dups_list)
             print(f"Deletion Summary: {deletion_summary}")
-
+    mongo.client.close()
     return True
 
 

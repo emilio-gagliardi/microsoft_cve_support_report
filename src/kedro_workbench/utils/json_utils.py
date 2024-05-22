@@ -58,24 +58,27 @@ def reshape_json(
 
         # Add metadata
         for key in keys_for_metadata:
-            print(f"Processing key: {key}")  # Debugging print statement
+            # print(f"Processing key: {key}")  # Debugging print statement
             if key in json_obj:
-                print(f"Found key {key} in json_obj.")  # Debugging print statement
+                # print(f"Found key {key} in json_obj.")  # Debugging print statement
                 try:
                     if key == "published":
-                        # Attempt to format 'published' key value
-                        print(f"Attempting to format {key}: {json_obj[key]}")  # Debugging print statement
-                        reshaped_json["metadata"][key] = json_obj[key].strftime("%d-%m-%Y")
+                        # Check if the value is a string before calling replace
+                        if isinstance(json_obj[key], str):
+                            print(f"Attempting to format {key}: {json_obj[key]}")  # Debugging print statement
+                            date_str = json_obj[key].replace(" Z", "")
+                            date_obj = datetime.datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S")
+                            reshaped_json["metadata"][key] = date_obj.strftime("%d-%m-%Y")
+                        else:
+                            print(f"Expected string for {key}, but got {type(json_obj[key])}")
+                            reshaped_json["metadata"][key] = json_obj[key]
                     else:
                         reshaped_json["metadata"][key] = json_obj[key]
                 except AttributeError as e:
                     # Catch and print the error along with some helpful context
                     print(f"AttributeError caught while processing key {key}: {e}")
-                    print(f"Unable to call strftime on {key} with value: {json_obj[key]}")
-                    # Handle the case where json_obj[key] is not a datetime object but a string
-                    # Assuming you want to directly assign the string in case of an AttributeError
-                    reshaped_json["metadata"][key] = json_obj[key]
 
+                    reshaped_json["metadata"][key] = f"{json_obj[key]}_processing_error"
 
         for key, value in json_obj.items():
             # Split the key by the colon (':')

@@ -3,34 +3,19 @@ This is a boilerplate pipeline 'ingest_product_build_cve_data'
 generated using Kedro 0.18.11
 """
 from kedro_workbench.extras.datasets.MongoDataset import MongoDBDocs
-from kedro_workbench.utils.feed_utils import (wait_for_specific_file, setup_selenium_browser, split_product_name, generate_hash, add_row_guid, convert_to_tuple, preprocess_update_guide_product_build_data, compile_update_guide_products_from_build_data,dataframe_to_string, hash_dataframe)
+from kedro_workbench.utils.feed_utils import (wait_for_specific_file, setup_selenium_browser, add_row_guid, convert_to_tuple, preprocess_update_guide_product_build_data, compile_update_guide_products_from_build_data, hash_dataframe)
 from kedro_workbench.utils.kedro_utils import make_row_hash
-# from kedro.io import AbstractDataSet
-# from kedro.io import DataCatalog
 from kedro.config import ConfigLoader
 from kedro.framework.project import settings
-from kedro.framework.session import KedroSession
-# from kedro.framework.startup import bootstrap_project
 from kedro_workbench.utils.kedro_utils import convert_to_actual_type
 import pandas as pd
-from typing import Any, Dict
-# from pathlib import Path
-# import os
-# from selenium import webdriver
-# from selenium.webdriver.common.keys import Keys
-# from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-# import hashlib
-from datetime import (datetime, timezone)
+from datetime import (datetime)
 import time
-# import uuid
 import logging
-# import pymongo
-# from pymongo import MongoClient
-# from pymongo.errors import PyMongoError
 from pymongo import errors
 from pymongo.errors import DuplicateKeyError
 import re
@@ -41,11 +26,18 @@ conf_loader = ConfigLoader(conf_source=conf_path)
 credentials = conf_loader["credentials"]
 mongo_creds = credentials["mongo_atlas"]
 
+
 def check_for_preprocessing_complete(preprocessing_complete):
     logger.info(f"preprocessing complete: {preprocessing_complete}")
     return preprocessing_complete
 
-def download_edge_product_build_data(skip_download, params, headless=False, begin_ingestion=True):
+
+def download_edge_product_build_data(
+    skip_download,
+    params,
+    headless=False,
+    begin_ingestion=True
+):
     if not begin_ingestion:
         logger.info("Preprocessing did not complete correctly.")
     if convert_to_actual_type(skip_download):
@@ -54,8 +46,11 @@ def download_edge_product_build_data(skip_download, params, headless=False, begi
         start_time = time.time()
         download_path = params['edge']["download_path"]
         source_url = params['edge']["source_url"]
-        
-        driver = setup_selenium_browser(download_path, headless=convert_to_actual_type(headless))
+
+        driver = setup_selenium_browser(
+            download_path,
+            headless=convert_to_actual_type(headless)
+            )
         driver.get(source_url)
         # log progress
         logger.info("Configured Selenium browser to download Edge product build data")
@@ -70,7 +65,7 @@ def download_edge_product_build_data(skip_download, params, headless=False, begi
             clear_button.click()
         except TimeoutException:
             print("Timeout waiting for the 'Clear' button to be clickable.")
-        
+
         # edit columns in case 'Impact' and 'Max Severity' are not checked
         edit_columns_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Edit columns']]")))
         edit_columns_button.click()
@@ -132,11 +127,11 @@ def download_edge_product_build_data(skip_download, params, headless=False, begi
         download_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Download']]")))
         download_button.click()
         # time.sleep(3)
-        
+
         # start downloading the xlsx file
         start_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Start']]")))
         start_button.click()
-        
+
         # File sizes vary, wait for the download to complete before proceeding.
         if wait_for_specific_file(download_path, expected_extension=".xlsx"):
             logger.info("Download completed successfully. New Edge product build data is available.")
@@ -148,12 +143,20 @@ def download_edge_product_build_data(skip_download, params, headless=False, begi
         time.sleep(3)
         driver.quit()
         total_time = time.time() - start_time
-        logger.info(f"Downloaded Edge product build data as xlsx. Total execution time: {total_time:.2f} seconds.")
-        
+        logger.info(
+            f"Downloaded Edge product build data as xlsx. "
+            f"Total execution time: {total_time:.2f} seconds."
+            )
+
     return node_status
 
 
-def download_windows10_product_build_data(skip_download, params, headless=False, begin_ingestion=True):
+def download_windows10_product_build_data(
+    skip_download,
+    params,
+    headless=False,
+    begin_ingestion=True
+):
     if not begin_ingestion:
         logger.info("Preprocessing did not complete correctly.")
     if convert_to_actual_type(skip_download):
@@ -161,6 +164,7 @@ def download_windows10_product_build_data(skip_download, params, headless=False,
     else:
         start_time = time.time()
         download_path = params['windows10']["download_path"]
+        print(f"download_path: {download_path}")
         source_url = params['windows10']["source_url"]
         driver = setup_selenium_browser(download_path, headless=convert_to_actual_type(headless))
         driver.get(source_url)
@@ -190,7 +194,7 @@ def download_windows10_product_build_data(skip_download, params, headless=False,
         time.sleep(4)
         # # Check if the checkbox is already selected by examining the class of the outer div
         is_checked = 'is-checked' in impact_outer_div.get_attribute("class")
-        
+
         if not is_checked:
             impact_label.click()
         # time.sleep(4)
@@ -261,16 +265,16 @@ def download_windows10_product_build_data(skip_download, params, headless=False,
         product_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[@title='Product']")))
         product_button.click()
         # time.sleep(3)
-        
+
         #  Initiate xlsx download, open flyout menu 
         download_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Download']]")))
         download_button.click()
         # time.sleep(3)
-        
+
         # start the download
         start_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Start']]")))
         start_button.click()
-        
+
         # Download time varies based on the number of records in the reporting period.
         # Ensure the file has completed downloading before proceeding.
         if wait_for_specific_file(download_path, expected_extension=".xlsx"):
@@ -284,11 +288,16 @@ def download_windows10_product_build_data(skip_download, params, headless=False,
         driver.quit()
         total_time = time.time() - start_time
         logger.info(f"Downloaded Windows 10 product build data as xlsx. Total execution time: {total_time:.2f} seconds.")
-    
+
     return node_status
-    
-    
-def download_windows11_product_build_data(skip_download,params, headless=False, begin_ingestion=True):
+
+
+def download_windows11_product_build_data(
+    skip_download,
+    params,
+    headless=False,
+    begin_ingestion=True
+):
     if not begin_ingestion:
         logger.info("Preprocessing did not complete correctly.")
     if convert_to_actual_type(skip_download):
@@ -296,6 +305,7 @@ def download_windows11_product_build_data(skip_download,params, headless=False, 
     else:
         start_time = time.time()
         download_path = params['windows11']["download_path"]
+        print(f"download_path: {download_path}")
         source_url = params['windows11']["source_url"]
         driver = setup_selenium_browser(download_path, headless=convert_to_actual_type(headless))
         driver.get(source_url)
@@ -315,10 +325,10 @@ def download_windows11_product_build_data(skip_download,params, headless=False, 
         # edit columns in case 'Impact' and 'Max Severity' are not checked
         edit_columns_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Edit columns']]")))
         edit_columns_button.click()
-        
+
         # Wait for the checkbox label to be present
         # time.sleep(4)
-        
+
         impact_label = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//span[text()='Impact']/ancestor::label")))
 
@@ -332,7 +342,7 @@ def download_windows11_product_build_data(skip_download,params, headless=False, 
             # If not selected, click the label
             impact_label.click()
         # time.sleep(4)
-        
+
         # Wait for the checkbox label to be present
         max_severity_label = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//span[text()='Max Severity']/ancestor::label")))
@@ -351,7 +361,7 @@ def download_windows11_product_build_data(skip_download,params, headless=False, 
         close_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Close']]")))
         close_button.click()
         # time.sleep(3)
-        
+
         # select the product family
         wait = WebDriverWait(driver, 10)
         product_family_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@title='Product Family']")))
@@ -361,10 +371,10 @@ def download_windows11_product_build_data(skip_download,params, headless=False, 
         windows_option_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Windows']]")))
         windows_option_button.click()
         # time.sleep(3)
-        
+
         # close the product family dropdown before proceeding
         product_family_button.click()
-        
+
         # open the product dropdown
         product_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[@title='Product']")))
         product_button.click()
@@ -393,7 +403,7 @@ def download_windows11_product_build_data(skip_download,params, headless=False, 
         # download the xlsx file
         start_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Start']]")))
         start_button.click()
-        
+
         # file sizes vary, wait for the download to complete
         if wait_for_specific_file(download_path, expected_extension=".xlsx"):
             logger.info("Download completed successfully. New Windows 11 product build data is available.")
@@ -406,13 +416,18 @@ def download_windows11_product_build_data(skip_download,params, headless=False, 
         driver.quit()
         total_time = time.time() - start_time
         logger.info(f"Downloaded Windows 11 product build data as xlsx. Total execution time: {total_time:.2f} seconds.")
-    
+
     return node_status
 
 
 # ---------------- Read xlsx files 
 
-def extract_product_build_cve_windows_10_node(node_status, data, products_to_keep, overwrite=False):
+def extract_product_build_cve_windows_10_node(
+    node_status,
+    data,
+    products_to_keep,
+    overwrite=False
+):
     overwrite = convert_to_actual_type(overwrite)
     # print("Extract windows 10 node")
     # extract product build data from csv file
@@ -430,7 +445,7 @@ def extract_product_build_cve_windows_10_node(node_status, data, products_to_kee
         'hash': downloaded_data_hash
     }
     data['hash'] = data.apply(lambda row: make_row_hash(row), axis=1)
-    
+
     escaped_products_to_keep = [re.escape(product) for product in products_to_keep]
     # print(f"products to keep: {products_to_keep}")
     regex_pattern = '|'.join(escaped_products_to_keep)
@@ -447,7 +462,7 @@ def extract_product_build_cve_windows_10_node(node_status, data, products_to_kee
             logger.info(f"[Product build - win10] Storing new file hash in MongoDB. Acknowledged:  {result.acknowledged}")
         else:
             print("Overwrite the product_build data in MongoDB.")
-        
+
         # remove unwanted products from dataframe before proceeding
         # For some reason, Selenium code is not correctly selecting the correct products on each run
         # print(f"rows before filter: {data.shape[0]}")
@@ -455,7 +470,8 @@ def extract_product_build_cve_windows_10_node(node_status, data, products_to_kee
         inverse_filtered_df = data[~data['Product'].str.contains(regex_pattern, regex=True, na=False)].copy(deep=True)
         if not inverse_filtered_df.empty:
             logger.info("WARNING: The download from Selenium contains out of bounds Products.")
-        logger.info(f"[Product build - win10] shape: {filtered_df.shape}.")
+        logger.info(f"[New Download. Product build - win10] shape: {filtered_df.shape}.")
+        # print(filtered_df.head())
         return filtered_df
     else:
         logger.info("Data already exists in MongoDB. Filtering rows from dataframe.")
@@ -467,17 +483,17 @@ def extract_product_build_cve_windows_10_node(node_status, data, products_to_kee
                 "password": mongo_creds["password"],
             },
         )
-        
+
         # Lists to store rows to keep and documents found in MongoDB
         data_to_keep_list = []
-        
+
         # process only product_build data from xlsx file for specific subset of Products
         filtered_df = data[data['Product'].str.contains(regex_pattern, regex=True, na=False)].copy(deep=True)
         # print(f"extract node: filtered_df\n {filtered_df.sample(n=12)}")
         inverse_filtered_df = data[~data['Product'].str.contains(regex_pattern, regex=True, na=False)].copy(deep=True)
         if not inverse_filtered_df.empty:
             logger.info("WARNING: The download from Selenium contains out of bounds Products.")
-        
+
         # Iterate over each row and check for its existence in MongoDB
         for index, row in filtered_df.iterrows():
             query = {'hash': row['hash']}
@@ -485,17 +501,23 @@ def extract_product_build_cve_windows_10_node(node_status, data, products_to_kee
             if not existing_doc:
                 # If the document doesn't exist, add the row to the list to keep
                 data_to_keep_list.append(index)
-        
+
         data_to_keep_df = filtered_df.loc[data_to_keep_list].copy(deep=True)
         # print(data_to_keep_df.head())
         mongo_for_file_check.client.close()
         mongo_for_dedup_check.client.close()
-        logger.info(f"[Product build - win10] num rows after cleanup: {data_to_keep_df.shape[0]}.")
-        
-        return data_to_keep_df
+        logger.info(f"[Existing download. Product build - win10] num rows after cleanup: {data_to_keep_df.shape[0]}.")
+
+    # print(data_to_keep_df.head())
+    return data_to_keep_df
 
 
-def extract_product_build_cve_windows_11_node(node_status, data, products_to_keep, overwrite=False):
+def extract_product_build_cve_windows_11_node(
+    node_status,
+    data,
+    products_to_keep,
+    overwrite=False
+):
     overwrite = convert_to_actual_type(overwrite)
     # print("Extract windows 11 node")
     # extract product build data from csv file
@@ -515,7 +537,7 @@ def extract_product_build_cve_windows_11_node(node_status, data, products_to_kee
     escaped_products_to_keep = [re.escape(product) for product in products_to_keep]
     regex_pattern = '|'.join(escaped_products_to_keep)
     data['hash'] = data.apply(lambda row: make_row_hash(row), axis=1)
-    
+
     if mongo_for_file_check.collection.find_one(query) is None or overwrite:
         logger.info("processing new Windows 11 xlsx file. processing all rows from dataframe.")
         properties = {
@@ -528,17 +550,17 @@ def extract_product_build_cve_windows_11_node(node_status, data, products_to_kee
             logger.info(f"[Product build - win11] Storing new file hash in MongoDB. Acknowledged: {result.acknowledged}")
         else:
             logger.info("Overwrite the product_build data in MongoDB.")
-            
+
         filtered_df = data[data['Product'].str.contains(regex_pattern, regex=True, na=False)].copy(deep=True)
         inverse_filtered_df = data[~data['Product'].str.contains(regex_pattern, regex=True, na=False)].copy(deep=True)
         if not inverse_filtered_df.empty:
             logger.info("WARNING: The download from Selenium contains out of bounds Products.")
-        logger.info(f"[Product build - win11] shape: {data.shape}.")
-        # print(data.head())
+        logger.info(f"[New Download. Product build - win11] shape: {filtered_df.shape}.")
+        # print(filtered_df.head())
         return filtered_df
     else:
         logger.info("Some Excel data already exists in MongoDB. Filtering rows from dataframe.")
-        
+
         mongo_for_dedup_check = MongoDBDocs(
             mongo_db="report_docstore",
             mongo_collection="microsoft_product_builds",
@@ -548,7 +570,6 @@ def extract_product_build_cve_windows_11_node(node_status, data, products_to_kee
             },
         )
         # Add a hash to each row of the dataframe
-        
         data_to_keep_list = []
         filtered_df = data[data['Product'].str.contains(regex_pattern, regex=True, na=False)].copy(deep=True)
         # print(f"extract node: filtered_df\n {filtered_df.sample(n=12)}")
@@ -562,12 +583,13 @@ def extract_product_build_cve_windows_11_node(node_status, data, products_to_kee
             if not existing_doc:
                 # If the document doesn't exist, add the index to the list to keep
                 data_to_keep_list.append(index)
-        
+
         data_to_keep_df = filtered_df.loc[data_to_keep_list]
         # print(data_to_keep_df.head())    
-        logger.info(f"[Product build - win11] num rows after cleanup: {data_to_keep_df.shape[0]}.")
-        
+        logger.info(f"[Existing download. Product build - win11] num rows after cleanup: {data_to_keep_df.shape[0]}.")
+    # print(filtered_df.head())
     return data_to_keep_df
+
 
 def extract_product_build_cve_edge_node(node_status, data, overwrite=False):
     overwrite = convert_to_actual_type(overwrite)
@@ -594,13 +616,13 @@ def extract_product_build_cve_edge_node(node_status, data, overwrite=False):
         if not overwrite:
             result = mongo_for_file_check.collection.insert_one(properties)
             logger.info(f"[Product build - edge] Storing new file hash in MongoDB. Acknowledged: {result.acknowledged}")
-        
-        logger.info(f"[Product build - edge] shape: {data.shape}.")
-        
+
+        logger.info(f"[New Download. Product build - edge] shape: {data.shape}.")
+        # print(data.head())
         return data
     else:
         logger.info("Some data from Excel already exists in MongoDB. Filtering rows from dataframe.")
-        
+
         mongo_for_dedup_check = MongoDBDocs(
             mongo_db="report_docstore",
             mongo_collection="microsoft_product_builds",
@@ -612,25 +634,28 @@ def extract_product_build_cve_edge_node(node_status, data, overwrite=False):
 
         # Lists to store rows to keep and documents found in MongoDB
         data_to_keep_list = []
-        
+
         # print(f"[product build - edge ] num rows before lookup: {data.shape[0]}")
         for index, row in data.iterrows():
             query = {'hash': row['hash']}
             existing_doc = mongo_for_dedup_check.collection.find_one(query)
             if not existing_doc:
                 data_to_keep_list.append(index)
-        
+
         data_to_keep_df = data.loc[data_to_keep_list]
         # print(data_to_keep_df.head())
-            
-        logger.info(f"[product build - edge] num rows after cleanup: {data_to_keep_df.shape[0]}.")
-    return data
+
+        logger.info(f"[Existing download. product build - edge] num rows after cleanup: {data_to_keep_df.shape[0]}.")
+
+    # print(data_to_keep_df.head())
+    return data_to_keep_df
 
 #  ---------------- Preprocess xlsx files
 # Preprocessing cleans up the dataframe, renames columns, removes rows with missing build numbers and adjusts data types. It converts build numbers from strings to lists of ints and extracts pieces of the product name.
 # -----------------------------------------
+
+
 def preprocess_update_guide_product_build_data_windows10(params, data):
-    
     columns_to_keep = params["columns_to_keep"]
     if data.empty:
         logger.info("No Windows 10 product build data to proceprocess.")
@@ -638,8 +663,8 @@ def preprocess_update_guide_product_build_data_windows10(params, data):
     prepped_df = preprocess_update_guide_product_build_data(data, columns_to_keep)
     # print(f"preprocess data shape: {prepped_df.shape}, columns: {prepped_df.columns}")
     # print(prepped_df.sample(n=prepped_df.shape[0]))
-    
     return prepped_df
+
 
 def preprocess_update_guide_product_build_data_windows11(params, data):
     columns_to_keep = params["columns_to_keep"]
@@ -649,8 +674,9 @@ def preprocess_update_guide_product_build_data_windows11(params, data):
     prepped_df = preprocess_update_guide_product_build_data(data, columns_to_keep)
     # print(f"preprocess data shape: {prepped_df.shape}, columns: {prepped_df.columns}")
     # print(prepped_df.sample(n=prepped_df.shape[0]))
-    
+
     return prepped_df
+
 
 def preprocess_update_guide_product_build_data_edge(params, data):
     columns_to_keep = params["columns_to_keep"]
@@ -660,10 +686,11 @@ def preprocess_update_guide_product_build_data_edge(params, data):
     prepped_df = preprocess_update_guide_product_build_data(data, columns_to_keep)
     # print(f"preprocess data shape: {prepped_df.shape}, columns: {prepped_df.columns}")
     # print(prepped_df.sample(n=prepped_df.shape[0]))
-    
+
     return prepped_df
 
 # ------------- Compile Products
+
 
 def compile_update_guide_products_from_build_data_windows10(params, data):
     # create unique products from the product_build data
@@ -675,8 +702,9 @@ def compile_update_guide_products_from_build_data_windows10(params, data):
     products_df = compile_update_guide_products_from_build_data(columns_to_keep, data)
     # print(products_df.columns)
     # print(products_df.head(n=5))
-    
+
     return products_df
+
 
 def compile_update_guide_products_from_build_data_windows11(params, data):
     # create unique products from the product_build data
@@ -688,8 +716,9 @@ def compile_update_guide_products_from_build_data_windows11(params, data):
     products_df = compile_update_guide_products_from_build_data(columns_to_keep, data)
     # print(products_df.columns)
     # print(products_df.head(n=5))
-    
+
     return products_df
+
 
 def compile_update_guide_products_from_build_data_edge(params, data):
     # create unique products from the product_build data
@@ -701,10 +730,11 @@ def compile_update_guide_products_from_build_data_edge(params, data):
     products_df = compile_update_guide_products_from_build_data(columns_to_keep, data)
     # print(products_df.columns)
     # print(products_df.head(n=5))
-    
+
     return products_df
 
 # ------------- Compile KB Articles
+
 
 def compile_update_guide_kb_article_data_windows10(params, data):
     columns_to_keep = params["columns_to_keep"]
@@ -717,11 +747,12 @@ def compile_update_guide_kb_article_data_windows10(params, data):
     # unique_kb_articles = kb_articles.drop_duplicates(subset=['kb_id']).copy()
     kb_articles['summary'] = ""
     # print(kb_articles.columns)
+    print(f"total kb articles win10: {kb_articles.shape[0]}")
     # with pd.option_context('display.max_colwidth', 400):
-    #     print(kb_articles[['kb_id','product_build_id','article_url']].sample(n=kb_articles.shape[0]))
-    
+    #     print(kb_articles[['kb_id','product_build_id','article_url', 'published']].sample(n=kb_articles.shape[0]))
+
     return kb_articles
-    
+
 
 def compile_update_guide_kb_article_data_windows11(params, data):
     columns_to_keep = params["columns_to_keep"]
@@ -734,10 +765,12 @@ def compile_update_guide_kb_article_data_windows11(params, data):
     # unique_kb_articles = kb_articles.drop_duplicates(subset=['kb_id']).copy()
     kb_articles['summary'] = ""
     # print(kb_articles.columns)
+    print(f"total kb articles win11: {kb_articles.shape[0]}")
     # with pd.option_context('display.max_colwidth', 400):
-    #     print(kb_articles[['kb_id','product_build_id','article_url']].sample(n=kb_articles.shape[0]))
-    
+    #     print(kb_articles[['kb_id','product_build_id','article_url', 'published']].sample(n=kb_articles.shape[0]))
+
     return kb_articles
+
 
 def compile_update_guide_kb_article_data_edge(params, data):
     columns_to_keep = params["columns_to_keep"]
@@ -750,12 +783,14 @@ def compile_update_guide_kb_article_data_edge(params, data):
     # unique_kb_articles = kb_articles.drop_duplicates(subset=['kb_id']).copy()
     kb_articles['summary'] = ""
     # print(kb_articles.columns)
+    print(f"total kb articles edge: {kb_articles.shape[0]}")
     # with pd.option_context('display.max_colwidth', 400):
-    #     print(kb_articles[['kb_id','product_build_id','article_url']].sample(n=kb_articles.shape[0]))
-    
+    #     print(kb_articles[['kb_id', 'product_build_id', 'article_url', 'published']].sample(n=kb_articles.shape[0]))
+
     return kb_articles
 
 # ------------------ Compile Product Builds
+
 
 def compile_update_guide_build_data_windows10_node(params, data: pd.DataFrame) -> pd.DataFrame:
     columns_to_keep = params["columns_to_keep"]
@@ -768,8 +803,9 @@ def compile_update_guide_build_data_windows10_node(params, data: pd.DataFrame) -
     # print(product_builds_df.columns)
     # with pd.option_context('display.max_colwidth', 400):
     #     print(product_builds_df.sample(n=product_builds_df.shape[0]))
-    
+
     return product_builds_df
+
 
 def compile_update_guide_build_data_windows11_node(params, data: pd.DataFrame) -> pd.DataFrame:
     columns_to_keep = params["columns_to_keep"]
@@ -782,8 +818,9 @@ def compile_update_guide_build_data_windows11_node(params, data: pd.DataFrame) -
     # print(product_builds_df.columns)
     # with pd.option_context('display.max_colwidth', 400):
     #     print(product_builds_df.sample(n=product_builds_df.shape[0]))
-        
+
     return product_builds_df
+
 
 def compile_update_guide_build_data_edge_node(params, data: pd.DataFrame) -> pd.DataFrame:
     columns_to_keep = params["columns_to_keep"]
@@ -796,10 +833,11 @@ def compile_update_guide_build_data_edge_node(params, data: pd.DataFrame) -> pd.
     # print(product_builds_df.columns)
     # with pd.option_context('display.max_colwidth', 400):
     #     print(product_builds_df.sample(n=product_builds_df.shape[0]))
-        
+
     return product_builds_df
 
 # ------------------ Compile Update Packages
+
 
 def compile_update_guide_update_packages_windows10_node(params, data: pd.DataFrame ) -> pd.DataFrame:
     columns_to_keep = params["columns_to_keep"]
@@ -812,8 +850,9 @@ def compile_update_guide_update_packages_windows10_node(params, data: pd.DataFra
     # print(f"update package source data win10:\n{update_packages_with_id.columns}\n{update_packages_with_id.shape}")
     # with pd.option_context('display.max_colwidth', 400):
     #     print(update_packages_with_id.sample(n=update_packages_with_id.shape[0]))
-        
+
     return update_packages_with_id
+
 
 def compile_update_guide_update_packages_windows11_node(params, data: pd.DataFrame ) -> pd.DataFrame:
     columns_to_keep = params["columns_to_keep"]
@@ -826,8 +865,9 @@ def compile_update_guide_update_packages_windows11_node(params, data: pd.DataFra
     # print(f"update package source data win11:\n{update_packages_with_id.columns}\n{update_packages_with_id.shape}")
     # with pd.option_context('display.max_colwidth', 400):
     #     print(update_packages_with_id.sample(n=update_packages_with_id.shape[0]))
-        
+
     return update_packages_with_id
+
 
 def compile_update_guide_update_packages_edge_node(params, data: pd.DataFrame ) -> pd.DataFrame:
     columns_to_keep = params["columns_to_keep"]
@@ -841,10 +881,11 @@ def compile_update_guide_update_packages_edge_node(params, data: pd.DataFrame ) 
     # print(f"update package source data edge:\n{update_packages_with_id.columns}\n{update_packages_with_id.shape}")
     # with pd.option_context('display.max_colwidth', 400):
     #     print(update_packages_with_id.sample(n=update_packages_with_id.shape[0]))
-        
+
     return update_packages_with_id
 
 # ------------------ Concatenate
+
 
 def concatenate_update_guide_product_build_data(params, windows10, windows11, edge):
     columns_to_keep = params["columns_to_keep"]
@@ -857,11 +898,14 @@ def concatenate_update_guide_product_build_data(params, windows10, windows11, ed
     correct_cols_df = concatenated_df[columns_to_keep]
     # with pd.option_context('display.max_colwidth', 400):
     #     print(correct_cols_df.sample(n=correct_cols_df.shape[0]))
-        
+    # with pd.option_context('display.max_colwidth', 400):
+    #     print(correct_cols_df.sample(n=75))    
     return correct_cols_df
+
 
 def concatenate_update_guide_kb_article_data(params, windows10, windows11, edge):
     columns_to_keep = params["columns_to_keep"]
+    print(f"columns to keep kb: \n{columns_to_keep}")
     if windows10.empty and windows11.empty and edge.empty:
         logger.info("No KB Article data to concatenate. Returning empty dataframe.")
         return pd.DataFrame(columns=columns_to_keep)
@@ -869,10 +913,12 @@ def concatenate_update_guide_kb_article_data(params, windows10, windows11, edge)
     concatenated_df = pd.concat([windows10, windows11, edge], ignore_index=True)
     # print(f"concatenated_df -kb articles cols: {concatenated_df.columns}")
     correct_cols_df = concatenated_df[columns_to_keep]
+    print(f"all kb data shape: {correct_cols_df.shape}, cols: {correct_cols_df.columns}")
     # with pd.option_context('display.max_colwidth', 400):
-    #     print(correct_cols_df.sample(n=correct_cols_df.shape[0]))
-        
+    #     print(correct_cols_df.sample(n=75))
+
     return correct_cols_df
+
 
 def concatenate_update_guide_products_data(params, windows10, windows11, edge):
     columns_to_keep = params["columns_to_keep"]
@@ -883,11 +929,12 @@ def concatenate_update_guide_products_data(params, windows10, windows11, edge):
     concatenated_df = pd.concat([windows10, windows11, edge], ignore_index=True)
     # print(f"concatenated_df -products cols: {concatenated_df.columns}")
     correct_cols_df = concatenated_df[columns_to_keep]
-    
+    # print(f"all products data shape: {correct_cols_df.shape}, cols: {correct_cols_df.columns}")
     # with pd.option_context('display.max_colwidth', None, 'display.max_columns', None):
     #     print(correct_cols_df.sample(n=correct_cols_df.shape[0]))
-        
+ 
     return correct_cols_df
+
 
 def concatenate_update_guide_update_packages_data(params, windows10, windows11, edge):
     columns_to_keep = params["columns_to_keep"]
@@ -896,17 +943,20 @@ def concatenate_update_guide_update_packages_data(params, windows10, windows11, 
         return pd.DataFrame(columns=columns_to_keep)
     logger.info('Update Packages concat has data, concatenating...')
     concatenated_df = pd.concat([windows10, windows11, edge], ignore_index=True)
-    
+
     correct_cols_df = concatenated_df[columns_to_keep]
-    # print(f"concatenated_df - update packages shape: {correct_cols_df.shape}, cols: {correct_cols_df.columns}")
+    print(f"concatenated_df - update packages shape: {correct_cols_df.shape}, cols: {correct_cols_df.columns}")
     # with pd.option_context('display.max_colwidth', 400):
     #     print(correct_cols_df.sample(n=correct_cols_df.shape[0]))
-        
+    # with pd.option_context('display.max_colwidth', 400):
+    #     print(correct_cols_df.sample(n=75))    
     return correct_cols_df
 
 #  ------------------ Transform
 
 # Insert product build data into mongo before augmenting cve docs
+
+
 def transform_update_guide_product_build_data_to_list(data: pd.DataFrame) -> list:
     if data.empty:
         return [], True
@@ -915,30 +965,37 @@ def transform_update_guide_product_build_data_to_list(data: pd.DataFrame) -> lis
     # unique_data = data.drop_duplicates(subset=['build_number', 'cve_id', 'kb_id']).copy()
     # unique_data['build_number'] = unique_data['build_number'].apply(list)
     # print(data.sample(n=3))
+    print(f"num product build data as list: {data.shape[0]}")
     return data.to_dict(orient="records"), True
+
 
 def transform_update_guide_product_data_to_list(data: pd.DataFrame) -> list:
     if data.empty:
         return []
     # print(data.sample(n=3))
+    print(f"num products data as list: {data.shape[0]}")
     return data.to_dict(orient="records")
+
 
 def transform_update_guide_kb_articles_to_list(data: pd.DataFrame) -> list:
     if data.empty:
         return []
     data['build_number'] = data['build_number'].apply(list)
     # print(data.sample(n=3))
+    print(f"num kb articles data as list: {data.shape[0]}")
     return data.to_dict(orient="records")
+
 
 def transform_update_guide_update_package_data_to_list(data: pd.DataFrame) -> list:
     if data.empty:
         return []
     data['build_number'] = data['build_number'].apply(list)
     # print(data.sample(n=3))
+    print(f"num update packages data as list: {data.shape[0]}")
     return data.to_dict(orient="records")
 
-
 # ------------------ Load to mongo
+
 
 def load_update_guide_product_build_data(product_build_data, overwrite=False):
     """
@@ -959,11 +1016,11 @@ def load_update_guide_product_build_data(product_build_data, overwrite=False):
             },
         )
         num_modified = 0
-        
+
         for record in product_build_data:
             record['published'] = datetime.strptime(record['published'], '%d-%m-%Y')
             query = {'hash': record['hash']}
-            
+
             if overwrite:
                 # Overwrite existing record
                 result = mongo.collection.replace_one(query, record, upsert=True)
@@ -981,7 +1038,7 @@ def load_update_guide_product_build_data(product_build_data, overwrite=False):
                     except ValueError as e:
                         logger.info("Error inserting document into MongoDB:", e)
                         logger.info("Document causing issue:", record)
-        
+
         logger.info(f"INGESTION: Product Build data ingestion complete.\nNum product build records processed: {num_modified}")
     else:
         logger.info("INGESTION: No product build records to process.")
@@ -989,7 +1046,7 @@ def load_update_guide_product_build_data(product_build_data, overwrite=False):
 
 def load_update_guide_product_data(product_data):
     if len(product_data) > 0:
-        
+
         mongo = MongoDBDocs(
             mongo_db="report_docstore",
             mongo_collection="microsoft_products",
@@ -1046,10 +1103,10 @@ def load_update_guide_product_data(product_data):
     else:
         logger.info(f"INGESTION: Num product records inserted: 0")
 
+
 def load_update_guide_kb_article_data(kb_article_data, overwrite=False):
     """
     Insert or update KB article records into MongoDB.
-    
     :param kb_article_data: List of dictionaries, each representing a KB article record.
     :param overwrite: Boolean, if True existing records with the same ID will be overwritten.
     """
@@ -1065,11 +1122,16 @@ def load_update_guide_kb_article_data(kb_article_data, overwrite=False):
             },
         )
         num_processed = 0  # This will count both inserted and updated records
-        
+
         for record in kb_article_data:
-            record['published'] = datetime.strptime(record['published'], '%d-%m-%Y')
+            try:
+                record['published'] = datetime.strptime(record['published'], '%d-%m-%Y')
+            except TypeError:
+                print(f"kb article {record['id']} has a bad date. {record['published']}")
+                record['published'] = None
+
             query = {'_id': record['id']}
-            
+
             if overwrite:
                 # Overwrite existing record
                 result = mongo.collection.replace_one(query, record, upsert=True)
@@ -1087,19 +1149,20 @@ def load_update_guide_kb_article_data(kb_article_data, overwrite=False):
                     except ValueError as e:
                         logger.info("Error inserting document into MongoDB:", e)
                         logger.info("Document causing issue:", record)
-        
+
         logger.info(f"INGESTION: Num loaded KB article records: {num_processed}")
     else:
         logger.info("INGESTION: No KB article records to process.")
 
+
 def load_update_guide_update_package_data(update_package_data, overwrite=False):
     """
     Insert or update update package records into MongoDB.
-    
+
     :param update_package_data: List of dictionaries, each representing an update package record.
     :param overwrite: Boolean, if True existing records with the same ID will be overwritten.
     """
-    
+
     if update_package_data:
         print(f"Num update package records to save: {len(update_package_data)}")
         mongo = MongoDBDocs(
@@ -1111,11 +1174,11 @@ def load_update_guide_update_package_data(update_package_data, overwrite=False):
             },
         )
         num_processed = 0  # This will count both inserted and updated records
-        
+
         for record in update_package_data:
             record['published'] = datetime.strptime(record['published'], '%d-%m-%Y')
             query = {'_id': record['id'], 'product_build_id': record['product_build_id']}
-            
+
             if overwrite:
                 # Overwrite existing record
                 result = mongo.collection.replace_one(query, record, upsert=True)
@@ -1134,14 +1197,14 @@ def load_update_guide_update_package_data(update_package_data, overwrite=False):
                         logger.debug(f"INGESTION: Duplicate Update Package not inserted: {record}")
                     except ValueError as e:
                         logger.info(f"Error inserting Update Package into collection: {record} with Error\n{e}")
-        
+
         logger.info(f"INGESTION: Num Update Package records: {num_processed} loaded.")
     else:
         logger.info("INGESTION: No Update Package records to process.")
-    
+
     return True
 
-        
+
 def begin_augment_proudct_build_pipeline_connector(ingestion_complete):
     if ingestion_complete:
         logger.info("Ingest product build pipeline completed")
