@@ -1,25 +1,35 @@
 import time
-from datetime import datetime
+# from datetime import datetime
 from time import sleep
 from kedro.config import ConfigLoader
 from kedro.framework.project import settings
-from kedro_workbench.utils.feature_engineering import convert_string_to_object, extract_summary
+from kedro_workbench.utils.feature_engineering import (
+    convert_string_to_object,
+    extract_summary
+    )
+from kedro_workbench.utils.athina_logging_utils import (AthinaEvalParams)
 import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re
 from dateutil.parser import parse
 from llama_index import Document
 from typing import List, Tuple
-import openai
+# import openai
 from requests.exceptions import HTTPError
 from openai import OpenAI
-from tenacity import retry, wait_exponential, stop_after_attempt
+# from tenacity import retry, wait_exponential, stop_after_attempt
 import tiktoken
 import json
 import logging
-# from athina_logger.api_key import AthinaApiKey
+from athina_logger.api_key import AthinaApiKey
 # from athina_logger.openai_wrapper import openai
-# from athina_logger import inference_logger
+from athina_logger.inference_logger import InferenceLogger
+from athina_logger.exception.custom_exception import CustomException
+from athina_logger.athina_meta import AthinaMeta
+# from athina_logger.log_stream_inference.openai_completion_stream import LogOpenAiCompletionStreamInference
+from dataclasses import dataclass
+from typing import List, Dict, Optional, Any
+
 
 logger = logging.getLogger(__name__)
 encoding = tiktoken.get_encoding("cl100k_base")
@@ -33,11 +43,22 @@ openai_api_key = credentials["OPENAI"]["api_key"]
 
 athina_credentials = credentials["athina"]
 athina_api_key = athina_credentials['api_key']
-# AthinaApiKey.set_api_key(athina_api_key)
+AthinaApiKey.set_api_key(athina_api_key)
+
+
+@dataclass
+class LLMParams:
+    model: str
+    system_prompt: str
+    input_prompt: str
+    max_tokens: int
+    temperature: float
+
 
 def get_num_tokens(text):
     num_tokens = len(encoding.encode(text))
     return num_tokens
+
 
 def find_matching_keys(document: Document) -> List:
     """
@@ -451,10 +472,9 @@ def fit_prompt_to_window(text, max_tokens):
         # If the original number of tokens is within the limit, return the original text
         return text
 
-# @retry(wait=wait_exponential(multiplier=1, min=4, max=20), stop=stop_after_attempt(3))
+
 def call_llm_completion(model, system_prompt, input_prompt, max_tokens, temperature):
-    # from athina_logger.athina_meta import AthinaMeta
-    # from athina_logger.inference_logger import InferenceLogger
+
     client = OpenAI(
         api_key=openai_api_key,
     )
@@ -472,30 +492,14 @@ def call_llm_completion(model, system_prompt, input_prompt, max_tokens, temperat
                 }
             ],
         "max_tokens": max_tokens,
-        "temperature": temperature,
-        # "athina_meta": AthinaMeta(
-        #     prompt_slug="yc_rag_v1",
-        #     context={"information": input_prompt}, # Your retrieved documents
-        #     session_id="session_id_1", # Conversation ID
-        #     customer_id="customer_id_1", # Your Customer's ID
-        #     customer_user_id="customer_user_id_1", # Your End User's ID
-        #     environment="production", # Environment (production, staging, dev, etc)
-        #     external_reference_id="ext_ref_123456",
-        #     custom_attributes={
-        #         "name": "John",
-        #         "age": 30,
-        #         "city": "New York"
-        #         } 
-        # )
+        "temperature": temperature
     }
-    
+
     # print(payload)
     try:
         response = client.chat.completions.create(**payload)
         choice = response.choices[0]
         response_msg = choice.message.content
-        # added for athina
-        response = response.model_dump()
     except HTTPError as e:
         # If an HTTPError is caught, print out the error and the data sent
         print(f"HTTPError occurred: {e}")
@@ -503,23 +507,71 @@ def call_llm_completion(model, system_prompt, input_prompt, max_tokens, temperat
     except Exception as e:
         # Catch other exceptions
         print(f"An exception occurred: {e}")
-    # try:
-    #     InferenceLogger.log_inference(
-    #         prompt_slug="weekly_report_post_summary",
-    #         prompt=payload['messages'],
-    #         language_model_id=model,
-    #         response=response,
-    #         external_reference_id="ext_ref_id_str",
-    #         cost=0.0123,
-    #         custom_attributes={
-    #             "report_end_date": "2024_05_07",
-    #             "post_count": 3,
-    #             "patch_tuesday": False
-    #         }
-    #     )
-    # except Exception as e:
-    #     print(e)
+
     sleep(3.5)
+    return response_msg
+
+
+def call_llm_completion_with_logging(
+    llm_params: LLMParams,
+    athina_eval: Optional[AthinaEvalParams] = None,
+    athina_meta: Optional[AthinaMeta] = None
+):
+
+    client = OpenAI(api_key=openai_api_key)
+    response_msg = ""
+    payload = {
+        "model": llm_params.model,
+        "messages": [
+            {
+                "role": "system",
+                "content": llm_params.system_prompt
+            },
+            {
+                "role": "user",
+                "content": llm_params.input_prompt
+            }
+        ],
+        "max_tokens": llm_params.max_tokens,
+        "temperature": llm_params.temperature
+    }
+
+    try:
+        response = client.chat.completions.create(**payload, athina_meta=athina_meta)
+        choice = response.choices[0]
+        response_msg = choice.message.content
+        response_dict = response.model_dump()  # For openai > 1 version
+
+        log_params = {
+            "language_model_id": llm_params.model,
+            "prompt": payload["messages"],
+            "response": response_dict,
+        }
+
+        if athina_eval:
+            log_params.update({
+                "user_query": athina_eval.user_query,
+                "context": athina_eval.context
+            })
+
+        try:
+            InferenceLogger.log_inference(log_params)
+        except Exception as e:
+            if isinstance(e, CustomException):
+                print(e.status_code)
+                print(e.message)
+            else:
+                print(e)
+
+    except HTTPError as e:
+        print(f"HTTPError occurred: {e}")
+        print(
+            f"Max tokens: {llm_params.max_tokens}\n"
+            f"Data sent: system_prompt: {llm_params.system_prompt},\n"
+            f"input_prompt: {llm_params.input_prompt}")
+    except Exception as e:
+        print(f"An exception occurred: {e}")
+
     return response_msg
 
 
