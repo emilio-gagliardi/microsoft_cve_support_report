@@ -22,13 +22,26 @@ from typing import List, Dict, Optional, Any
 
 
 @dataclass
-class AthinaRequiredParams:
+class AthinaParams:
     language_model_id: str
     prompt: List[Dict[str, str]]
-    response: Dict[str, Any]
-
-
-@dataclass
-class AthinaEvalParams:
+    response: Optional[Dict[str, Any]] = None
     user_query: Optional[str] = None
     context: Optional[Dict[str, Any]] = None
+    prompt_tokens: Optional[int] = None
+    completion_tokens: Optional[int] = None
+    total_tokens: Optional[int] = None
+    cost: Optional[float] = None
+    response_time: Optional[float] = None
+    prompt_slug: Optional[str] = None
+    environment: Optional[str] = None
+    customer_id: Optional[str] = None
+    customer_user_id: Optional[str] = None
+    session_id: Optional[str] = None
+    external_reference_id: Optional[str] = None
+    custom_attributes: Optional[Dict[str, Any]] = None
+    expected_response: Optional[Dict[str, Any]] = None
+    tools: Optional[Dict[str, Any]] = None
+    tool_calls: Optional[Dict[str, Any]] = None
+    functions: Optional[Dict[str, Any]] = None
+    function_call_response: Optional[Dict[str, Any]] = None

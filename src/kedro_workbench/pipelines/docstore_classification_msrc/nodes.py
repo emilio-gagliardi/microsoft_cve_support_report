@@ -86,8 +86,8 @@ def extract_posts_to_classify(document_limit, begin_docstore_feature_engineering
     list_of_dicts_to_classify = list(result)
     logger.info(f"num posts to classify: {len(list_of_dicts_to_classify)}")
 
-    for item in list_of_dicts_to_classify:
-        print(item['metadata'])
+    # for item in list_of_dicts_to_classify:
+    #     print(item['metadata'])
     return list_of_dicts_to_classify if list_of_dicts_to_classify else ['None']
 
 
