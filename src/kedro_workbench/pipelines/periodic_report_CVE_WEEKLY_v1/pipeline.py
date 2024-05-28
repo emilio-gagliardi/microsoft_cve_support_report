@@ -207,20 +207,20 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs="periodic_report_generated",
                 name="generate_periodic_report_CVE_WEEKLY_v1_html",
             ),
-        # node(
-        #         func=move_cve_weekly_report_assets_to_blob,
-        #         inputs="periodic_report_generated",
-        #         outputs=None,
-        #         name="move_cve_weekly_report_assets_to_blob",
-        #     ),
-        # node(
-        #         func=load_report_assets_to_webserver,
-        #         inputs=["periodic_report_generated",
-        #                 "params:report_params_periodic_report_CVE_WEEKLY_v1"
-        #                 ],
-        #         outputs=None,
-        #         name="load_report_assets_to_webserver",
-        #     ),
+        node(
+                func=move_cve_weekly_report_assets_to_blob,
+                inputs="periodic_report_generated",
+                outputs=None,
+                name="move_cve_weekly_report_assets_to_blob",
+            ),
+        node(
+                func=load_report_assets_to_webserver,
+                inputs=["periodic_report_generated",
+                        "params:report_params_periodic_report_CVE_WEEKLY_v1"
+                        ],
+                outputs=None,
+                name="load_report_assets_to_webserver",
+            ),
         node(
                 func=send_notification_to_sendgrid_qa_list,
                 inputs=["periodic_report_generated",

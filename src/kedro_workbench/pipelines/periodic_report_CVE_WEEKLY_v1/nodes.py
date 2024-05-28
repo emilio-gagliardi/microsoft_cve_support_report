@@ -1204,7 +1204,7 @@ def create_draft_campaign_cve_weekly(report_data_container, params):
             "suppression_group_id": 28454}
         }
 
-    print(data)
+    # print(data)
 
     sg = SendGridAPIClient(sendgrid_api_key)
     try:
