@@ -1,0 +1,3722 @@
+id,post_id,published,revision,post_type,title,description,source,related_posts,summary,summarization_payload,build_numbers,product_build_ids,products,report_category,text,build_number_str,core_products,kb_article_pairs,package_pairs,metadata_context,user_prompt
+07d7fb0d-d625-0e0c-9c8e-4e38be0901ac,CVE-2024-30017,15-05-2024,1.1,Information only,CVE-2024-30017 Windows Hyper-V Remote Code Execution Vulnerability,Updated FAQ information. This is an informational change only.,https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-30017,[],"This post is an informational update only, providing revised FAQ information for CVE-2024-30017. No new substantive details or changes to the vulnerability or its mitigations have been introduced.",,"[[10, 0, 19045, 4412], [10, 0, 22631, 3593], [10, 0, 22621, 3593], [10, 0, 22000, 2960], [10, 0, 10240, 20651], [10, 0, 19044, 4412]]","['902d74bf-e00c-69f8-b882-436c139c6dcc', '1207c7bf-2a30-24e4-1cfe-a61b500e2b4e', 'b45db0a0-47d9-63c3-2127-0c9d3c343330', '0519e2c6-f243-3997-a8b9-ab5e1143c069', 'da7a2bd1-f864-5a4c-bc62-3720d5eb9230', 'a03bf103-a2ec-f30e-1ff9-552ee075e9cb']","['windows 10 22H2 x64-based_systems', 'windows 11 23H2 x64-based_systems', 'windows 11 22H2 x64-based_systems', 'windows 10 21H2 x64-based_systems', 'windows 11 21H2 x64-based_systems', 'windows 10  x64-based_systems']",windows_10_windows_11_shared,"Updated FAQ information. This is an informational change only. 
+Windows Hyper-V Remote Code Execution Vulnerability  
+New 
+Recently updated 
+On this page 
+ 
+CVE-2024-30017 
+ 
+Subscribe 
+RSS 
+PowerShell 
+ 
+API 
+Security Vulnerability 
+Released: 14 May 2024 
+Last updated: 15 May 2024 
+Assigning CNA: 
+Microsoft 
+CVE-2024-30017  
+ 
+Impact: Remote Code Execution 
+Max Severity: Important 
+Weakness: 
+CWE-122: Heap-based Buffer Overflow 
+CVSS Source: 
+ Microsoft 
+CVSS:3.1 8.8 / 7.7 
+ 
+Base score metrics: 8.8 / Temporal score metrics: 7.7 
+Base score metrics: 8.8 / Temporal score metrics: 7.7 
+ 
+Expand all 
+ 
+Collapse all 
+Metric 
+Value 
+ 
+ 
+Base score metrics 
+(8) 
+Attack Vector 
+This metric reflects the context by which vulnerability exploitation is possible. The Base Score increases the more remote (logically, and physically) an attacker can be in order to exploit the vulnerable component. 
+Network 
+The vulnerable component is bound to the network stack and the set of possible attackers extends beyond the other options listed, up to and including the entire Internet. Such a vulnerability is often termed 'remotely exploitable' and can be thought of as an attack being exploitable at the protocol level one or more network hops away (e.g., across one or more routers). 
+Attack Complexity 
+This metric describes the conditions beyond the attacker’s control that must exist in order to exploit the vulnerability. Such conditions may require the collection of more information about the target or computational exceptions. The assessment of this metric excludes any requirements for user interaction in order to exploit the vulnerability. If a specific configuration is required for an attack to succeed, the Base metrics should be scored assuming the vulnerable component is in that configuration. 
+Low 
+Specialized access conditions or extenuating circumstances do not exist. An attacker can expect repeatable success against the vulnerable component. 
+Privileges Required 
+This metric describes the level of privileges an attacker must possess before successfully exploiting the vulnerability. 
+Low 
+The attacker is authorized with (i.e., requires) privileges that provide basic user capabilities that could normally affect only settings and files owned by a user. Alternatively, an attacker with Low privileges may have the ability to cause an impact only to non-sensitive resources. 
+User Interaction 
+This metric captures the requirement for a user, other than the attacker, to participate in the successful compromise the vulnerable component. This metric determines whether the vulnerability can be exploited solely at the will of the attacker, or whether a separate user (or user-initiated process) must participate in some manner. 
+None 
+The vulnerable system can be exploited without any interaction from any user. 
+Scope 
+Does a successful attack impact a component other than the vulnerable component? If so, the Base Score increases and the Confidentiality, Integrity and Authentication metrics should be scored relative to the impacted component. 
+Unchanged 
+An exploited vulnerability can only affect resources managed by the same security authority. In this case, the vulnerable component and the impacted component are either the same, or both are managed by the same security authority. 
+Confidentiality 
+This metric measures the impact to the confidentiality of the information resources managed by a software component due to a successfully exploited vulnerability. Confidentiality refers to limiting information access and disclosure to only authorized users, as well as preventing access by, or disclosure to, unauthorized ones. 
+High 
+There is total loss of confidentiality, resulting in all resources within the impacted component being divulged to the attacker. Alternatively, access to only some restricted information is obtained, but the disclosed information presents a direct, serious impact. 
+Integrity 
+This metric measures the impact to integrity of a successfully exploited vulnerability. Integrity refers to the trustworthiness and veracity of information. 
+High 
+There is a total loss of integrity, or a complete loss of protection. For example, the attacker is able to modify any/all files protected by the impacted component. Alternatively, only some files can be modified, but malicious modification would present a direct, serious consequence to the impacted component. 
+Availability 
+This metric measures the impact to the availability of the impacted component resulting from a successfully exploited vulnerability. It refers to the loss of availability of the impacted component itself, such as a networked service (e.g., web, database, email). Since availability refers to the accessibility of information resources, attacks that consume network bandwidth, processor cycles, or disk space all impact the availability of an impacted component. 
+High 
+There is total loss of availability, resulting in the attacker being able to fully deny access to resources in the impacted component; this loss is either sustained (while the attacker continues to deliver the attack) or persistent (the condition persists even after the attack has completed). Alternatively, the attacker has the ability to deny some availability, but the loss of availability presents a direct, serious consequence to the impacted component (e.g., the attacker cannot disrupt existing connections, but can prevent new connections; the attacker can repeatedly exploit a vulnerability that, in each instance of a successful attack, leaks a only small amount of memory, but after repeated exploitation causes a service to become completely unavailable). 
+ 
+ 
+Temporal score metrics 
+(3) 
+Exploit Code Maturity 
+This metric measures the likelihood of the vulnerability being attacked, and is typically based on the current state of exploit techniques, exploit code availability, or active, 'in-the-wild' exploitation. 
+Unproven 
+No exploit code is available, or an exploit is theoretical. 
+Remediation Level 
+The Remediation Level of a vulnerability is an important factor for prioritization. The typical vulnerability is unpatched when initially published. Workarounds or hotfixes may offer interim remediation until an official patch or upgrade is issued. Each of these respective stages adjusts the temporal score downwards, reflecting the decreasing urgency as remediation becomes final. 
+Official Fix 
+A complete vendor solution is available. Either the vendor has issued an official patch, or an upgrade is available. 
+Report Confidence 
+This metric measures the degree of confidence in the existence of the vulnerability and the credibility of the known technical details. Sometimes only the existence of vulnerabilities are publicized, but without specific details. For example, an impact may be recognized as undesirable, but the root cause may not be known. The vulnerability may later be corroborated by research which suggests where the vulnerability may lie, though the research may not be certain. Finally, a vulnerability may be confirmed through acknowledgement by the author or vendor of the affected technology. The urgency of a vulnerability is higher when a vulnerability is known to exist with certainty. This metric also suggests the level of technical knowledge available to would-be attackers. 
+Confirmed 
+Detailed reports exist, or functional reproduction is possible (functional exploits may provide this). Source code is available to independently verify the assertions of the research, or the author or vendor of the affected code has confirmed the presence of the vulnerability. 
+Please see  
+Common Vulnerability Scoring System 
+ for more information on the definition of these metrics. 
+The following table provides an  
+exploitability assessment 
+ for this vulnerability at the time of original publication. 
+Publicly disclosed 
+Exploited 
+Exploitability assessment 
+No 
+No 
+Exploitation Less Likely 
+According to the CVSS metric, privileges required is low (PR:L).  What does that mean for this vulnerability? 
+The attacker must be authenticated to be able to exploit this vulnerability. 
+How would an attacker exploit this vulnerability? 
+An attacker who successfully exploited this vulnerability could send malformed packets to Hyper-V Replica endpoints on the host from a remote machine. 
+ziming zhang 
+ with Ant Security Light-Year Lab 
+Microsoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  
+Acknowledgements 
+ for more information. 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+14 May 2024 
+Windows Server 2016 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows Server 2016 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 Version 1607 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037788  
+ 
+Security Update  
+ 
+10.0.10240.20651 
+14 May 2024 
+Windows Server 2022, 23H2 Edition (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037781  
+ 
+Security Update  
+ 
+10.0.25398.887 
+14 May 2024 
+Windows 11 Version 23H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 11 Version 23H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 10 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19045.4412 
+14 May 2024 
+Windows 11 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621.3593 
+14 May 2024 
+Windows 11 Version 22H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621.3593 
+14 May 2024 
+Windows 10 Version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19044.4412 
+14 May 2024 
+Windows 11 version 21H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows 11 version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows Server 2022 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037782  
+ 
+5037848  
+ 
+Security Update  
+ 
+SecurityHotpatchUpdate  
+ 
+10.0.20348.2461 
+10.0.20348.2458 
+14 May 2024 
+Windows Server 2022 
+- 
+Remote Code Execution 
+Important 
+5037782  
+ 
+5037848  
+ 
+Security Update  
+ 
+SecurityHotpatchUpdate  
+ 
+10.0.20348.2461 
+10.0.20348.2458 
+14 May 2024 
+Windows Server 2019 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037765  
+ 
+Security Update  
+ 
+10.0.17763.5820 
+14 May 2024 
+Windows Server 2019 
+- 
+Remote Code Execution 
+Important 
+5037765  
+ 
+Security Update  
+ 
+10.0.17763.5820 
+14 May 2024 
+Windows 10 Version 1809 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037765  
+ 
+Security Update  
+ 
+10.0.17763.5820 
+All results loaded 
+Loaded all 18 rows 
+The information provided in the Microsoft Knowledge Base is provided ""as is"" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. 
+version 
+revisionDate 
+description 
+1.1 
+15 May 2024 
+Updated FAQ information. This is an informational change only. 
+1.0 
+14 May 2024 
+Information published. 
+FAQ 
+According to the CVSS metric, privileges required is low (PR:L).  What does that mean for this vulnerability? 
+The attacker must be authenticated to be able to exploit this vulnerability. 
+How would an attacker exploit this vulnerability? 
+An attacker who successfully exploited this vulnerability could send malformed packets to Hyper-V Replica endpoints on the host from a remote machine. 
+Security Updates 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+14 May 2024 
+Windows Server 2016 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows Server 2016 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 Version 1607 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037788  
+ 
+Security Update  
+ 
+10.0.10240.20651 
+14 May 2024 
+Windows Server 2022, 23H2 Edition (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037781  
+ 
+Security Update  
+ 
+10.0.25398.887 
+14 May 2024 
+Windows 11 Version 23H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 11 Version 23H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 10 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19045.4412 
+14 May 2024 
+Windows 11 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621.3593 
+14 May 2024 
+Windows 11 Version 22H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621.3593 
+14 May 2024 
+Windows 10 Version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19044.4412 
+14 May 2024 
+Windows 11 version 21H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows 11 version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows Server 2022 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037782  
+ 
+5037848  
+ 
+Security Update  
+ 
+SecurityHotpatchUpdate  
+ 
+10.0.20348.2461 
+10.0.20348.2458 
+14 May 2024 
+Windows Server 2022 
+- 
+Remote Code Execution 
+Important 
+5037782  
+ 
+5037848  
+ 
+Security Update  
+ 
+SecurityHotpatchUpdate  
+ 
+10.0.20348.2461 
+10.0.20348.2458 
+14 May 2024 
+Windows Server 2019 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037765  
+ 
+Security Update  
+ 
+10.0.17763.5820 
+14 May 2024 
+Windows Server 2019 
+- 
+Remote Code Execution 
+Important 
+5037765  
+ 
+Security Update  
+ 
+10.0.17763.5820 
+14 May 2024 
+Windows 10 Version 1809 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037765  
+ 
+Security Update  
+ 
+10.0.17763.5820 
+All results loaded 
+Loaded all 18 rows","['10.0.22631.3593', '10.0.22621.3593', '10.0.22000.2960', '10.0.19045.4412', '10.0.19044.4412', '10.0.10240.20651']","['windows 10  x64-based_systems', 'windows 10 21H2 x64-based_systems', 'windows 11 21H2 x64-based_systems', 'windows 10 22H2 x64-based_systems', 'windows 11 22H2 x64-based_systems', 'windows 11 23H2 x64-based_systems']","[{'kb_id': 'kb5037788', 'kb_link': 'https://support.microsoft.com/help/5037788#may-14-2024'}, {'kb_id': 'kb5037771', 'kb_link': 'https://support.microsoft.com/help/5037771#may-14-2024'}, {'kb_id': 'kb5037770', 'kb_link': 'https://support.microsoft.com/help/5037770#may-14-2024'}, {'kb_id': 'kb5037768', 'kb_link': 'https://support.microsoft.com/help/5037768#may-14-2024'}]","[{'package_type': 'Security Update (KB5037771)', 'package_url': 'https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037771', 'kbid': 5037771, 'downloadable_packages': [{'product_name': 'windows_11', 'product_version': '22H2', 'product_architecture': 'x64', 'update_type': 'Cumulative', 'file_size': '712.5 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'n/a', 'restart_behavior_matches_baseline': True}, {'product_name': 'windows_11', 'product_version': '23H2', 'product_architecture': 'x64', 'update_type': 'Cumulative', 'file_size': '712.5 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'n/a', 'restart_behavior_matches_baseline': True}]}, {'package_type': 'Security Update (KB5037770)', 'package_url': 'https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037770', 'kbid': 5037770, 'downloadable_packages': [{'product_name': 'windows_11', 'product_version': None, 'product_architecture': 'x64', 'update_type': 'Dynamic Cumulative', 'file_size': '402.7 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.', 'restart_behavior_matches_baseline': True}, {'product_name': 'windows_11', 'product_version': None, 'product_architecture': 'x64', 'update_type': 'Cumulative', 'file_size': '402.7 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.', 'restart_behavior_matches_baseline': True}]}, {'package_type': 'Security Update (KB5037768)', 'package_url': 'https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037768', 'kbid': 5037768, 'downloadable_packages': [{'product_name': 'windows_10', 'product_version': '21H2', 'product_architecture': 'x64', 'update_type': 'Dynamic Cumulative', 'file_size': '633.6 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.', 'restart_behavior_matches_baseline': True}, {'product_name': 'windows_10', 'product_version': '21H2', 'product_architecture': 'x86', 'update_type': 'Dynamic Cumulative', 'file_size': '358.8 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.', 'restart_behavior_matches_baseline': True}, {'product_name': 'windows_10', 'product_version': '22H2', 'product_architecture': 'x64', 'update_type': 'Dynamic Cumulative', 'file_size': '633.6 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.', 'restart_behavior_matches_baseline': True}, {'product_name': 'windows_10', 'product_version': '22H2', 'product_architecture': 'x86', 'update_type': 'Dynamic Cumulative', 'file_size': '358.8 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.', 'restart_behavior_matches_baseline': True}]}]","post_id: CVE-2024-30017
+id: 07d7fb0d-d625-0e0c-9c8e-4e38be0901ac
+revision: 1.1
+published: 15-05-2024
+source: https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-30017
+post_type: Information only
+","
+Use the provided Microsoft Security Response Center post details below, generate a valid JSON object with a detailed and comprehensive summary. The summary should be less than 15 sentences long, explaining the nature of the vulnerability, how an attacker may exploit it, the underlying cause, and the availability of an official fix. The post is classified as one of ['Critical', 'New feature', 'Solution provided', 'Information only']. 
+Use the post_type to guide your summary. If a post_type is 'Information only' it likely means Microsoft updated the FAQs but nothing substantive beyond the previous revision. So your summary is merely needs to state that the post is a updated revision and is information only. 
+
+If a post_type is 'Solution provided' you must mention the remedy or workaround.
+If a post_type is NaN, you can deduce the post_type by searching for 'Remediation Level' in the post body and whether it says 'Official Fix' or not.
+
+Clearly identify the affected Microsoft product(s), services, and or features. Use your knowledge to add any related facts or comments for a better explanation. Do not restate the post title or use redundant metadata information. The metadata provided includes id, post_id, title, post_type, and published date.
+
+Example summary:
+Microsoft Edge (Chromium-based) is affected by a use after free vulnerability in Profiles, identified as CVE-2023-5472. This vulnerability was assigned by Chrome and is addressed by ingesting Chromium. The latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. The vulnerability is caused by a flaw in the Chromium Open Source Software (OSS) consumed by Microsoft Edge. An attacker could exploit this vulnerability to execute arbitrary code in the context of the current user. Microsoft has provided a solution by releasing a security update for Microsoft Edge (Chromium-based) with the build number 118.0.2088.76. System administrators are advised to update their Microsoft Edge installations to the latest version to mitigate the risk of exploitation. For more information, refer to the [Google Chrome Releases](https://chromereleases.googleblog.com/2023) page.
+
+Generate a valid JSON object following this schema. DO NOT ADD ANY OTHER KEYS.
+{
+    ""metadata"": {
+        ""id"": ""b2cced8d-a552-f52a-6699-1da6b97d015d"",
+        ""post_id"": ""CVE-2018-10001"",
+        ""revision: ""1.4"",
+        ""published"": ""<dd-mm-YYYY>""
+    },
+    ""summary"": ""INSERT SUMMARY HERE""
+}
+
+Notes for LLM:
+- Ensure the summary is robust, technically thorough, and less than 15 sentences.
+- Target audience is Microsoft system engineers and administrators - experts. Generate a summary that is informative and valuable for them. Basic information like how to find the browser version number is not useful.
+- Focus on the key aspects of the vulnerability and its impact on the specific Microsoft:
+    - which product(s) are affected
+    - is a service affected? If so, which one?
+    - is a specific feature affected?
+    - what is the attack vector?
+    - is there an official fix? If not, is there a temporary workaround?
+- make sure you scan all sections looking for explicit workarounds, mitigations or powershell commands. These are the most valuable pieces of information for system administrators.
+- Include relevant details from your training data to enhance the summary.
+- Avoid redundancy with provided metadata. Do not re-state the title or post_type in your summary. The reader already has this information.
+- Do not include FAQ information in your summary unless it specifically mentions additional technical details or links for further research.
+What not to include in the summary guidelines:
+- DO NOT generate any text like 'Microsoft acknowledges the efforts of ...'
+- DO NOT generate any text like 'Users can check their browser version by clicking on the three dots (...) ...'.
+- DO NOT include any special thanks or acknowledgements. Just report on actionable facts.
+- The JSON object should be correctly formatted and include all required fields in the schema. Do not add any additional fields.
+- Do not output any text outside of the json object because an external script will parse the output. 
+
+------------------------
+post_id: CVE-2024-30017
+id: 07d7fb0d-d625-0e0c-9c8e-4e38be0901ac
+revision: 1.1
+published: 15-05-2024
+source: https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-30017
+post_type: Information only
+Updated FAQ information. This is an informational change only. 
+Windows Hyper-V Remote Code Execution Vulnerability  
+New 
+Recently updated 
+On this page 
+ 
+CVE-2024-30017 
+ 
+Subscribe 
+RSS 
+PowerShell 
+ 
+API 
+Security Vulnerability 
+Released: 14 May 2024 
+Last updated: 15 May 2024 
+Assigning CNA: 
+Microsoft 
+CVE-2024-30017  
+ 
+Impact: Remote Code Execution 
+Max Severity: Important 
+Weakness: 
+CWE-122: Heap-based Buffer Overflow 
+CVSS Source: 
+ Microsoft 
+CVSS:3.1 8.8 / 7.7 
+ 
+Base score metrics: 8.8 / Temporal score metrics: 7.7 
+Base score metrics: 8.8 / Temporal score metrics: 7.7 
+ 
+Expand all 
+ 
+Collapse all 
+Metric 
+Value 
+ 
+ 
+Base score metrics 
+(8) 
+Attack Vector 
+This metric reflects the context by which vulnerability exploitation is possible. The Base Score increases the more remote (logically, and physically) an attacker can be in order to exploit the vulnerable component. 
+Network 
+The vulnerable component is bound to the network stack and the set of possible attackers extends beyond the other options listed, up to and including the entire Internet. Such a vulnerability is often termed 'remotely exploitable' and can be thought of as an attack being exploitable at the protocol level one or more network hops away (e.g., across one or more routers). 
+Attack Complexity 
+This metric describes the conditions beyond the attacker’s control that must exist in order to exploit the vulnerability. Such conditions may require the collection of more information about the target or computational exceptions. The assessment of this metric excludes any requirements for user interaction in order to exploit the vulnerability. If a specific configuration is required for an attack to succeed, the Base metrics should be scored assuming the vulnerable component is in that configuration. 
+Low 
+Specialized access conditions or extenuating circumstances do not exist. An attacker can expect repeatable success against the vulnerable component. 
+Privileges Required 
+This metric describes the level of privileges an attacker must possess before successfully exploiting the vulnerability. 
+Low 
+The attacker is authorized with (i.e., requires) privileges that provide basic user capabilities that could normally affect only settings and files owned by a user. Alternatively, an attacker with Low privileges may have the ability to cause an impact only to non-sensitive resources. 
+User Interaction 
+This metric captures the requirement for a user, other than the attacker, to participate in the successful compromise the vulnerable component. This metric determines whether the vulnerability can be exploited solely at the will of the attacker, or whether a separate user (or user-initiated process) must participate in some manner. 
+None 
+The vulnerable system can be exploited without any interaction from any user. 
+Scope 
+Does a successful attack impact a component other than the vulnerable component? If so, the Base Score increases and the Confidentiality, Integrity and Authentication metrics should be scored relative to the impacted component. 
+Unchanged 
+An exploited vulnerability can only affect resources managed by the same security authority. In this case, the vulnerable component and the impacted component are either the same, or both are managed by the same security authority. 
+Confidentiality 
+This metric measures the impact to the confidentiality of the information resources managed by a software component due to a successfully exploited vulnerability. Confidentiality refers to limiting information access and disclosure to only authorized users, as well as preventing access by, or disclosure to, unauthorized ones. 
+High 
+There is total loss of confidentiality, resulting in all resources within the impacted component being divulged to the attacker. Alternatively, access to only some restricted information is obtained, but the disclosed information presents a direct, serious impact. 
+Integrity 
+This metric measures the impact to integrity of a successfully exploited vulnerability. Integrity refers to the trustworthiness and veracity of information. 
+High 
+There is a total loss of integrity, or a complete loss of protection. For example, the attacker is able to modify any/all files protected by the impacted component. Alternatively, only some files can be modified, but malicious modification would present a direct, serious consequence to the impacted component. 
+Availability 
+This metric measures the impact to the availability of the impacted component resulting from a successfully exploited vulnerability. It refers to the loss of availability of the impacted component itself, such as a networked service (e.g., web, database, email). Since availability refers to the accessibility of information resources, attacks that consume network bandwidth, processor cycles, or disk space all impact the availability of an impacted component. 
+High 
+There is total loss of availability, resulting in the attacker being able to fully deny access to resources in the impacted component; this loss is either sustained (while the attacker continues to deliver the attack) or persistent (the condition persists even after the attack has completed). Alternatively, the attacker has the ability to deny some availability, but the loss of availability presents a direct, serious consequence to the impacted component (e.g., the attacker cannot disrupt existing connections, but can prevent new connections; the attacker can repeatedly exploit a vulnerability that, in each instance of a successful attack, leaks a only small amount of memory, but after repeated exploitation causes a service to become completely unavailable). 
+ 
+ 
+Temporal score metrics 
+(3) 
+Exploit Code Maturity 
+This metric measures the likelihood of the vulnerability being attacked, and is typically based on the current state of exploit techniques, exploit code availability, or active, 'in-the-wild' exploitation. 
+Unproven 
+No exploit code is available, or an exploit is theoretical. 
+Remediation Level 
+The Remediation Level of a vulnerability is an important factor for prioritization. The typical vulnerability is unpatched when initially published. Workarounds or hotfixes may offer interim remediation until an official patch or upgrade is issued. Each of these respective stages adjusts the temporal score downwards, reflecting the decreasing urgency as remediation becomes final. 
+Official Fix 
+A complete vendor solution is available. Either the vendor has issued an official patch, or an upgrade is available. 
+Report Confidence 
+This metric measures the degree of confidence in the existence of the vulnerability and the credibility of the known technical details. Sometimes only the existence of vulnerabilities are publicized, but without specific details. For example, an impact may be recognized as undesirable, but the root cause may not be known. The vulnerability may later be corroborated by research which suggests where the vulnerability may lie, though the research may not be certain. Finally, a vulnerability may be confirmed through acknowledgement by the author or vendor of the affected technology. The urgency of a vulnerability is higher when a vulnerability is known to exist with certainty. This metric also suggests the level of technical knowledge available to would-be attackers. 
+Confirmed 
+Detailed reports exist, or functional reproduction is possible (functional exploits may provide this). Source code is available to independently verify the assertions of the research, or the author or vendor of the affected code has confirmed the presence of the vulnerability. 
+Please see  
+Common Vulnerability Scoring System 
+ for more information on the definition of these metrics. 
+The following table provides an  
+exploitability assessment 
+ for this vulnerability at the time of original publication. 
+Publicly disclosed 
+Exploited 
+Exploitability assessment 
+No 
+No 
+Exploitation Less Likely 
+According to the CVSS metric, privileges required is low (PR:L).  What does that mean for this vulnerability? 
+The attacker must be authenticated to be able to exploit this vulnerability. 
+How would an attacker exploit this vulnerability? 
+An attacker who successfully exploited this vulnerability could send malformed packets to Hyper-V Replica endpoints on the host from a remote machine. 
+ziming zhang 
+ with Ant Security Light-Year Lab 
+Microsoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  
+Acknowledgements 
+ for more information. 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+14 May 2024 
+Windows Server 2016 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows Server 2016 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 Version 1607 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037788  
+ 
+Security Update  
+ 
+10.0.10240.20651 
+14 May 2024 
+Windows Server 2022, 23H2 Edition (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037781  
+ 
+Security Update  
+ 
+10.0.25398.887 
+14 May 2024 
+Windows 11 Version 23H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 11 Version 23H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 10 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19045.4412 
+14 May 2024 
+Windows 11 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621.3593 
+14 May 2024 
+Windows 11 Version 22H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621.3593 
+14 May 2024 
+Windows 10 Version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19044.4412 
+14 May 2024 
+Windows 11 version 21H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows 11 version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows Server 2022 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037782  
+ 
+5037848  
+ 
+Security Update  
+ 
+SecurityHotpatchUpdate  
+ 
+10.0.20348.2461 
+10.0.20348.2458 
+14 May 2024 
+Windows Server 2022 
+- 
+Remote Code Execution 
+Important 
+5037782  
+ 
+5037848  
+ 
+Security Update  
+ 
+SecurityHotpatchUpdate  
+ 
+10.0.20348.2461 
+10.0.20348.2458 
+14 May 2024 
+Windows Server 2019 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037765  
+ 
+Security Update  
+ 
+10.0.17763.5820 
+14 May 2024 
+Windows Server 2019 
+- 
+Remote Code Execution 
+Important 
+5037765  
+ 
+Security Update  
+ 
+10.0.17763.5820 
+14 May 2024 
+Windows 10 Version 1809 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037765  
+ 
+Security Update  
+ 
+10.0.17763.5820 
+All results loaded 
+Loaded all 18 rows 
+The information provided in the Microsoft Knowledge Base is provided ""as is"" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. 
+version 
+revisionDate 
+description 
+1.1 
+15 May 2024 
+Updated FAQ information. This is an informational change only. 
+1.0 
+14 May 2024 
+Information published. 
+FAQ 
+According to the CVSS metric, privileges required is low (PR:L).  What does that mean for this vulnerability? 
+The attacker must be authenticated to be able to exploit this vulnerability. 
+How would an attacker exploit this vulnerability? 
+An attacker who successfully exploited this vulnerability could send malformed packets to Hyper-V Replica endpoints on the host from a remote machine. 
+Security Updates 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+14 May 2024 
+Windows Server 2016 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows Server 2016 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 Version 1607 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037788  
+ 
+Security Update  
+ 
+10.0.10240.20651 
+14 May 2024 
+Windows Server 2022, 23H2 Edition (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037781  
+ 
+Security Update  
+ 
+10.0.25398.887 
+14 May 2024 
+Windows 11 Version 23H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 11 Version 23H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 10 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19045.4412 
+14 May 2024 
+Windows 11 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621.3593 
+14 May 2024 
+Windows 11 Version 22H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621.3593 
+14 May 2024 
+Windows 10 Version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19044.4412 
+14 May 2024 
+Windows 11 version 21H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows 11 version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows Server 2022 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037782  
+ 
+5037848  
+ 
+Security Update  
+ 
+SecurityHotpatchUpdate  
+ 
+10.0.20348.2461 
+10.0.20348.2458 
+14 May 2024 
+Windows Server 2022 
+- 
+Remote Code Execution 
+Important 
+5037782  
+ 
+5037848  
+ 
+Security Update  
+ 
+SecurityHotpatchUpdate  
+ 
+10.0.20348.2461 
+10.0.20348.2458 
+14 May 2024 
+Windows Server 2019 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037765  
+ 
+Security Update  
+ 
+10.0.17763.5820 
+14 May 2024 
+Windows Server 2019 
+- 
+Remote Code Execution 
+Important 
+5037765  
+ 
+Security Update  
+ 
+10.0.17763.5820 
+14 May 2024 
+Windows 10 Version 1809 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037765  
+ 
+Security Update  
+ 
+10.0.17763.5820 
+All results loaded 
+Loaded all 18 rows
+------------------------
+"
+70ddb430-333f-ef57-9c49-5b2665f25a7c,CVE-2024-30009,15-05-2024,1.1,Information only,CVE-2024-30009 Windows Routing and Remote Access Service (RRAS) Remote Code Execution Vulnerability,Removed one of the FAQs. This is an information change only.,https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-30009,[],This post is an updated revision and is for information only. No new substantive information beyond the previous revision has been provided.,,"[[10, 0, 19045, 4412], [10, 0, 22631, 3593], [10, 0, 22621, 3593], [10, 0, 22000, 2960], [10, 0, 10240, 20651], [10, 0, 19044, 4412]]","['1207c7bf-2a30-24e4-1cfe-a61b500e2b4e', 'b45db0a0-47d9-63c3-2127-0c9d3c343330', 'c54877b4-67de-6ddb-bb28-38d5328a6941', 'da7a2bd1-f864-5a4c-bc62-3720d5eb9230', '4f0f9250-06ad-6dd7-0c1b-f74702208fec', '902d74bf-e00c-69f8-b882-436c139c6dcc', '0519e2c6-f243-3997-a8b9-ab5e1143c069', '1da253ac-40e5-e430-fef2-372f0e5df164', 'a03bf103-a2ec-f30e-1ff9-552ee075e9cb']","['windows 10 22H2 x64-based_systems', 'windows 10  32-bit_systems', 'windows 11 23H2 x64-based_systems', 'windows 11 22H2 x64-based_systems', 'windows 10 21H2 x64-based_systems', 'windows 10  x64-based_systems', 'windows 10 22H2 32-bit_systems', 'windows 11 21H2 x64-based_systems', 'windows 10 21H2 32-bit_systems']",windows_10_windows_11_shared,"Removed one of the FAQs. This is an information change only. 
+Windows Routing and Remote Access Service (RRAS) Remote Code Execution Vulnerability  
+New 
+Recently updated 
+On this page 
+ 
+CVE-2024-30009 
+ 
+Subscribe 
+RSS 
+PowerShell 
+ 
+API 
+Security Vulnerability 
+Released: 14 May 2024 
+Last updated: 15 May 2024 
+Assigning CNA: 
+Microsoft 
+CVE-2024-30009  
+ 
+Impact: Remote Code Execution 
+Max Severity: Important 
+Weakness: 
+CWE-197: Numeric Truncation Error 
+CVSS Source: 
+ Microsoft 
+CVSS:3.1 8.8 / 7.7 
+ 
+Base score metrics: 8.8 / Temporal score metrics: 7.7 
+Base score metrics: 8.8 / Temporal score metrics: 7.7 
+ 
+Expand all 
+ 
+Collapse all 
+Metric 
+Value 
+ 
+ 
+Base score metrics 
+(8) 
+Attack Vector 
+This metric reflects the context by which vulnerability exploitation is possible. The Base Score increases the more remote (logically, and physically) an attacker can be in order to exploit the vulnerable component. 
+Network 
+The vulnerable component is bound to the network stack and the set of possible attackers extends beyond the other options listed, up to and including the entire Internet. Such a vulnerability is often termed 'remotely exploitable' and can be thought of as an attack being exploitable at the protocol level one or more network hops away (e.g., across one or more routers). 
+Attack Complexity 
+This metric describes the conditions beyond the attacker’s control that must exist in order to exploit the vulnerability. Such conditions may require the collection of more information about the target or computational exceptions. The assessment of this metric excludes any requirements for user interaction in order to exploit the vulnerability. If a specific configuration is required for an attack to succeed, the Base metrics should be scored assuming the vulnerable component is in that configuration. 
+Low 
+Specialized access conditions or extenuating circumstances do not exist. 
+.
+ An attacker can expect repeatable success against the vulnerable component. 
+Privileges Required 
+This metric describes the level of privileges an attacker must possess before successfully exploiting the vulnerability. 
+None 
+The attacker is unauthorized prior to attack, and therefore does not require any access to settings or files to carry out an attack. 
+User Interaction 
+This metric captures the requirement for a user, other than the attacker, to participate in the successful compromise the vulnerable component. This metric determines whether the vulnerability can be exploited solely at the will of the attacker, or whether a separate user (or user-initiated process) must participate in some manner. 
+Required 
+Successful exploitation of this vulnerability requires a user to take some action before the vulnerability can be exploited. 
+Scope 
+Does a successful attack impact a component other than the vulnerable component? If so, the Base Score increases and the Confidentiality, Integrity and Authentication metrics should be scored relative to the impacted component. 
+Unchanged 
+An exploited vulnerability can only affect resources managed by the same security authority. In this case, the vulnerable component and the impacted component are either the same, or both are managed by the same security authority. 
+Confidentiality 
+This metric measures the impact to the confidentiality of the information resources managed by a software component due to a successfully exploited vulnerability. Confidentiality refers to limiting information access and disclosure to only authorized users, as well as preventing access by, or disclosure to, unauthorized ones. 
+High 
+There is total loss of confidentiality, resulting in all resources within the impacted component being divulged to the attacker. Alternatively, access to only some restricted information is obtained, but the disclosed information presents a direct, serious impact. 
+Integrity 
+This metric measures the impact to integrity of a successfully exploited vulnerability. Integrity refers to the trustworthiness and veracity of information. 
+High 
+There is a total loss of integrity, or a complete loss of protection. For example, the attacker is able to modify any/all files protected by the impacted component. Alternatively, only some files can be modified, but malicious modification would present a direct, serious consequence to the impacted component. 
+Availability 
+This metric measures the impact to the availability of the impacted component resulting from a successfully exploited vulnerability. 
+.
+ It refers to the loss of availability of the impacted component itself, such as a networked service (e.g., web, database, email). Since availability refers to the accessibility of information resources, attacks that consume network bandwidth, processor cycles, or disk space all impact the availability of an impacted component. 
+High 
+There is total loss of availability, resulting in the attacker being able to fully deny access to resources in the impacted component; this loss is either sustained (while the attacker continues to deliver the attack) or persistent (the condition persists even after the attack has completed). Alternatively, the attacker has the ability to deny some availability, but the loss of availability presents a direct, serious consequence to the impacted component (e.g., the attacker cannot disrupt existing connections, but can prevent new connections; the attacker can repeatedly exploit a vulnerability that, in each instance of a successful attack, leaks a only small amount of memory, but after repeated exploitation causes a service to become completely unavailable). 
+ 
+ 
+Temporal score metrics 
+(3) 
+Exploit Code Maturity 
+This metric measures the likelihood of the vulnerability being attacked, and is typically based on the current state of exploit techniques, exploit code availability, or active, 'in-the-wild' exploitation. 
+Unproven 
+No exploit code is available, or an exploit is theoretical. 
+Remediation Level 
+The Remediation Level of a vulnerability is an important factor for prioritization. The typical vulnerability is unpatched when initially published. Workarounds or hotfixes may offer interim remediation until an official patch or upgrade is issued. Each of these respective stages adjusts the temporal score downwards, reflecting the decreasing urgency as remediation becomes final. 
+Official Fix 
+A complete vendor solution is available. Either the vendor has issued an official patch, or an upgrade is available. 
+Report Confidence 
+This metric measures the degree of confidence in the existence of the vulnerability and the credibility of the known technical details. Sometimes only the existence of vulnerabilities are publicized, but without specific details. For example, an impact may be recognized as undesirable, but the root cause may not be known. The vulnerability may later be corroborated by research which suggests where the vulnerability may lie, though the research may not be certain. Finally, a vulnerability may be confirmed through acknowledgement by the author or vendor of the affected technology. 
+.
+ The urgency of a vulnerability is higher when a vulnerability is known to exist with certainty. This metric also suggests the level of technical knowledge available to would-be attackers. 
+Confirmed 
+Detailed reports exist, or functional reproduction is possible (functional exploits may provide this). Source code is available to independently verify the assertions of the research, or the author or vendor of the affected code has confirmed the presence of the vulnerability. 
+Please see  
+Common Vulnerability Scoring System 
+ for more information on the definition of these metrics. 
+The following table provides an  
+exploitability assessment 
+ for this vulnerability at the time of original publication. 
+Publicly disclosed 
+Exploited 
+Exploitability assessment 
+No 
+No 
+Exploitation Less Likely 
+According to the CVSS metric, the attack vector is network (AV:N) and the user interaction is required (UI:R). What is the target context of the remote code execution? 
+This attack requires a client to connect to a malicious server, and that could allow the attacker to gain code execution on the client. 
+Anonymous 
+Microsoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  
+Acknowledgements 
+ for more information. 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+14 May 2024 
+Windows Server 2012 R2 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037823  
+ 
+Monthly Rollup  
+ 
+6.3.9600.21972 
+14 May 2024 
+Windows Server 2012 R2 
+- 
+Remote Code Execution 
+Important 
+5037823  
+ 
+Monthly Rollup  
+ 
+6.3.9600. 
+.
+ 21972 
+14 May 2024 
+Windows Server 2012 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037778  
+ 
+Monthly Rollup  
+ 
+6.2.9200.24868 
+14 May 2024 
+Windows Server 2012 
+- 
+Remote Code Execution 
+Important 
+5037778  
+ 
+Monthly Rollup  
+ 
+6.2.9200.24868 
+14 May 2024 
+Windows Server 2008 R2 for x64-based Systems Service Pack 1 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037780  
+ 
+5037803  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.1.7601.27117 
+6.1.7601.27117 
+14 May 2024 
+Windows Server 2008 R2 for x64-based Systems Service Pack 1 
+- 
+Remote Code Execution 
+Important 
+5037780  
+ 
+5037803  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.1.7601.27117 
+6.1.7601.27117 
+14 May 2024 
+Windows Server 2008 for x64-based Systems Service Pack 2 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2008 for x64-based Systems Service Pack 2 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003. 
+.
+ 22668 
+14 May 2024 
+Windows Server 2008 for 32-bit Systems Service Pack 2 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2008 for 32-bit Systems Service Pack 2 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2016 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows Server 2016 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 Version 1607 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 Version 1607 for 32-bit Systems 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037788  
+ 
+Security Update  
+ 
+10.0.10240. 
+.
+ 20651 
+14 May 2024 
+Windows 10 for 32-bit Systems 
+- 
+Remote Code Execution 
+Important 
+5037788  
+ 
+Security Update  
+ 
+10.0.10240.20651 
+14 May 2024 
+Windows Server 2022, 23H2 Edition (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037781  
+ 
+Security Update  
+ 
+10.0.25398.887 
+14 May 2024 
+Windows 11 Version 23H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 11 Version 23H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 10 Version 22H2 for 32-bit Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19045.4412 
+14 May 2024 
+Windows 10 Version 22H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19045.4412 
+14 May 2024 
+Windows 10 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19045.4412 
+14 May 2024 
+Windows 11 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621. 
+.
+ 3593 
+14 May 2024 
+Windows 11 Version 22H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621.3593 
+14 May 2024 
+Windows 10 Version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19044.4412 
+14 May 2024 
+Windows 10 Version 21H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19044.4412 
+14 May 2024 
+Windows 10 Version 21H2 for 32-bit Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19044.4412 
+14 May 2024 
+Windows 11 version 21H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows 11 version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows Server 2022 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037782  
+ 
+5037848  
+ 
+Security Update  
+ 
+SecurityHotpatchUpdate  
+ 
+10.0.20348.2461 
+10.0.20348.2458 
+All results loaded 
+Loaded all 36 rows 
+The information provided in the Microsoft Knowledge Base is provided ""as is"" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. 
+.
+ In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. 
+version 
+revisionDate 
+description 
+1.1 
+15 May 2024 
+Removed one of the FAQs. This is an information change only. 
+1.0 
+14 May 2024 
+Information published. 
+FAQ 
+According to the CVSS metric, the attack vector is network (AV:N) and the user interaction is required (UI:R). What is the target context of the remote code execution? 
+This attack requires a client to connect to a malicious server, and that could allow the attacker to gain code execution on the client. 
+Security Updates 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+14 May 2024 
+Windows Server 2012 R2 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037823  
+ 
+Monthly Rollup  
+ 
+6.3.9600.21972 
+14 May 2024 
+Windows Server 2012 R2 
+- 
+Remote Code Execution 
+Important 
+5037823  
+ 
+Monthly Rollup  
+ 
+6.3.9600.21972 
+14 May 2024 
+Windows Server 2012 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037778  
+ 
+Monthly Rollup  
+ 
+6.2.9200. 
+.
+ 24868 
+14 May 2024 
+Windows Server 2012 
+- 
+Remote Code Execution 
+Important 
+5037778  
+ 
+Monthly Rollup  
+ 
+6.2.9200.24868 
+14 May 2024 
+Windows Server 2008 R2 for x64-based Systems Service Pack 1 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037780  
+ 
+5037803  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.1.7601.27117 
+6.1.7601.27117 
+14 May 2024 
+Windows Server 2008 R2 for x64-based Systems Service Pack 1 
+- 
+Remote Code Execution 
+Important 
+5037780  
+ 
+5037803  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.1.7601.27117 
+6.1.7601.27117 
+14 May 2024 
+Windows Server 2008 for x64-based Systems Service Pack 2 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2008 for x64-based Systems Service Pack 2 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2008 for 32-bit Systems Service Pack 2 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6. 
+.
+ 0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2008 for 32-bit Systems Service Pack 2 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2016 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows Server 2016 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 Version 1607 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 Version 1607 for 32-bit Systems 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037788  
+ 
+Security Update  
+ 
+10.0.10240.20651 
+14 May 2024 
+Windows 10 for 32-bit Systems 
+- 
+Remote Code Execution 
+Important 
+5037788  
+ 
+Security Update  
+ 
+10.0.10240.20651 
+14 May 2024 
+Windows Server 2022, 23H2 Edition (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037781  
+ 
+Security Update  
+ 
+10.0.25398. 
+.
+ 887 
+14 May 2024 
+Windows 11 Version 23H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 11 Version 23H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 10 Version 22H2 for 32-bit Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19045.4412 
+14 May 2024 
+Windows 10 Version 22H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19045.4412 
+14 May 2024 
+Windows 10 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19045.4412 
+14 May 2024 
+Windows 11 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621.3593 
+14 May 2024 
+Windows 11 Version 22H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621.3593 
+14 May 2024 
+Windows 10 Version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19044. 
+.
+ 4412 
+14 May 2024 
+Windows 10 Version 21H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19044.4412 
+14 May 2024 
+Windows 10 Version 21H2 for 32-bit Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19044.4412 
+14 May 2024 
+Windows 11 version 21H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows 11 version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows Server 2022 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037782  
+ 
+5037848  
+ 
+Security Update  
+ 
+SecurityHotpatchUpdate  
+ 
+10.0.20348.2461 
+10.0.20348.2458 
+All results loaded 
+Loaded all 36 rows 
+.
+ ","['10.0.22631.3593', '10.0.22621.3593', '10.0.22000.2960', '10.0.19045.4412', '10.0.19044.4412', '10.0.10240.20651']","['windows 10  32-bit_systems', 'windows 10  x64-based_systems', 'windows 10 21H2 32-bit_systems', 'windows 10 21H2 x64-based_systems', 'windows 11 21H2 x64-based_systems', 'windows 10 22H2 32-bit_systems', 'windows 10 22H2 x64-based_systems', 'windows 11 22H2 x64-based_systems', 'windows 11 23H2 x64-based_systems']","[{'kb_id': 'kb5037788', 'kb_link': 'https://support.microsoft.com/help/5037788#may-14-2024'}, {'kb_id': 'kb5037771', 'kb_link': 'https://support.microsoft.com/help/5037771#may-14-2024'}, {'kb_id': 'kb5037770', 'kb_link': 'https://support.microsoft.com/help/5037770#may-14-2024'}, {'kb_id': 'kb5037768', 'kb_link': 'https://support.microsoft.com/help/5037768#may-14-2024'}]","[{'package_type': 'Security Update (KB5037771)', 'package_url': 'https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037771', 'kbid': 5037771, 'downloadable_packages': [{'product_name': 'windows_11', 'product_version': '22H2', 'product_architecture': 'x64', 'update_type': 'Cumulative', 'file_size': '712.5 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'n/a', 'restart_behavior_matches_baseline': True}, {'product_name': 'windows_11', 'product_version': '23H2', 'product_architecture': 'x64', 'update_type': 'Cumulative', 'file_size': '712.5 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'n/a', 'restart_behavior_matches_baseline': True}]}, {'package_type': 'Security Update (KB5037770)', 'package_url': 'https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037770', 'kbid': 5037770, 'downloadable_packages': [{'product_name': 'windows_11', 'product_version': None, 'product_architecture': 'x64', 'update_type': 'Dynamic Cumulative', 'file_size': '402.7 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.', 'restart_behavior_matches_baseline': True}, {'product_name': 'windows_11', 'product_version': None, 'product_architecture': 'x64', 'update_type': 'Cumulative', 'file_size': '402.7 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.', 'restart_behavior_matches_baseline': True}]}, {'package_type': 'Security Update (KB5037768)', 'package_url': 'https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037768', 'kbid': 5037768, 'downloadable_packages': [{'product_name': 'windows_10', 'product_version': '21H2', 'product_architecture': 'x64', 'update_type': 'Dynamic Cumulative', 'file_size': '633.6 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.', 'restart_behavior_matches_baseline': True}, {'product_name': 'windows_10', 'product_version': '21H2', 'product_architecture': 'x86', 'update_type': 'Dynamic Cumulative', 'file_size': '358.8 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.', 'restart_behavior_matches_baseline': True}, {'product_name': 'windows_10', 'product_version': '22H2', 'product_architecture': 'x64', 'update_type': 'Dynamic Cumulative', 'file_size': '633.6 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.', 'restart_behavior_matches_baseline': True}, {'product_name': 'windows_10', 'product_version': '22H2', 'product_architecture': 'x86', 'update_type': 'Dynamic Cumulative', 'file_size': '358.8 MB', 'restart_behavior': 'Can request restart', 'request_user_input': 'No', 'installed_exclusively': '', 'requires_network': 'No', 'uninstall_notes': 'This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.', 'restart_behavior_matches_baseline': True}]}]","post_id: CVE-2024-30009
+id: 70ddb430-333f-ef57-9c49-5b2665f25a7c
+revision: 1.1
+published: 15-05-2024
+source: https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-30009
+post_type: Information only
+","
+Use the provided Microsoft Security Response Center post details below, generate a valid JSON object with a detailed and comprehensive summary. The summary should be less than 15 sentences long, explaining the nature of the vulnerability, how an attacker may exploit it, the underlying cause, and the availability of an official fix. The post is classified as one of ['Critical', 'New feature', 'Solution provided', 'Information only']. 
+Use the post_type to guide your summary. If a post_type is 'Information only' it likely means Microsoft updated the FAQs but nothing substantive beyond the previous revision. So your summary is merely needs to state that the post is a updated revision and is information only. 
+
+If a post_type is 'Solution provided' you must mention the remedy or workaround.
+If a post_type is NaN, you can deduce the post_type by searching for 'Remediation Level' in the post body and whether it says 'Official Fix' or not.
+
+Clearly identify the affected Microsoft product(s), services, and or features. Use your knowledge to add any related facts or comments for a better explanation. Do not restate the post title or use redundant metadata information. The metadata provided includes id, post_id, title, post_type, and published date.
+
+Example summary:
+Microsoft Edge (Chromium-based) is affected by a use after free vulnerability in Profiles, identified as CVE-2023-5472. This vulnerability was assigned by Chrome and is addressed by ingesting Chromium. The latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. The vulnerability is caused by a flaw in the Chromium Open Source Software (OSS) consumed by Microsoft Edge. An attacker could exploit this vulnerability to execute arbitrary code in the context of the current user. Microsoft has provided a solution by releasing a security update for Microsoft Edge (Chromium-based) with the build number 118.0.2088.76. System administrators are advised to update their Microsoft Edge installations to the latest version to mitigate the risk of exploitation. For more information, refer to the [Google Chrome Releases](https://chromereleases.googleblog.com/2023) page.
+
+Generate a valid JSON object following this schema. DO NOT ADD ANY OTHER KEYS.
+{
+    ""metadata"": {
+        ""id"": ""b2cced8d-a552-f52a-6699-1da6b97d015d"",
+        ""post_id"": ""CVE-2018-10001"",
+        ""revision: ""1.4"",
+        ""published"": ""<dd-mm-YYYY>""
+    },
+    ""summary"": ""INSERT SUMMARY HERE""
+}
+
+Notes for LLM:
+- Ensure the summary is robust, technically thorough, and less than 15 sentences.
+- Target audience is Microsoft system engineers and administrators - experts. Generate a summary that is informative and valuable for them. Basic information like how to find the browser version number is not useful.
+- Focus on the key aspects of the vulnerability and its impact on the specific Microsoft:
+    - which product(s) are affected
+    - is a service affected? If so, which one?
+    - is a specific feature affected?
+    - what is the attack vector?
+    - is there an official fix? If not, is there a temporary workaround?
+- make sure you scan all sections looking for explicit workarounds, mitigations or powershell commands. These are the most valuable pieces of information for system administrators.
+- Include relevant details from your training data to enhance the summary.
+- Avoid redundancy with provided metadata. Do not re-state the title or post_type in your summary. The reader already has this information.
+- Do not include FAQ information in your summary unless it specifically mentions additional technical details or links for further research.
+What not to include in the summary guidelines:
+- DO NOT generate any text like 'Microsoft acknowledges the efforts of ...'
+- DO NOT generate any text like 'Users can check their browser version by clicking on the three dots (...) ...'.
+- DO NOT include any special thanks or acknowledgements. Just report on actionable facts.
+- The JSON object should be correctly formatted and include all required fields in the schema. Do not add any additional fields.
+- Do not output any text outside of the json object because an external script will parse the output. 
+
+------------------------
+post_id: CVE-2024-30009
+id: 70ddb430-333f-ef57-9c49-5b2665f25a7c
+revision: 1.1
+published: 15-05-2024
+source: https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-30009
+post_type: Information only
+Removed one of the FAQs. This is an information change only. 
+Windows Routing and Remote Access Service (RRAS) Remote Code Execution Vulnerability  
+New 
+Recently updated 
+On this page 
+ 
+CVE-2024-30009 
+ 
+Subscribe 
+RSS 
+PowerShell 
+ 
+API 
+Security Vulnerability 
+Released: 14 May 2024 
+Last updated: 15 May 2024 
+Assigning CNA: 
+Microsoft 
+CVE-2024-30009  
+ 
+Impact: Remote Code Execution 
+Max Severity: Important 
+Weakness: 
+CWE-197: Numeric Truncation Error 
+CVSS Source: 
+ Microsoft 
+CVSS:3.1 8.8 / 7.7 
+ 
+Base score metrics: 8.8 / Temporal score metrics: 7.7 
+Base score metrics: 8.8 / Temporal score metrics: 7.7 
+ 
+Expand all 
+ 
+Collapse all 
+Metric 
+Value 
+ 
+ 
+Base score metrics 
+(8) 
+Attack Vector 
+This metric reflects the context by which vulnerability exploitation is possible. The Base Score increases the more remote (logically, and physically) an attacker can be in order to exploit the vulnerable component. 
+Network 
+The vulnerable component is bound to the network stack and the set of possible attackers extends beyond the other options listed, up to and including the entire Internet. Such a vulnerability is often termed 'remotely exploitable' and can be thought of as an attack being exploitable at the protocol level one or more network hops away (e.g., across one or more routers). 
+Attack Complexity 
+This metric describes the conditions beyond the attacker’s control that must exist in order to exploit the vulnerability. Such conditions may require the collection of more information about the target or computational exceptions. The assessment of this metric excludes any requirements for user interaction in order to exploit the vulnerability. If a specific configuration is required for an attack to succeed, the Base metrics should be scored assuming the vulnerable component is in that configuration. 
+Low 
+Specialized access conditions or extenuating circumstances do not exist. 
+.
+ An attacker can expect repeatable success against the vulnerable component. 
+Privileges Required 
+This metric describes the level of privileges an attacker must possess before successfully exploiting the vulnerability. 
+None 
+The attacker is unauthorized prior to attack, and therefore does not require any access to settings or files to carry out an attack. 
+User Interaction 
+This metric captures the requirement for a user, other than the attacker, to participate in the successful compromise the vulnerable component. This metric determines whether the vulnerability can be exploited solely at the will of the attacker, or whether a separate user (or user-initiated process) must participate in some manner. 
+Required 
+Successful exploitation of this vulnerability requires a user to take some action before the vulnerability can be exploited. 
+Scope 
+Does a successful attack impact a component other than the vulnerable component? If so, the Base Score increases and the Confidentiality, Integrity and Authentication metrics should be scored relative to the impacted component. 
+Unchanged 
+An exploited vulnerability can only affect resources managed by the same security authority. In this case, the vulnerable component and the impacted component are either the same, or both are managed by the same security authority. 
+Confidentiality 
+This metric measures the impact to the confidentiality of the information resources managed by a software component due to a successfully exploited vulnerability. Confidentiality refers to limiting information access and disclosure to only authorized users, as well as preventing access by, or disclosure to, unauthorized ones. 
+High 
+There is total loss of confidentiality, resulting in all resources within the impacted component being divulged to the attacker. Alternatively, access to only some restricted information is obtained, but the disclosed information presents a direct, serious impact. 
+Integrity 
+This metric measures the impact to integrity of a successfully exploited vulnerability. Integrity refers to the trustworthiness and veracity of information. 
+High 
+There is a total loss of integrity, or a complete loss of protection. For example, the attacker is able to modify any/all files protected by the impacted component. Alternatively, only some files can be modified, but malicious modification would present a direct, serious consequence to the impacted component. 
+Availability 
+This metric measures the impact to the availability of the impacted component resulting from a successfully exploited vulnerability. 
+.
+ It refers to the loss of availability of the impacted component itself, such as a networked service (e.g., web, database, email). Since availability refers to the accessibility of information resources, attacks that consume network bandwidth, processor cycles, or disk space all impact the availability of an impacted component. 
+High 
+There is total loss of availability, resulting in the attacker being able to fully deny access to resources in the impacted component; this loss is either sustained (while the attacker continues to deliver the attack) or persistent (the condition persists even after the attack has completed). Alternatively, the attacker has the ability to deny some availability, but the loss of availability presents a direct, serious consequence to the impacted component (e.g., the attacker cannot disrupt existing connections, but can prevent new connections; the attacker can repeatedly exploit a vulnerability that, in each instance of a successful attack, leaks a only small amount of memory, but after repeated exploitation causes a service to become completely unavailable). 
+ 
+ 
+Temporal score metrics 
+(3) 
+Exploit Code Maturity 
+This metric measures the likelihood of the vulnerability being attacked, and is typically based on the current state of exploit techniques, exploit code availability, or active, 'in-the-wild' exploitation. 
+Unproven 
+No exploit code is available, or an exploit is theoretical. 
+Remediation Level 
+The Remediation Level of a vulnerability is an important factor for prioritization. The typical vulnerability is unpatched when initially published. Workarounds or hotfixes may offer interim remediation until an official patch or upgrade is issued. Each of these respective stages adjusts the temporal score downwards, reflecting the decreasing urgency as remediation becomes final. 
+Official Fix 
+A complete vendor solution is available. Either the vendor has issued an official patch, or an upgrade is available. 
+Report Confidence 
+This metric measures the degree of confidence in the existence of the vulnerability and the credibility of the known technical details. Sometimes only the existence of vulnerabilities are publicized, but without specific details. For example, an impact may be recognized as undesirable, but the root cause may not be known. The vulnerability may later be corroborated by research which suggests where the vulnerability may lie, though the research may not be certain. Finally, a vulnerability may be confirmed through acknowledgement by the author or vendor of the affected technology. 
+.
+ The urgency of a vulnerability is higher when a vulnerability is known to exist with certainty. This metric also suggests the level of technical knowledge available to would-be attackers. 
+Confirmed 
+Detailed reports exist, or functional reproduction is possible (functional exploits may provide this). Source code is available to independently verify the assertions of the research, or the author or vendor of the affected code has confirmed the presence of the vulnerability. 
+Please see  
+Common Vulnerability Scoring System 
+ for more information on the definition of these metrics. 
+The following table provides an  
+exploitability assessment 
+ for this vulnerability at the time of original publication. 
+Publicly disclosed 
+Exploited 
+Exploitability assessment 
+No 
+No 
+Exploitation Less Likely 
+According to the CVSS metric, the attack vector is network (AV:N) and the user interaction is required (UI:R). What is the target context of the remote code execution? 
+This attack requires a client to connect to a malicious server, and that could allow the attacker to gain code execution on the client. 
+Anonymous 
+Microsoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  
+Acknowledgements 
+ for more information. 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+14 May 2024 
+Windows Server 2012 R2 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037823  
+ 
+Monthly Rollup  
+ 
+6.3.9600.21972 
+14 May 2024 
+Windows Server 2012 R2 
+- 
+Remote Code Execution 
+Important 
+5037823  
+ 
+Monthly Rollup  
+ 
+6.3.9600. 
+.
+ 21972 
+14 May 2024 
+Windows Server 2012 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037778  
+ 
+Monthly Rollup  
+ 
+6.2.9200.24868 
+14 May 2024 
+Windows Server 2012 
+- 
+Remote Code Execution 
+Important 
+5037778  
+ 
+Monthly Rollup  
+ 
+6.2.9200.24868 
+14 May 2024 
+Windows Server 2008 R2 for x64-based Systems Service Pack 1 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037780  
+ 
+5037803  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.1.7601.27117 
+6.1.7601.27117 
+14 May 2024 
+Windows Server 2008 R2 for x64-based Systems Service Pack 1 
+- 
+Remote Code Execution 
+Important 
+5037780  
+ 
+5037803  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.1.7601.27117 
+6.1.7601.27117 
+14 May 2024 
+Windows Server 2008 for x64-based Systems Service Pack 2 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2008 for x64-based Systems Service Pack 2 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003. 
+.
+ 22668 
+14 May 2024 
+Windows Server 2008 for 32-bit Systems Service Pack 2 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2008 for 32-bit Systems Service Pack 2 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2016 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows Server 2016 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 Version 1607 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 Version 1607 for 32-bit Systems 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037788  
+ 
+Security Update  
+ 
+10.0.10240. 
+.
+ 20651 
+14 May 2024 
+Windows 10 for 32-bit Systems 
+- 
+Remote Code Execution 
+Important 
+5037788  
+ 
+Security Update  
+ 
+10.0.10240.20651 
+14 May 2024 
+Windows Server 2022, 23H2 Edition (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037781  
+ 
+Security Update  
+ 
+10.0.25398.887 
+14 May 2024 
+Windows 11 Version 23H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 11 Version 23H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22631.3593 
+14 May 2024 
+Windows 10 Version 22H2 for 32-bit Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19045.4412 
+14 May 2024 
+Windows 10 Version 22H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19045.4412 
+14 May 2024 
+Windows 10 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19045.4412 
+14 May 2024 
+Windows 11 Version 22H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621. 
+.
+ 3593 
+14 May 2024 
+Windows 11 Version 22H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037771  
+ 
+Security Update  
+ 
+10.0.22621.3593 
+14 May 2024 
+Windows 10 Version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19044.4412 
+14 May 2024 
+Windows 10 Version 21H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19044.4412 
+14 May 2024 
+Windows 10 Version 21H2 for 32-bit Systems 
+- 
+Remote Code Execution 
+Important 
+5037768  
+ 
+Security Update  
+ 
+10.0.19044.4412 
+14 May 2024 
+Windows 11 version 21H2 for ARM64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows 11 version 21H2 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037770  
+ 
+Security Update  
+ 
+10.0.22000.2960 
+14 May 2024 
+Windows Server 2022 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037782  
+ 
+5037848  
+ 
+Security Update  
+ 
+SecurityHotpatchUpdate  
+ 
+10.0.20348.2461 
+10.0.20348.2458 
+All results loaded 
+Loaded all 36 rows 
+The information provided in the Microsoft Knowledge Base is provided ""as is"" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. 
+.
+ In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. 
+version 
+revisionDate 
+description 
+1.1 
+15 May 2024 
+Removed one of the FAQs. This is an information change only. 
+1.0 
+14 May 2024 
+Information published. 
+FAQ 
+According to the CVSS metric, the attack vector is network (AV:N) and the user interaction is required (UI:R). What is the target context of the remote code execution? 
+This attack requires a client to connect to a malicious server, and that could allow the attacker to gain code execution on the client. 
+Security Updates 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+14 May 2024 
+Windows Server 2012 R2 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037823  
+ 
+Monthly Rollup  
+ 
+6.3.9600.21972 
+14 May 2024 
+Windows Server 2012 R2 
+- 
+Remote Code Execution 
+Important 
+5037823  
+ 
+Monthly Rollup  
+ 
+6.3.9600.21972 
+14 May 2024 
+Windows Server 2012 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037778  
+ 
+Monthly Rollup  
+ 
+6.2.9200. 
+.
+ 24868 
+14 May 2024 
+Windows Server 2012 
+- 
+Remote Code Execution 
+Important 
+5037778  
+ 
+Monthly Rollup  
+ 
+6.2.9200.24868 
+14 May 2024 
+Windows Server 2008 R2 for x64-based Systems Service Pack 1 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037780  
+ 
+5037803  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.1.7601.27117 
+6.1.7601.27117 
+14 May 2024 
+Windows Server 2008 R2 for x64-based Systems Service Pack 1 
+- 
+Remote Code Execution 
+Important 
+5037780  
+ 
+5037803  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.1.7601.27117 
+6.1.7601.27117 
+14 May 2024 
+Windows Server 2008 for x64-based Systems Service Pack 2 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2008 for x64-based Systems Service Pack 2 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2008 for 32-bit Systems Service Pack 2 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6. 
+.
+ 0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2008 for 32-bit Systems Service Pack 2 
+- 
+Remote Code Execution 
+Important 
+5037800  
+ 
+5037836  
+ 
+Monthly Rollup  
+ 
+Security Only  
+ 
+6.0.6003.22668 
+6.0.6003.22668 
+14 May 2024 
+Windows Server 2016 (Server Core installation) 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows Server 2016 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+14 May 2024 
+Windows 10 Version 1607 for x64-based Systems 
+- 
+Remote Code Execution 
+Important 
+5037763  
+ 
+Security Update  
+ 
+10.0.14393.6981 
+"
+5886fcc2-1f96-c048-389e-1975f864eee0,CVE-2024-4950,16-05-2024,1.0,Information only,Chromium: CVE-2024-4950 Inappropriate implementation in Downloads,Information published.,https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4950,[],"This post is an informational update regarding CVE-2024-4950, an inappropriate implementation vulnerability in the Downloads component of Chromium, which affects Microsoft Edge (Chromium-based). The vulnerability has been addressed by the latest version of Microsoft Edge (Chromium-based), which now ingests the updated Chromium version. No further action is required from administrators as the update ensures that the browser is no longer vulnerable. For more details, refer to the Google Chrome Releases page.",,"[[124, 0, 2478, 109]]",['88a83758-4fe9-8cc0-b57f-f2eb548fdce1'],['microsoft edge (chromium-based)  '],microsoft_edge,"Information published. 
+Chromium: CVE-2024-4950 Inappropriate implementation in Downloads  
+New 
+On this page 
+ 
+CVE-2024-4950 
+ 
+Subscribe 
+RSS 
+PowerShell 
+ 
+API 
+Security Vulnerability 
+Released: 16 May 2024 
+Assigning CNA: 
+Chrome 
+CVE-2024-4950  
+ 
+This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  
+Google Chrome Releases 
+ for more information. 
+Why is this Chrome CVE included in the Security Update Guide? 
+The vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. 
+How can I see the version of the browser? 
+In your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window 
+Click on  
+Help and Feedback 
+Click on  
+About Microsoft Edge 
+Microsoft Edge Channel 
+Microsoft Edge Version 
+Date Released 
+Based on Chromium Version 
+Stable 
+124.0.2478.109 
+5/16/2024 
+124.0.6367.221 
+Microsoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  
+Acknowledgements 
+ for more information. 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+16 May 2024 
+Microsoft Edge (Chromium-based) 
+- 
+- 
+- 
+Release Notes  
+ 
+Security Update 
+124.0.2478.109 
+All results loaded 
+Loaded all 1 rows 
+The information provided in the Microsoft Knowledge Base is provided ""as is"" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. 
+version 
+revisionDate 
+description 
+1.0 
+16 May 2024 
+Information published. 
+FAQ 
+Why is this Chrome CVE included in the Security Update Guide? 
+The vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. 
+How can I see the version of the browser? 
+In your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window 
+Click on  
+Help and Feedback 
+Click on  
+About Microsoft Edge 
+Microsoft Edge Channel 
+Microsoft Edge Version 
+Date Released 
+Based on Chromium Version 
+Stable 
+124.0.2478.109 
+5/16/2024 
+124.0.6367.221 
+Security Updates 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+16 May 2024 
+Microsoft Edge (Chromium-based) 
+- 
+- 
+- 
+Release Notes  
+ 
+Security Update 
+124.0.2478.109 
+All results loaded 
+Loaded all 1 rows",['124.0.2478.109'],['microsoft edge (chromium-based)  '],"[{'kb_id': 'Release Note (16-05-2024)', 'kb_link': 'https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-16-2024'}]",[],"post_id: CVE-2024-4950
+id: 5886fcc2-1f96-c048-389e-1975f864eee0
+revision: 1.0
+published: 16-05-2024
+source: https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4950
+post_type: Information only
+","
+Use the provided Microsoft Security Response Center post details below, generate a valid JSON object with a detailed and comprehensive summary. The summary should be less than 15 sentences long, explaining the nature of the vulnerability, how an attacker may exploit it, the underlying cause, and the availability of an official fix. The post is classified as one of ['Critical', 'New feature', 'Solution provided', 'Information only']. 
+Use the post_type to guide your summary. If a post_type is 'Information only' it likely means Microsoft updated the FAQs but nothing substantive beyond the previous revision. So your summary is merely needs to state that the post is a updated revision and is information only. 
+
+If a post_type is 'Solution provided' you must mention the remedy or workaround.
+If a post_type is NaN, you can deduce the post_type by searching for 'Remediation Level' in the post body and whether it says 'Official Fix' or not.
+
+Clearly identify the affected Microsoft product(s), services, and or features. Use your knowledge to add any related facts or comments for a better explanation. Do not restate the post title or use redundant metadata information. The metadata provided includes id, post_id, title, post_type, and published date.
+
+Example summary:
+Microsoft Edge (Chromium-based) is affected by a use after free vulnerability in Profiles, identified as CVE-2023-5472. This vulnerability was assigned by Chrome and is addressed by ingesting Chromium. The latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. The vulnerability is caused by a flaw in the Chromium Open Source Software (OSS) consumed by Microsoft Edge. An attacker could exploit this vulnerability to execute arbitrary code in the context of the current user. Microsoft has provided a solution by releasing a security update for Microsoft Edge (Chromium-based) with the build number 118.0.2088.76. System administrators are advised to update their Microsoft Edge installations to the latest version to mitigate the risk of exploitation. For more information, refer to the [Google Chrome Releases](https://chromereleases.googleblog.com/2023) page.
+
+Generate a valid JSON object following this schema. DO NOT ADD ANY OTHER KEYS.
+{
+    ""metadata"": {
+        ""id"": ""b2cced8d-a552-f52a-6699-1da6b97d015d"",
+        ""post_id"": ""CVE-2018-10001"",
+        ""revision: ""1.4"",
+        ""published"": ""<dd-mm-YYYY>""
+    },
+    ""summary"": ""INSERT SUMMARY HERE""
+}
+
+Notes for LLM:
+- Ensure the summary is robust, technically thorough, and less than 15 sentences.
+- Target audience is Microsoft system engineers and administrators - experts. Generate a summary that is informative and valuable for them. Basic information like how to find the browser version number is not useful.
+- Focus on the key aspects of the vulnerability and its impact on the specific Microsoft:
+    - which product(s) are affected
+    - is a service affected? If so, which one?
+    - is a specific feature affected?
+    - what is the attack vector?
+    - is there an official fix? If not, is there a temporary workaround?
+- make sure you scan all sections looking for explicit workarounds, mitigations or powershell commands. These are the most valuable pieces of information for system administrators.
+- Include relevant details from your training data to enhance the summary.
+- Avoid redundancy with provided metadata. Do not re-state the title or post_type in your summary. The reader already has this information.
+- Do not include FAQ information in your summary unless it specifically mentions additional technical details or links for further research.
+What not to include in the summary guidelines:
+- DO NOT generate any text like 'Microsoft acknowledges the efforts of ...'
+- DO NOT generate any text like 'Users can check their browser version by clicking on the three dots (...) ...'.
+- DO NOT include any special thanks or acknowledgements. Just report on actionable facts.
+- The JSON object should be correctly formatted and include all required fields in the schema. Do not add any additional fields.
+- Do not output any text outside of the json object because an external script will parse the output. 
+
+------------------------
+post_id: CVE-2024-4950
+id: 5886fcc2-1f96-c048-389e-1975f864eee0
+revision: 1.0
+published: 16-05-2024
+source: https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4950
+post_type: Information only
+Information published. 
+Chromium: CVE-2024-4950 Inappropriate implementation in Downloads  
+New 
+On this page 
+ 
+CVE-2024-4950 
+ 
+Subscribe 
+RSS 
+PowerShell 
+ 
+API 
+Security Vulnerability 
+Released: 16 May 2024 
+Assigning CNA: 
+Chrome 
+CVE-2024-4950  
+ 
+This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  
+Google Chrome Releases 
+ for more information. 
+Why is this Chrome CVE included in the Security Update Guide? 
+The vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. 
+How can I see the version of the browser? 
+In your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window 
+Click on  
+Help and Feedback 
+Click on  
+About Microsoft Edge 
+Microsoft Edge Channel 
+Microsoft Edge Version 
+Date Released 
+Based on Chromium Version 
+Stable 
+124.0.2478.109 
+5/16/2024 
+124.0.6367.221 
+Microsoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  
+Acknowledgements 
+ for more information. 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+16 May 2024 
+Microsoft Edge (Chromium-based) 
+- 
+- 
+- 
+Release Notes  
+ 
+Security Update 
+124.0.2478.109 
+All results loaded 
+Loaded all 1 rows 
+The information provided in the Microsoft Knowledge Base is provided ""as is"" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. 
+version 
+revisionDate 
+description 
+1.0 
+16 May 2024 
+Information published. 
+FAQ 
+Why is this Chrome CVE included in the Security Update Guide? 
+The vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. 
+How can I see the version of the browser? 
+In your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window 
+Click on  
+Help and Feedback 
+Click on  
+About Microsoft Edge 
+Microsoft Edge Channel 
+Microsoft Edge Version 
+Date Released 
+Based on Chromium Version 
+Stable 
+124.0.2478.109 
+5/16/2024 
+124.0.6367.221 
+Security Updates 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+16 May 2024 
+Microsoft Edge (Chromium-based) 
+- 
+- 
+- 
+Release Notes  
+ 
+Security Update 
+124.0.2478.109 
+All results loaded 
+Loaded all 1 rows
+------------------------
+"
+6f07e101-bcf2-c403-5bc6-a6adfc0c6d8c,CVE-2024-4949,16-05-2024,1.0,Information only,Chromium: CVE-2024-4949 Use after free in V8,Information published.,https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4949,[],"This post is an informational update regarding CVE-2024-4949, a use after free vulnerability in the V8 engine of Chromium, which affects Microsoft Edge (Chromium-based). The vulnerability was assigned by Chrome and has been addressed by ingesting the latest version of Chromium. Consequently, the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. No new fixes or workarounds are provided in this update. For more details, refer to the Google Chrome Releases page.",,"[[124, 0, 2478, 109]]",['88a83758-4fe9-8cc0-b57f-f2eb548fdce1'],['microsoft edge (chromium-based)  '],microsoft_edge,"Information published. 
+Chromium: CVE-2024-4949 Use after free in V8  
+New 
+On this page 
+ 
+CVE-2024-4949 
+ 
+Subscribe 
+RSS 
+PowerShell 
+ 
+API 
+Security Vulnerability 
+Released: 16 May 2024 
+Assigning CNA: 
+Chrome 
+CVE-2024-4949  
+ 
+This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  
+Google Chrome Releases 
+ for more information. 
+Why is this Chrome CVE included in the Security Update Guide? 
+The vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. 
+How can I see the version of the browser? 
+In your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window 
+Click on  
+Help and Feedback 
+Click on  
+About Microsoft Edge 
+Microsoft Edge Channel 
+Microsoft Edge Version 
+Date Released 
+Based on Chromium Version 
+Stable 
+124.0.2478.109 
+5/16/2024 
+124.0.6367.221 
+Microsoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  
+Acknowledgements 
+ for more information. 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+16 May 2024 
+Microsoft Edge (Chromium-based) 
+- 
+- 
+- 
+Release Notes  
+ 
+Security Update 
+124.0.2478.109 
+All results loaded 
+Loaded all 1 rows 
+The information provided in the Microsoft Knowledge Base is provided ""as is"" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. 
+version 
+revisionDate 
+description 
+1.0 
+16 May 2024 
+Information published. 
+FAQ 
+Why is this Chrome CVE included in the Security Update Guide? 
+The vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. 
+How can I see the version of the browser? 
+In your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window 
+Click on  
+Help and Feedback 
+Click on  
+About Microsoft Edge 
+Microsoft Edge Channel 
+Microsoft Edge Version 
+Date Released 
+Based on Chromium Version 
+Stable 
+124.0.2478.109 
+5/16/2024 
+124.0.6367.221 
+Security Updates 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+16 May 2024 
+Microsoft Edge (Chromium-based) 
+- 
+- 
+- 
+Release Notes  
+ 
+Security Update 
+124.0.2478.109 
+All results loaded 
+Loaded all 1 rows",['124.0.2478.109'],['microsoft edge (chromium-based)  '],"[{'kb_id': 'Release Note (16-05-2024)', 'kb_link': 'https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-16-2024'}]",[],"post_id: CVE-2024-4949
+id: 6f07e101-bcf2-c403-5bc6-a6adfc0c6d8c
+revision: 1.0
+published: 16-05-2024
+source: https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4949
+post_type: Information only
+","
+Use the provided Microsoft Security Response Center post details below, generate a valid JSON object with a detailed and comprehensive summary. The summary should be less than 15 sentences long, explaining the nature of the vulnerability, how an attacker may exploit it, the underlying cause, and the availability of an official fix. The post is classified as one of ['Critical', 'New feature', 'Solution provided', 'Information only']. 
+Use the post_type to guide your summary. If a post_type is 'Information only' it likely means Microsoft updated the FAQs but nothing substantive beyond the previous revision. So your summary is merely needs to state that the post is a updated revision and is information only. 
+
+If a post_type is 'Solution provided' you must mention the remedy or workaround.
+If a post_type is NaN, you can deduce the post_type by searching for 'Remediation Level' in the post body and whether it says 'Official Fix' or not.
+
+Clearly identify the affected Microsoft product(s), services, and or features. Use your knowledge to add any related facts or comments for a better explanation. Do not restate the post title or use redundant metadata information. The metadata provided includes id, post_id, title, post_type, and published date.
+
+Example summary:
+Microsoft Edge (Chromium-based) is affected by a use after free vulnerability in Profiles, identified as CVE-2023-5472. This vulnerability was assigned by Chrome and is addressed by ingesting Chromium. The latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. The vulnerability is caused by a flaw in the Chromium Open Source Software (OSS) consumed by Microsoft Edge. An attacker could exploit this vulnerability to execute arbitrary code in the context of the current user. Microsoft has provided a solution by releasing a security update for Microsoft Edge (Chromium-based) with the build number 118.0.2088.76. System administrators are advised to update their Microsoft Edge installations to the latest version to mitigate the risk of exploitation. For more information, refer to the [Google Chrome Releases](https://chromereleases.googleblog.com/2023) page.
+
+Generate a valid JSON object following this schema. DO NOT ADD ANY OTHER KEYS.
+{
+    ""metadata"": {
+        ""id"": ""b2cced8d-a552-f52a-6699-1da6b97d015d"",
+        ""post_id"": ""CVE-2018-10001"",
+        ""revision: ""1.4"",
+        ""published"": ""<dd-mm-YYYY>""
+    },
+    ""summary"": ""INSERT SUMMARY HERE""
+}
+
+Notes for LLM:
+- Ensure the summary is robust, technically thorough, and less than 15 sentences.
+- Target audience is Microsoft system engineers and administrators - experts. Generate a summary that is informative and valuable for them. Basic information like how to find the browser version number is not useful.
+- Focus on the key aspects of the vulnerability and its impact on the specific Microsoft:
+    - which product(s) are affected
+    - is a service affected? If so, which one?
+    - is a specific feature affected?
+    - what is the attack vector?
+    - is there an official fix? If not, is there a temporary workaround?
+- make sure you scan all sections looking for explicit workarounds, mitigations or powershell commands. These are the most valuable pieces of information for system administrators.
+- Include relevant details from your training data to enhance the summary.
+- Avoid redundancy with provided metadata. Do not re-state the title or post_type in your summary. The reader already has this information.
+- Do not include FAQ information in your summary unless it specifically mentions additional technical details or links for further research.
+What not to include in the summary guidelines:
+- DO NOT generate any text like 'Microsoft acknowledges the efforts of ...'
+- DO NOT generate any text like 'Users can check their browser version by clicking on the three dots (...) ...'.
+- DO NOT include any special thanks or acknowledgements. Just report on actionable facts.
+- The JSON object should be correctly formatted and include all required fields in the schema. Do not add any additional fields.
+- Do not output any text outside of the json object because an external script will parse the output. 
+
+------------------------
+post_id: CVE-2024-4949
+id: 6f07e101-bcf2-c403-5bc6-a6adfc0c6d8c
+revision: 1.0
+published: 16-05-2024
+source: https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4949
+post_type: Information only
+Information published. 
+Chromium: CVE-2024-4949 Use after free in V8  
+New 
+On this page 
+ 
+CVE-2024-4949 
+ 
+Subscribe 
+RSS 
+PowerShell 
+ 
+API 
+Security Vulnerability 
+Released: 16 May 2024 
+Assigning CNA: 
+Chrome 
+CVE-2024-4949  
+ 
+This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  
+Google Chrome Releases 
+ for more information. 
+Why is this Chrome CVE included in the Security Update Guide? 
+The vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. 
+How can I see the version of the browser? 
+In your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window 
+Click on  
+Help and Feedback 
+Click on  
+About Microsoft Edge 
+Microsoft Edge Channel 
+Microsoft Edge Version 
+Date Released 
+Based on Chromium Version 
+Stable 
+124.0.2478.109 
+5/16/2024 
+124.0.6367.221 
+Microsoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  
+Acknowledgements 
+ for more information. 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+16 May 2024 
+Microsoft Edge (Chromium-based) 
+- 
+- 
+- 
+Release Notes  
+ 
+Security Update 
+124.0.2478.109 
+All results loaded 
+Loaded all 1 rows 
+The information provided in the Microsoft Knowledge Base is provided ""as is"" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. 
+version 
+revisionDate 
+description 
+1.0 
+16 May 2024 
+Information published. 
+FAQ 
+Why is this Chrome CVE included in the Security Update Guide? 
+The vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. 
+How can I see the version of the browser? 
+In your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window 
+Click on  
+Help and Feedback 
+Click on  
+About Microsoft Edge 
+Microsoft Edge Channel 
+Microsoft Edge Version 
+Date Released 
+Based on Chromium Version 
+Stable 
+124.0.2478.109 
+5/16/2024 
+124.0.6367.221 
+Security Updates 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+16 May 2024 
+Microsoft Edge (Chromium-based) 
+- 
+- 
+- 
+Release Notes  
+ 
+Security Update 
+124.0.2478.109 
+All results loaded 
+Loaded all 1 rows
+------------------------
+"
+bfa3bdd8-c7c6-104b-d719-b0d44cc0f542,CVE-2024-4948,16-05-2024,1.0,Information only,Chromium: CVE-2024-4948 Use after free in Dawn,Information published.,https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4948,[],"This post is an informational update regarding CVE-2024-4948, a use after free vulnerability in the Chromium Open Source Software (OSS) consumed by Microsoft Edge (Chromium-based). The vulnerability was assigned by Chrome and has been addressed in the latest version of Microsoft Edge. The updated version, 124.0.2478.109, is no longer vulnerable to this issue. System administrators should ensure their Microsoft Edge installations are updated to this version to mitigate any potential risks. For more details, refer to the Google Chrome Releases page.",,"[[124, 0, 2478, 109]]",['88a83758-4fe9-8cc0-b57f-f2eb548fdce1'],['microsoft edge (chromium-based)  '],microsoft_edge,"Information published. 
+Chromium: CVE-2024-4948 Use after free in Dawn  
+New 
+On this page 
+ 
+CVE-2024-4948 
+ 
+Subscribe 
+RSS 
+PowerShell 
+ 
+API 
+Security Vulnerability 
+Released: 16 May 2024 
+Assigning CNA: 
+Chrome 
+CVE-2024-4948  
+ 
+This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  
+Google Chrome Releases 
+ for more information. 
+Why is this Chrome CVE included in the Security Update Guide? 
+The vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. 
+How can I see the version of the browser? 
+In your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window 
+Click on  
+Help and Feedback 
+Click on  
+About Microsoft Edge 
+Microsoft Edge Channel 
+Microsoft Edge Version 
+Date Released 
+Based on Chromium Version 
+Stable 
+124.0.2478.109 
+5/16/2024 
+124.0.6367.221 
+Microsoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  
+Acknowledgements 
+ for more information. 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+16 May 2024 
+Microsoft Edge (Chromium-based) 
+- 
+- 
+- 
+Release Notes  
+ 
+Security Update 
+124.0.2478.109 
+All results loaded 
+Loaded all 1 rows 
+The information provided in the Microsoft Knowledge Base is provided ""as is"" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. 
+version 
+revisionDate 
+description 
+1.0 
+16 May 2024 
+Information published. 
+FAQ 
+Why is this Chrome CVE included in the Security Update Guide? 
+The vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. 
+How can I see the version of the browser? 
+In your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window 
+Click on  
+Help and Feedback 
+Click on  
+About Microsoft Edge 
+Microsoft Edge Channel 
+Microsoft Edge Version 
+Date Released 
+Based on Chromium Version 
+Stable 
+124.0.2478.109 
+5/16/2024 
+124.0.6367.221 
+Security Updates 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+16 May 2024 
+Microsoft Edge (Chromium-based) 
+- 
+- 
+- 
+Release Notes  
+ 
+Security Update 
+124.0.2478.109 
+All results loaded 
+Loaded all 1 rows",['124.0.2478.109'],['microsoft edge (chromium-based)  '],"[{'kb_id': 'Release Note (16-05-2024)', 'kb_link': 'https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-16-2024'}]",[],"post_id: CVE-2024-4948
+id: bfa3bdd8-c7c6-104b-d719-b0d44cc0f542
+revision: 1.0
+published: 16-05-2024
+source: https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4948
+post_type: Information only
+","
+Use the provided Microsoft Security Response Center post details below, generate a valid JSON object with a detailed and comprehensive summary. The summary should be less than 15 sentences long, explaining the nature of the vulnerability, how an attacker may exploit it, the underlying cause, and the availability of an official fix. The post is classified as one of ['Critical', 'New feature', 'Solution provided', 'Information only']. 
+Use the post_type to guide your summary. If a post_type is 'Information only' it likely means Microsoft updated the FAQs but nothing substantive beyond the previous revision. So your summary is merely needs to state that the post is a updated revision and is information only. 
+
+If a post_type is 'Solution provided' you must mention the remedy or workaround.
+If a post_type is NaN, you can deduce the post_type by searching for 'Remediation Level' in the post body and whether it says 'Official Fix' or not.
+
+Clearly identify the affected Microsoft product(s), services, and or features. Use your knowledge to add any related facts or comments for a better explanation. Do not restate the post title or use redundant metadata information. The metadata provided includes id, post_id, title, post_type, and published date.
+
+Example summary:
+Microsoft Edge (Chromium-based) is affected by a use after free vulnerability in Profiles, identified as CVE-2023-5472. This vulnerability was assigned by Chrome and is addressed by ingesting Chromium. The latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. The vulnerability is caused by a flaw in the Chromium Open Source Software (OSS) consumed by Microsoft Edge. An attacker could exploit this vulnerability to execute arbitrary code in the context of the current user. Microsoft has provided a solution by releasing a security update for Microsoft Edge (Chromium-based) with the build number 118.0.2088.76. System administrators are advised to update their Microsoft Edge installations to the latest version to mitigate the risk of exploitation. For more information, refer to the [Google Chrome Releases](https://chromereleases.googleblog.com/2023) page.
+
+Generate a valid JSON object following this schema. DO NOT ADD ANY OTHER KEYS.
+{
+    ""metadata"": {
+        ""id"": ""b2cced8d-a552-f52a-6699-1da6b97d015d"",
+        ""post_id"": ""CVE-2018-10001"",
+        ""revision: ""1.4"",
+        ""published"": ""<dd-mm-YYYY>""
+    },
+    ""summary"": ""INSERT SUMMARY HERE""
+}
+
+Notes for LLM:
+- Ensure the summary is robust, technically thorough, and less than 15 sentences.
+- Target audience is Microsoft system engineers and administrators - experts. Generate a summary that is informative and valuable for them. Basic information like how to find the browser version number is not useful.
+- Focus on the key aspects of the vulnerability and its impact on the specific Microsoft:
+    - which product(s) are affected
+    - is a service affected? If so, which one?
+    - is a specific feature affected?
+    - what is the attack vector?
+    - is there an official fix? If not, is there a temporary workaround?
+- make sure you scan all sections looking for explicit workarounds, mitigations or powershell commands. These are the most valuable pieces of information for system administrators.
+- Include relevant details from your training data to enhance the summary.
+- Avoid redundancy with provided metadata. Do not re-state the title or post_type in your summary. The reader already has this information.
+- Do not include FAQ information in your summary unless it specifically mentions additional technical details or links for further research.
+What not to include in the summary guidelines:
+- DO NOT generate any text like 'Microsoft acknowledges the efforts of ...'
+- DO NOT generate any text like 'Users can check their browser version by clicking on the three dots (...) ...'.
+- DO NOT include any special thanks or acknowledgements. Just report on actionable facts.
+- The JSON object should be correctly formatted and include all required fields in the schema. Do not add any additional fields.
+- Do not output any text outside of the json object because an external script will parse the output. 
+
+------------------------
+post_id: CVE-2024-4948
+id: bfa3bdd8-c7c6-104b-d719-b0d44cc0f542
+revision: 1.0
+published: 16-05-2024
+source: https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4948
+post_type: Information only
+Information published. 
+Chromium: CVE-2024-4948 Use after free in Dawn  
+New 
+On this page 
+ 
+CVE-2024-4948 
+ 
+Subscribe 
+RSS 
+PowerShell 
+ 
+API 
+Security Vulnerability 
+Released: 16 May 2024 
+Assigning CNA: 
+Chrome 
+CVE-2024-4948  
+ 
+This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  
+Google Chrome Releases 
+ for more information. 
+Why is this Chrome CVE included in the Security Update Guide? 
+The vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. 
+How can I see the version of the browser? 
+In your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window 
+Click on  
+Help and Feedback 
+Click on  
+About Microsoft Edge 
+Microsoft Edge Channel 
+Microsoft Edge Version 
+Date Released 
+Based on Chromium Version 
+Stable 
+124.0.2478.109 
+5/16/2024 
+124.0.6367.221 
+Microsoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  
+Acknowledgements 
+ for more information. 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+16 May 2024 
+Microsoft Edge (Chromium-based) 
+- 
+- 
+- 
+Release Notes  
+ 
+Security Update 
+124.0.2478.109 
+All results loaded 
+Loaded all 1 rows 
+The information provided in the Microsoft Knowledge Base is provided ""as is"" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. 
+version 
+revisionDate 
+description 
+1.0 
+16 May 2024 
+Information published. 
+FAQ 
+Why is this Chrome CVE included in the Security Update Guide? 
+The vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. 
+How can I see the version of the browser? 
+In your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window 
+Click on  
+Help and Feedback 
+Click on  
+About Microsoft Edge 
+Microsoft Edge Channel 
+Microsoft Edge Version 
+Date Released 
+Based on Chromium Version 
+Stable 
+124.0.2478.109 
+5/16/2024 
+124.0.6367.221 
+Security Updates 
+To determine the support lifecycle for your software, see the  
+Microsoft Support Lifecycle 
+. 
+ Updates 
+ CVSS 
+ 
+Release date Descending 
+ 
+Edit columns 
+ 
+Download 
+ 
+Filters 
+Release date 
+ 
+Product 
+Platform 
+Impact 
+Max Severity 
+Article 
+Download 
+Build Number 
+16 May 2024 
+Microsoft Edge (Chromium-based) 
+- 
+- 
+- 
+Release Notes  
+ 
+Security Update 
+124.0.2478.109 
+All results loaded 
+Loaded all 1 rows
+------------------------
+"
