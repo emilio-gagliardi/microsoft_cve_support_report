@@ -1138,6 +1138,7 @@ def send_notification_to_sendgrid_qa_list(report_data_container, params):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+
 def create_draft_campaign_cve_weekly(report_data_container, params):
     # Extract the path for the PNG and HTML files
     all_file_paths = report_data_container['sftp']
@@ -1180,8 +1181,8 @@ def create_draft_campaign_cve_weekly(report_data_container, params):
         thumbnail_file_name=thumbnail_file_name
     )
     # print(f"rendered body: {campaign_body}")
-    
-    sender_id = "5660513"
+
+    sender_id = 5660513
     # # Create the campaign draft
     # data = {
     #     "title": f"CVE Weekly Report Draft for {report_end_date}",
@@ -1192,29 +1193,34 @@ def create_draft_campaign_cve_weekly(report_data_container, params):
     #     "custom_unsubscribe_url": ""
     # }
     data = {
-        # minimal data example
-        'title': 'Test Campaign',
-        'subject': 'Test Subject',
-        'sender_id': '5660513',
-        'list_ids': ['eb0237f5-2814-49b1-a8d3-265e0b949a60'],
-        'html_content': '<p>Simple content</p>'
-    }
+        "name": f"CVE Weekly Report for {report_end_date}",
+        "send_to": {"list_ids": [report_subscriber_sendgrid_list_id]},
+        "email_config": {
+            "subject": campaign_subject,
+            "sender_id": sender_id,
+            "html_content": campaign_body,
+            "generate_plain_content": True,
+            "editor": "code",
+            "suppression_group_id": 28454}
+        }
+
     print(data)
-    
+
     sg = SendGridAPIClient(sendgrid_api_key)
     try:
-        response = sg.client.campaigns.post(request_body=data)
+        response = sg.client.marketing.singlesends.post(request_body=data)
         print(f"Campaign created successfully, Status Code: {response.status_code}")
     except Exception as e:
         print(f"An error occurred: {e}")
 
         # Inspect the exception object for more information
         if hasattr(e, 'body'):
-            print(f"Error Body: {e.body}")  # Assuming the body might provide some JSON-like error message
+            print(f"Error Body: {e.body}")
         if hasattr(e, 'status_code'):
             print(f"HTTP Status Code: {e.status_code}")
         if hasattr(e, 'headers'):
             print(f"Response Headers: {e.headers}")
+
 
 def create_draft_campaign_cve_weekly_workaround(report_data_container, params):
     # the report data container contains a list of file paths for assets generated during generation. 
