@@ -561,13 +561,24 @@ def filter_source_documents(source_documents, report_end_date, day_interval):
     filtered_docs = source_documents[(source_documents['published'] >= start_date) & (source_documents['published'] <= end_date)]
     return filtered_docs
 
-def prepare_plot_data(source_documents, new_order):
+
+def adjust_weekday_for_weekends(source_documents):
     source_documents['weekday'] = source_documents['published'].dt.day_name()
+    # Adjust Saturday and Sunday to Monday
+    source_documents.loc[source_documents['weekday'] == 'Saturday', 'weekday'] = 'Monday'
+    source_documents.loc[source_documents['weekday'] == 'Sunday', 'weekday'] = 'Monday'
+    return source_documents
+
+
+def prepare_plot_data(source_documents, new_order):
+
+    source_documents = adjust_weekday_for_weekends(source_documents)
     weekdays_df = pd.DataFrame(new_order, columns=['weekday'])
     counts_df = source_documents.groupby('weekday').size().reset_index(name='counts')
     final_df = weekdays_df.merge(counts_df, on='weekday', how='left').fillna(0)
     final_df['weekday'] = pd.Categorical(final_df['weekday'], categories=new_order, ordered=True)
     return final_df.sort_values('weekday')
+
 
 def generate_and_save_plot(final_df, output_file_path, report_end_date, day_interval):
     # Calculate the start date using the day_interval
@@ -576,7 +587,10 @@ def generate_and_save_plot(final_df, output_file_path, report_end_date, day_inte
     
     # Format the date range for the title
     date_range = f"({start_date.strftime('%B %d')} - {report_end_date_dt.strftime('%B %d')})"
-    
+    # for idx, row in final_df.iterrows():
+    #     print(f"{row}")
+
+    # Custom palette
     custom_palette = ['#72929E', '#82B796', '#8188AC', '#A7BCC4', '#72929E']
     sns.set_theme(style='whitegrid')
     
