@@ -1,0 +1,33 @@
+[flake8]
+max-line-length = 88
+
+exclude = 
+    .git,
+    __pycache__,
+    build,
+    dist,
+    conf,
+    logs,
+    data,
+    notebooks,
+    .vscode,
+    .gitignore,
+    .flake8,
+    .coverage,
+    .pytest_cache,
+    .mypy_cache,
+    .venv
+
+ignore = E203, W503
+
+select = E731, E741
+
+per-file-ignores = 
+    __init__.py: F401
+    tests/*: D100,D101,D102,D103
+
+show-source = True
+
+application-import-names = mircosoft_cve_support_report
+
+max-complexity = 10

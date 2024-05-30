@@ -1,12 +1,14 @@
 seven_day_periodic_report_CVE_WEEKLY_v1_prompt_strings = {
     "msrc_security_update": {'user_prompt': """
 Use the provided Microsoft Security Response Center post details below, generate a valid JSON object with a detailed and comprehensive summary. The summary should be less than 15 sentences long, explaining the nature of the vulnerability, how an attacker may exploit it, the underlying cause, and the availability of an official fix. The post is classified as one of ['Critical', 'New feature', 'Solution provided', 'Information only']. 
-Use the post_type to guide your summary. If a post_type is 'Information only' it likely means Microsoft updated the FAQs but nothing substantive beyond the previous revision. So your summary is merely needs to state that the post is a updated revision and is information only. 
+Use the post_type to guide your summary. If a post_type is 'Information only' it likely means Microsoft updated the FAQs but nothing substantive beyond the previous revision. So your summary can be brief - retsate the key concepts and scores. However, you still must evaluate the provided revision value and state what the actual revision value is. Chromium and Microsoft Edge posts at revision 1.0 can also be 'Information only' because the source of the solution is outside of Microsoft's control.
 
-If a post_type is 'Solution provided' you must mention the remedy or workaround.
-If a post_type is NaN, you can deduce the post_type by searching for 'Remediation Level' in the post body and whether it says 'Official Fix' or not.
+If a post_type is 'Solution provided' you must mention the remedy or workaround and make it clear to the reader how to take action.
+If a post_type is not available, you can deduce the post_type by searching for 'Remediation Level' in the post body and whether it says 'Official Fix' or not.
 
 Clearly identify the affected Microsoft product(s), services, and or features. Use your knowledge to add any related facts or comments for a better explanation. Do not restate the post title or use redundant metadata information. The metadata provided includes id, post_id, title, post_type, and published date.
+
+Example summary below, Do not copy verbatim. Generate unique summaries for each post based on the context provided. The following is a zero-shot example only. You must generate a complete, concise and accurate summary for each post.
 
 Example summary:
 Microsoft Edge (Chromium-based) is affected by a use after free vulnerability in Profiles, identified as CVE-2023-5472. This vulnerability was assigned by Chrome and is addressed by ingesting Chromium. The latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. The vulnerability is caused by a flaw in the Chromium Open Source Software (OSS) consumed by Microsoft Edge. An attacker could exploit this vulnerability to execute arbitrary code in the context of the current user. Microsoft has provided a solution by releasing a security update for Microsoft Edge (Chromium-based) with the build number 118.0.2088.76. System administrators are advised to update their Microsoft Edge installations to the latest version to mitigate the risk of exploitation. For more information, refer to the [Google Chrome Releases](https://chromereleases.googleblog.com/2023) page.
