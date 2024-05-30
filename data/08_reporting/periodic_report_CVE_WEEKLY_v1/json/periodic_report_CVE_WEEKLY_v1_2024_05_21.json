@@ -424,7 +424,7 @@
             "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4949",
             "related_posts": "[]",
             "summary": "This post is an informational update regarding CVE-2024-4949, a use after free vulnerability in the V8 engine of Chromium, which affects Microsoft Edge (Chromium-based). The vulnerability was assigned by Chrome and has been addressed by ingesting the latest version of Chromium. Consequently, the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. No new fixes or workarounds are provided in this update. For more details, refer to the Google Chrome Releases page.",
-            "summarization_payload": NaN,
+            "summarization_payload": "NaN",
             "build_numbers": "[[124, 0, 2478, 109]]",
             "product_build_ids": "['88a83758-4fe9-8cc0-b57f-f2eb548fdce1']",
             "products": "['microsoft edge (chromium-based)  ']",
