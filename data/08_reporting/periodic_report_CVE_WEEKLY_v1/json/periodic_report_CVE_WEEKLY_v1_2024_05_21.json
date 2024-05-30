@@ -1,0 +1,720 @@
+{
+    "report_day_start": "14",
+    "report_month_start": "May",
+    "report_year_start": "2024",
+    "report_day_end": "21",
+    "report_month_end": "May",
+    "report_year_end": "2024",
+    "report_end_date": "2024_05_21",
+    "report_current_date": "28_05_2024",
+    "report_title": "PortalFuse Weekly Security Update Report",
+    "report_subtitle": "(Windows and Edge Edition)",
+    "report_description": "The PortalFuse Weekly Security Update Report is a resource for System Administrators and Security Professionals looking to keep their systems secure. With a comprehensive compilation of Microsoft Security Response Center posts and Microsoft Support documentation, users can easily access critical KB articles and update packages for their Windows devices without having to spend time searching across multiple sources. This report helps busy Microsoft professionals to stay up-to-date with security issues and new features.",
+    "plot_path": "../plots/",
+    "toc": {
+        "section_1": "MSRC Posts",
+        "section_2": "Products",
+        "section_3": "Tooling Support",
+        "section_4": "Appendix"
+    },
+    "sftp": [
+        "data/08_reporting/periodic_report_CVE_WEEKLY_v1/plots/posts_by_day_2024_05_21.png"
+    ],
+    "section_1_data": [
+        {
+            "id": "07d7fb0d-d625-0e0c-9c8e-4e38be0901ac",
+            "post_id": "CVE-2024-30017",
+            "published": "15-05-2024",
+            "revision": "1.1",
+            "post_type": "Information only",
+            "title": "CVE-2024-30017 Windows Hyper-V Remote Code Execution Vulnerability",
+            "description": "Updated FAQ information. This is an informational change only.",
+            "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-30017",
+            "related_posts": "[]",
+            "summary": "This post is an informational update only, providing revised FAQ information for CVE-2024-30017. No new substantive details or changes to the vulnerability or its mitigations have been introduced.",
+            "summarization_payload": NaN,
+            "build_numbers": "[[10, 0, 19045, 4412], [10, 0, 22631, 3593], [10, 0, 22621, 3593], [10, 0, 22000, 2960], [10, 0, 10240, 20651], [10, 0, 19044, 4412]]",
+            "product_build_ids": "['902d74bf-e00c-69f8-b882-436c139c6dcc', '1207c7bf-2a30-24e4-1cfe-a61b500e2b4e', 'b45db0a0-47d9-63c3-2127-0c9d3c343330', '0519e2c6-f243-3997-a8b9-ab5e1143c069', 'da7a2bd1-f864-5a4c-bc62-3720d5eb9230', 'a03bf103-a2ec-f30e-1ff9-552ee075e9cb']",
+            "products": "['windows 10 22H2 x64-based_systems', 'windows 11 23H2 x64-based_systems', 'windows 11 22H2 x64-based_systems', 'windows 10 21H2 x64-based_systems', 'windows 11 21H2 x64-based_systems', 'windows 10  x64-based_systems']",
+            "report_category": "windows_10_windows_11_shared",
+            "text": "Updated FAQ information. This is an informational change only. \nWindows Hyper-V Remote Code Execution Vulnerability  \nNew \nRecently updated \nOn this page \n\ue70d \nCVE-2024-30017 \n\ue715 \nSubscribe \nRSS \nPowerShell \n\ue943 \nAPI \nSecurity Vulnerability \nReleased: 14 May 2024 \nLast updated: 15 May 2024 \nAssigning CNA: \nMicrosoft \nCVE-2024-30017  \n\uf35f \nImpact: Remote Code Execution \nMax Severity: Important \nWeakness: \nCWE-122: Heap-based Buffer Overflow \nCVSS Source: \n Microsoft \nCVSS:3.1 8.8 / 7.7 \n\ue946 \nBase score metrics: 8.8 / Temporal score metrics: 7.7 \nBase score metrics: 8.8 / Temporal score metrics: 7.7 \n\ue96e \nExpand all \n\ue970 \nCollapse all \nMetric \nValue \n\ue8ec \n\ue974 \nBase score metrics \n(8) \nAttack Vector \nThis metric reflects the context by which vulnerability exploitation is possible. The Base Score increases the more remote (logically, and physically) an attacker can be in order to exploit the vulnerable component. \nNetwork \nThe vulnerable component is bound to the network stack and the set of possible attackers extends beyond the other options listed, up to and including the entire Internet. Such a vulnerability is often termed 'remotely exploitable' and can be thought of as an attack being exploitable at the protocol level one or more network hops away (e.g., across one or more routers). \nAttack Complexity \nThis metric describes the conditions beyond the attacker\u2019s control that must exist in order to exploit the vulnerability. Such conditions may require the collection of more information about the target or computational exceptions. The assessment of this metric excludes any requirements for user interaction in order to exploit the vulnerability. If a specific configuration is required for an attack to succeed, the Base metrics should be scored assuming the vulnerable component is in that configuration. \nLow \nSpecialized access conditions or extenuating circumstances do not exist. An attacker can expect repeatable success against the vulnerable component. \nPrivileges Required \nThis metric describes the level of privileges an attacker must possess before successfully exploiting the vulnerability. \nLow \nThe attacker is authorized with (i.e., requires) privileges that provide basic user capabilities that could normally affect only settings and files owned by a user. Alternatively, an attacker with Low privileges may have the ability to cause an impact only to non-sensitive resources. \nUser Interaction \nThis metric captures the requirement for a user, other than the attacker, to participate in the successful compromise the vulnerable component. This metric determines whether the vulnerability can be exploited solely at the will of the attacker, or whether a separate user (or user-initiated process) must participate in some manner. \nNone \nThe vulnerable system can be exploited without any interaction from any user. \nScope \nDoes a successful attack impact a component other than the vulnerable component? If so, the Base Score increases and the Confidentiality, Integrity and Authentication metrics should be scored relative to the impacted component. \nUnchanged \nAn exploited vulnerability can only affect resources managed by the same security authority. In this case, the vulnerable component and the impacted component are either the same, or both are managed by the same security authority. \nConfidentiality \nThis metric measures the impact to the confidentiality of the information resources managed by a software component due to a successfully exploited vulnerability. Confidentiality refers to limiting information access and disclosure to only authorized users, as well as preventing access by, or disclosure to, unauthorized ones. \nHigh \nThere is total loss of confidentiality, resulting in all resources within the impacted component being divulged to the attacker. Alternatively, access to only some restricted information is obtained, but the disclosed information presents a direct, serious impact. \nIntegrity \nThis metric measures the impact to integrity of a successfully exploited vulnerability. Integrity refers to the trustworthiness and veracity of information. \nHigh \nThere is a total loss of integrity, or a complete loss of protection. For example, the attacker is able to modify any/all files protected by the impacted component. Alternatively, only some files can be modified, but malicious modification would present a direct, serious consequence to the impacted component. \nAvailability \nThis metric measures the impact to the availability of the impacted component resulting from a successfully exploited vulnerability. It refers to the loss of availability of the impacted component itself, such as a networked service (e.g., web, database, email). Since availability refers to the accessibility of information resources, attacks that consume network bandwidth, processor cycles, or disk space all impact the availability of an impacted component. \nHigh \nThere is total loss of availability, resulting in the attacker being able to fully deny access to resources in the impacted component; this loss is either sustained (while the attacker continues to deliver the attack) or persistent (the condition persists even after the attack has completed). Alternatively, the attacker has the ability to deny some availability, but the loss of availability presents a direct, serious consequence to the impacted component (e.g., the attacker cannot disrupt existing connections, but can prevent new connections; the attacker can repeatedly exploit a vulnerability that, in each instance of a successful attack, leaks a only small amount of memory, but after repeated exploitation causes a service to become completely unavailable). \n\ue8ec \n\ue974 \nTemporal score metrics \n(3) \nExploit Code Maturity \nThis metric measures the likelihood of the vulnerability being attacked, and is typically based on the current state of exploit techniques, exploit code availability, or active, 'in-the-wild' exploitation. \nUnproven \nNo exploit code is available, or an exploit is theoretical. \nRemediation Level \nThe Remediation Level of a vulnerability is an important factor for prioritization. The typical vulnerability is unpatched when initially published. Workarounds or hotfixes may offer interim remediation until an official patch or upgrade is issued. Each of these respective stages adjusts the temporal score downwards, reflecting the decreasing urgency as remediation becomes final. \nOfficial Fix \nA complete vendor solution is available. Either the vendor has issued an official patch, or an upgrade is available. \nReport Confidence \nThis metric measures the degree of confidence in the existence of the vulnerability and the credibility of the known technical details. Sometimes only the existence of vulnerabilities are publicized, but without specific details. For example, an impact may be recognized as undesirable, but the root cause may not be known. The vulnerability may later be corroborated by research which suggests where the vulnerability may lie, though the research may not be certain. Finally, a vulnerability may be confirmed through acknowledgement by the author or vendor of the affected technology. The urgency of a vulnerability is higher when a vulnerability is known to exist with certainty. This metric also suggests the level of technical knowledge available to would-be attackers. \nConfirmed \nDetailed reports exist, or functional reproduction is possible (functional exploits may provide this). Source code is available to independently verify the assertions of the research, or the author or vendor of the affected code has confirmed the presence of the vulnerability. \nPlease see  \nCommon Vulnerability Scoring System \n for more information on the definition of these metrics. \nThe following table provides an  \nexploitability assessment \n for this vulnerability at the time of original publication. \nPublicly disclosed \nExploited \nExploitability assessment \nNo \nNo \nExploitation Less Likely \nAccording to the CVSS metric, privileges required is low (PR:L).  What does that mean for this vulnerability? \nThe attacker must be authenticated to be able to exploit this vulnerability. \nHow would an attacker exploit this vulnerability? \nAn attacker who successfully exploited this vulnerability could send malformed packets to Hyper-V Replica endpoints on the host from a remote machine. \nziming zhang \n with Ant Security Light-Year Lab \nMicrosoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  \nAcknowledgements \n for more information. \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n14 May 2024 \nWindows Server 2016 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows Server 2016 \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows 10 Version 1607 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows 10 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037788  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.10240.20651 \n14 May 2024 \nWindows Server 2022, 23H2 Edition (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037781  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.25398.887 \n14 May 2024 \nWindows 11 Version 23H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22631.3593 \n14 May 2024 \nWindows 11 Version 23H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22631.3593 \n14 May 2024 \nWindows 10 Version 22H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19045.4412 \n14 May 2024 \nWindows 11 Version 22H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22621.3593 \n14 May 2024 \nWindows 11 Version 22H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22621.3593 \n14 May 2024 \nWindows 10 Version 21H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19044.4412 \n14 May 2024 \nWindows 11 version 21H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037770  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22000.2960 \n14 May 2024 \nWindows 11 version 21H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037770  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22000.2960 \n14 May 2024 \nWindows Server 2022 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037782  \n\uf35f \n5037848  \n\uf35f \nSecurity Update  \n\uf35f \nSecurityHotpatchUpdate  \n\uf35f \n10.0.20348.2461 \n10.0.20348.2458 \n14 May 2024 \nWindows Server 2022 \n- \nRemote Code Execution \nImportant \n5037782  \n\uf35f \n5037848  \n\uf35f \nSecurity Update  \n\uf35f \nSecurityHotpatchUpdate  \n\uf35f \n10.0.20348.2461 \n10.0.20348.2458 \n14 May 2024 \nWindows Server 2019 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037765  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.17763.5820 \n14 May 2024 \nWindows Server 2019 \n- \nRemote Code Execution \nImportant \n5037765  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.17763.5820 \n14 May 2024 \nWindows 10 Version 1809 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037765  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.17763.5820 \nAll results loaded \nLoaded all 18 rows \nThe information provided in the Microsoft Knowledge Base is provided \"as is\" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. \nversion \nrevisionDate \ndescription \n1.1 \n15 May 2024 \nUpdated FAQ information. This is an informational change only. \n1.0 \n14 May 2024 \nInformation published. \nFAQ \nAccording to the CVSS metric, privileges required is low (PR:L).  What does that mean for this vulnerability? \nThe attacker must be authenticated to be able to exploit this vulnerability. \nHow would an attacker exploit this vulnerability? \nAn attacker who successfully exploited this vulnerability could send malformed packets to Hyper-V Replica endpoints on the host from a remote machine. \nSecurity Updates \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n14 May 2024 \nWindows Server 2016 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows Server 2016 \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows 10 Version 1607 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows 10 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037788  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.10240.20651 \n14 May 2024 \nWindows Server 2022, 23H2 Edition (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037781  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.25398.887 \n14 May 2024 \nWindows 11 Version 23H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22631.3593 \n14 May 2024 \nWindows 11 Version 23H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22631.3593 \n14 May 2024 \nWindows 10 Version 22H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19045.4412 \n14 May 2024 \nWindows 11 Version 22H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22621.3593 \n14 May 2024 \nWindows 11 Version 22H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22621.3593 \n14 May 2024 \nWindows 10 Version 21H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19044.4412 \n14 May 2024 \nWindows 11 version 21H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037770  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22000.2960 \n14 May 2024 \nWindows 11 version 21H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037770  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22000.2960 \n14 May 2024 \nWindows Server 2022 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037782  \n\uf35f \n5037848  \n\uf35f \nSecurity Update  \n\uf35f \nSecurityHotpatchUpdate  \n\uf35f \n10.0.20348.2461 \n10.0.20348.2458 \n14 May 2024 \nWindows Server 2022 \n- \nRemote Code Execution \nImportant \n5037782  \n\uf35f \n5037848  \n\uf35f \nSecurity Update  \n\uf35f \nSecurityHotpatchUpdate  \n\uf35f \n10.0.20348.2461 \n10.0.20348.2458 \n14 May 2024 \nWindows Server 2019 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037765  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.17763.5820 \n14 May 2024 \nWindows Server 2019 \n- \nRemote Code Execution \nImportant \n5037765  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.17763.5820 \n14 May 2024 \nWindows 10 Version 1809 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037765  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.17763.5820 \nAll results loaded \nLoaded all 18 rows",
+            "build_number_str": [
+                "10.0.22631.3593",
+                "10.0.22621.3593",
+                "10.0.22000.2960",
+                "10.0.19045.4412",
+                "10.0.19044.4412",
+                "10.0.10240.20651"
+            ],
+            "core_products": [
+                "windows 10  x64-based_systems",
+                "windows 10 21H2 x64-based_systems",
+                "windows 11 21H2 x64-based_systems",
+                "windows 10 22H2 x64-based_systems",
+                "windows 11 22H2 x64-based_systems",
+                "windows 11 23H2 x64-based_systems"
+            ],
+            "kb_article_pairs": [
+                {
+                    "kb_id": "kb5037788",
+                    "kb_link": "https://support.microsoft.com/help/5037788#may-14-2024"
+                },
+                {
+                    "kb_id": "kb5037771",
+                    "kb_link": "https://support.microsoft.com/help/5037771#may-14-2024"
+                },
+                {
+                    "kb_id": "kb5037770",
+                    "kb_link": "https://support.microsoft.com/help/5037770#may-14-2024"
+                },
+                {
+                    "kb_id": "kb5037768",
+                    "kb_link": "https://support.microsoft.com/help/5037768#may-14-2024"
+                }
+            ],
+            "package_pairs": [
+                {
+                    "package_type": "Security Update (KB5037771)",
+                    "package_url": "https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037771",
+                    "kbid": 5037771,
+                    "downloadable_packages": [
+                        {
+                            "product_name": "windows_11",
+                            "product_version": "22H2",
+                            "product_architecture": "x64",
+                            "update_type": "Cumulative",
+                            "file_size": "712.5 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "n/a",
+                            "restart_behavior_matches_baseline": true
+                        },
+                        {
+                            "product_name": "windows_11",
+                            "product_version": "23H2",
+                            "product_architecture": "x64",
+                            "update_type": "Cumulative",
+                            "file_size": "712.5 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "n/a",
+                            "restart_behavior_matches_baseline": true
+                        }
+                    ]
+                },
+                {
+                    "package_type": "Security Update (KB5037770)",
+                    "package_url": "https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037770",
+                    "kbid": 5037770,
+                    "downloadable_packages": [
+                        {
+                            "product_name": "windows_11",
+                            "product_version": null,
+                            "product_architecture": "x64",
+                            "update_type": "Dynamic Cumulative",
+                            "file_size": "402.7 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.",
+                            "restart_behavior_matches_baseline": true
+                        },
+                        {
+                            "product_name": "windows_11",
+                            "product_version": null,
+                            "product_architecture": "x64",
+                            "update_type": "Cumulative",
+                            "file_size": "402.7 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.",
+                            "restart_behavior_matches_baseline": true
+                        }
+                    ]
+                },
+                {
+                    "package_type": "Security Update (KB5037768)",
+                    "package_url": "https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037768",
+                    "kbid": 5037768,
+                    "downloadable_packages": [
+                        {
+                            "product_name": "windows_10",
+                            "product_version": "21H2",
+                            "product_architecture": "x64",
+                            "update_type": "Dynamic Cumulative",
+                            "file_size": "633.6 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.",
+                            "restart_behavior_matches_baseline": true
+                        },
+                        {
+                            "product_name": "windows_10",
+                            "product_version": "21H2",
+                            "product_architecture": "x86",
+                            "update_type": "Dynamic Cumulative",
+                            "file_size": "358.8 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.",
+                            "restart_behavior_matches_baseline": true
+                        },
+                        {
+                            "product_name": "windows_10",
+                            "product_version": "22H2",
+                            "product_architecture": "x64",
+                            "update_type": "Dynamic Cumulative",
+                            "file_size": "633.6 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.",
+                            "restart_behavior_matches_baseline": true
+                        },
+                        {
+                            "product_name": "windows_10",
+                            "product_version": "22H2",
+                            "product_architecture": "x86",
+                            "update_type": "Dynamic Cumulative",
+                            "file_size": "358.8 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.",
+                            "restart_behavior_matches_baseline": true
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "70ddb430-333f-ef57-9c49-5b2665f25a7c",
+            "post_id": "CVE-2024-30009",
+            "published": "15-05-2024",
+            "revision": "1.1",
+            "post_type": "Information only",
+            "title": "CVE-2024-30009 Windows Routing and Remote Access Service (RRAS) Remote Code Execution Vulnerability",
+            "description": "Removed one of the FAQs. This is an information change only.",
+            "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-30009",
+            "related_posts": "[]",
+            "summary": "This post is an updated revision and is for information only. No new substantive information beyond the previous revision has been provided.",
+            "summarization_payload": NaN,
+            "build_numbers": "[[10, 0, 19045, 4412], [10, 0, 22631, 3593], [10, 0, 22621, 3593], [10, 0, 22000, 2960], [10, 0, 10240, 20651], [10, 0, 19044, 4412]]",
+            "product_build_ids": "['1207c7bf-2a30-24e4-1cfe-a61b500e2b4e', 'b45db0a0-47d9-63c3-2127-0c9d3c343330', 'c54877b4-67de-6ddb-bb28-38d5328a6941', 'da7a2bd1-f864-5a4c-bc62-3720d5eb9230', '4f0f9250-06ad-6dd7-0c1b-f74702208fec', '902d74bf-e00c-69f8-b882-436c139c6dcc', '0519e2c6-f243-3997-a8b9-ab5e1143c069', '1da253ac-40e5-e430-fef2-372f0e5df164', 'a03bf103-a2ec-f30e-1ff9-552ee075e9cb']",
+            "products": "['windows 10 22H2 x64-based_systems', 'windows 10  32-bit_systems', 'windows 11 23H2 x64-based_systems', 'windows 11 22H2 x64-based_systems', 'windows 10 21H2 x64-based_systems', 'windows 10  x64-based_systems', 'windows 10 22H2 32-bit_systems', 'windows 11 21H2 x64-based_systems', 'windows 10 21H2 32-bit_systems']",
+            "report_category": "windows_10_windows_11_shared",
+            "text": "Removed one of the FAQs. This is an information change only. \nWindows Routing and Remote Access Service (RRAS) Remote Code Execution Vulnerability  \nNew \nRecently updated \nOn this page \n\ue70d \nCVE-2024-30009 \n\ue715 \nSubscribe \nRSS \nPowerShell \n\ue943 \nAPI \nSecurity Vulnerability \nReleased: 14 May 2024 \nLast updated: 15 May 2024 \nAssigning CNA: \nMicrosoft \nCVE-2024-30009  \n\uf35f \nImpact: Remote Code Execution \nMax Severity: Important \nWeakness: \nCWE-197: Numeric Truncation Error \nCVSS Source: \n Microsoft \nCVSS:3.1 8.8 / 7.7 \n\ue946 \nBase score metrics: 8.8 / Temporal score metrics: 7.7 \nBase score metrics: 8.8 / Temporal score metrics: 7.7 \n\ue96e \nExpand all \n\ue970 \nCollapse all \nMetric \nValue \n\ue8ec \n\ue974 \nBase score metrics \n(8) \nAttack Vector \nThis metric reflects the context by which vulnerability exploitation is possible. The Base Score increases the more remote (logically, and physically) an attacker can be in order to exploit the vulnerable component. \nNetwork \nThe vulnerable component is bound to the network stack and the set of possible attackers extends beyond the other options listed, up to and including the entire Internet. Such a vulnerability is often termed 'remotely exploitable' and can be thought of as an attack being exploitable at the protocol level one or more network hops away (e.g., across one or more routers). \nAttack Complexity \nThis metric describes the conditions beyond the attacker\u2019s control that must exist in order to exploit the vulnerability. Such conditions may require the collection of more information about the target or computational exceptions. The assessment of this metric excludes any requirements for user interaction in order to exploit the vulnerability. If a specific configuration is required for an attack to succeed, the Base metrics should be scored assuming the vulnerable component is in that configuration. \nLow \nSpecialized access conditions or extenuating circumstances do not exist. \n.\n An attacker can expect repeatable success against the vulnerable component. \nPrivileges Required \nThis metric describes the level of privileges an attacker must possess before successfully exploiting the vulnerability. \nNone \nThe attacker is unauthorized prior to attack, and therefore does not require any access to settings or files to carry out an attack. \nUser Interaction \nThis metric captures the requirement for a user, other than the attacker, to participate in the successful compromise the vulnerable component. This metric determines whether the vulnerability can be exploited solely at the will of the attacker, or whether a separate user (or user-initiated process) must participate in some manner. \nRequired \nSuccessful exploitation of this vulnerability requires a user to take some action before the vulnerability can be exploited. \nScope \nDoes a successful attack impact a component other than the vulnerable component? If so, the Base Score increases and the Confidentiality, Integrity and Authentication metrics should be scored relative to the impacted component. \nUnchanged \nAn exploited vulnerability can only affect resources managed by the same security authority. In this case, the vulnerable component and the impacted component are either the same, or both are managed by the same security authority. \nConfidentiality \nThis metric measures the impact to the confidentiality of the information resources managed by a software component due to a successfully exploited vulnerability. Confidentiality refers to limiting information access and disclosure to only authorized users, as well as preventing access by, or disclosure to, unauthorized ones. \nHigh \nThere is total loss of confidentiality, resulting in all resources within the impacted component being divulged to the attacker. Alternatively, access to only some restricted information is obtained, but the disclosed information presents a direct, serious impact. \nIntegrity \nThis metric measures the impact to integrity of a successfully exploited vulnerability. Integrity refers to the trustworthiness and veracity of information. \nHigh \nThere is a total loss of integrity, or a complete loss of protection. For example, the attacker is able to modify any/all files protected by the impacted component. Alternatively, only some files can be modified, but malicious modification would present a direct, serious consequence to the impacted component. \nAvailability \nThis metric measures the impact to the availability of the impacted component resulting from a successfully exploited vulnerability. \n.\n It refers to the loss of availability of the impacted component itself, such as a networked service (e.g., web, database, email). Since availability refers to the accessibility of information resources, attacks that consume network bandwidth, processor cycles, or disk space all impact the availability of an impacted component. \nHigh \nThere is total loss of availability, resulting in the attacker being able to fully deny access to resources in the impacted component; this loss is either sustained (while the attacker continues to deliver the attack) or persistent (the condition persists even after the attack has completed). Alternatively, the attacker has the ability to deny some availability, but the loss of availability presents a direct, serious consequence to the impacted component (e.g., the attacker cannot disrupt existing connections, but can prevent new connections; the attacker can repeatedly exploit a vulnerability that, in each instance of a successful attack, leaks a only small amount of memory, but after repeated exploitation causes a service to become completely unavailable). \n\ue8ec \n\ue974 \nTemporal score metrics \n(3) \nExploit Code Maturity \nThis metric measures the likelihood of the vulnerability being attacked, and is typically based on the current state of exploit techniques, exploit code availability, or active, 'in-the-wild' exploitation. \nUnproven \nNo exploit code is available, or an exploit is theoretical. \nRemediation Level \nThe Remediation Level of a vulnerability is an important factor for prioritization. The typical vulnerability is unpatched when initially published. Workarounds or hotfixes may offer interim remediation until an official patch or upgrade is issued. Each of these respective stages adjusts the temporal score downwards, reflecting the decreasing urgency as remediation becomes final. \nOfficial Fix \nA complete vendor solution is available. Either the vendor has issued an official patch, or an upgrade is available. \nReport Confidence \nThis metric measures the degree of confidence in the existence of the vulnerability and the credibility of the known technical details. Sometimes only the existence of vulnerabilities are publicized, but without specific details. For example, an impact may be recognized as undesirable, but the root cause may not be known. The vulnerability may later be corroborated by research which suggests where the vulnerability may lie, though the research may not be certain. Finally, a vulnerability may be confirmed through acknowledgement by the author or vendor of the affected technology. \n.\n The urgency of a vulnerability is higher when a vulnerability is known to exist with certainty. This metric also suggests the level of technical knowledge available to would-be attackers. \nConfirmed \nDetailed reports exist, or functional reproduction is possible (functional exploits may provide this). Source code is available to independently verify the assertions of the research, or the author or vendor of the affected code has confirmed the presence of the vulnerability. \nPlease see  \nCommon Vulnerability Scoring System \n for more information on the definition of these metrics. \nThe following table provides an  \nexploitability assessment \n for this vulnerability at the time of original publication. \nPublicly disclosed \nExploited \nExploitability assessment \nNo \nNo \nExploitation Less Likely \nAccording to the CVSS metric, the attack vector is network (AV:N) and the user interaction is required (UI:R). What is the target context of the remote code execution? \nThis attack requires a client to connect to a malicious server, and that could allow the attacker to gain code execution on the client. \nAnonymous \nMicrosoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  \nAcknowledgements \n for more information. \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n14 May 2024 \nWindows Server 2012 R2 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037823  \n\uf35f \nMonthly Rollup  \n\uf35f \n6.3.9600.21972 \n14 May 2024 \nWindows Server 2012 R2 \n- \nRemote Code Execution \nImportant \n5037823  \n\uf35f \nMonthly Rollup  \n\uf35f \n6.3.9600. \n.\n 21972 \n14 May 2024 \nWindows Server 2012 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037778  \n\uf35f \nMonthly Rollup  \n\uf35f \n6.2.9200.24868 \n14 May 2024 \nWindows Server 2012 \n- \nRemote Code Execution \nImportant \n5037778  \n\uf35f \nMonthly Rollup  \n\uf35f \n6.2.9200.24868 \n14 May 2024 \nWindows Server 2008 R2 for x64-based Systems Service Pack 1 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037780  \n\uf35f \n5037803  \n\uf35f \nMonthly Rollup  \n\uf35f \nSecurity Only  \n\uf35f \n6.1.7601.27117 \n6.1.7601.27117 \n14 May 2024 \nWindows Server 2008 R2 for x64-based Systems Service Pack 1 \n- \nRemote Code Execution \nImportant \n5037780  \n\uf35f \n5037803  \n\uf35f \nMonthly Rollup  \n\uf35f \nSecurity Only  \n\uf35f \n6.1.7601.27117 \n6.1.7601.27117 \n14 May 2024 \nWindows Server 2008 for x64-based Systems Service Pack 2 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037800  \n\uf35f \n5037836  \n\uf35f \nMonthly Rollup  \n\uf35f \nSecurity Only  \n\uf35f \n6.0.6003.22668 \n6.0.6003.22668 \n14 May 2024 \nWindows Server 2008 for x64-based Systems Service Pack 2 \n- \nRemote Code Execution \nImportant \n5037800  \n\uf35f \n5037836  \n\uf35f \nMonthly Rollup  \n\uf35f \nSecurity Only  \n\uf35f \n6.0.6003.22668 \n6.0.6003. \n.\n 22668 \n14 May 2024 \nWindows Server 2008 for 32-bit Systems Service Pack 2 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037800  \n\uf35f \n5037836  \n\uf35f \nMonthly Rollup  \n\uf35f \nSecurity Only  \n\uf35f \n6.0.6003.22668 \n6.0.6003.22668 \n14 May 2024 \nWindows Server 2008 for 32-bit Systems Service Pack 2 \n- \nRemote Code Execution \nImportant \n5037800  \n\uf35f \n5037836  \n\uf35f \nMonthly Rollup  \n\uf35f \nSecurity Only  \n\uf35f \n6.0.6003.22668 \n6.0.6003.22668 \n14 May 2024 \nWindows Server 2016 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows Server 2016 \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows 10 Version 1607 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows 10 Version 1607 for 32-bit Systems \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows 10 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037788  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.10240. \n.\n 20651 \n14 May 2024 \nWindows 10 for 32-bit Systems \n- \nRemote Code Execution \nImportant \n5037788  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.10240.20651 \n14 May 2024 \nWindows Server 2022, 23H2 Edition (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037781  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.25398.887 \n14 May 2024 \nWindows 11 Version 23H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22631.3593 \n14 May 2024 \nWindows 11 Version 23H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22631.3593 \n14 May 2024 \nWindows 10 Version 22H2 for 32-bit Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19045.4412 \n14 May 2024 \nWindows 10 Version 22H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19045.4412 \n14 May 2024 \nWindows 10 Version 22H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19045.4412 \n14 May 2024 \nWindows 11 Version 22H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22621. \n.\n 3593 \n14 May 2024 \nWindows 11 Version 22H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22621.3593 \n14 May 2024 \nWindows 10 Version 21H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19044.4412 \n14 May 2024 \nWindows 10 Version 21H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19044.4412 \n14 May 2024 \nWindows 10 Version 21H2 for 32-bit Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19044.4412 \n14 May 2024 \nWindows 11 version 21H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037770  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22000.2960 \n14 May 2024 \nWindows 11 version 21H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037770  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22000.2960 \n14 May 2024 \nWindows Server 2022 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037782  \n\uf35f \n5037848  \n\uf35f \nSecurity Update  \n\uf35f \nSecurityHotpatchUpdate  \n\uf35f \n10.0.20348.2461 \n10.0.20348.2458 \nAll results loaded \nLoaded all 36 rows \nThe information provided in the Microsoft Knowledge Base is provided \"as is\" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. \n.\n In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. \nversion \nrevisionDate \ndescription \n1.1 \n15 May 2024 \nRemoved one of the FAQs. This is an information change only. \n1.0 \n14 May 2024 \nInformation published. \nFAQ \nAccording to the CVSS metric, the attack vector is network (AV:N) and the user interaction is required (UI:R). What is the target context of the remote code execution? \nThis attack requires a client to connect to a malicious server, and that could allow the attacker to gain code execution on the client. \nSecurity Updates \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n14 May 2024 \nWindows Server 2012 R2 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037823  \n\uf35f \nMonthly Rollup  \n\uf35f \n6.3.9600.21972 \n14 May 2024 \nWindows Server 2012 R2 \n- \nRemote Code Execution \nImportant \n5037823  \n\uf35f \nMonthly Rollup  \n\uf35f \n6.3.9600.21972 \n14 May 2024 \nWindows Server 2012 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037778  \n\uf35f \nMonthly Rollup  \n\uf35f \n6.2.9200. \n.\n 24868 \n14 May 2024 \nWindows Server 2012 \n- \nRemote Code Execution \nImportant \n5037778  \n\uf35f \nMonthly Rollup  \n\uf35f \n6.2.9200.24868 \n14 May 2024 \nWindows Server 2008 R2 for x64-based Systems Service Pack 1 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037780  \n\uf35f \n5037803  \n\uf35f \nMonthly Rollup  \n\uf35f \nSecurity Only  \n\uf35f \n6.1.7601.27117 \n6.1.7601.27117 \n14 May 2024 \nWindows Server 2008 R2 for x64-based Systems Service Pack 1 \n- \nRemote Code Execution \nImportant \n5037780  \n\uf35f \n5037803  \n\uf35f \nMonthly Rollup  \n\uf35f \nSecurity Only  \n\uf35f \n6.1.7601.27117 \n6.1.7601.27117 \n14 May 2024 \nWindows Server 2008 for x64-based Systems Service Pack 2 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037800  \n\uf35f \n5037836  \n\uf35f \nMonthly Rollup  \n\uf35f \nSecurity Only  \n\uf35f \n6.0.6003.22668 \n6.0.6003.22668 \n14 May 2024 \nWindows Server 2008 for x64-based Systems Service Pack 2 \n- \nRemote Code Execution \nImportant \n5037800  \n\uf35f \n5037836  \n\uf35f \nMonthly Rollup  \n\uf35f \nSecurity Only  \n\uf35f \n6.0.6003.22668 \n6.0.6003.22668 \n14 May 2024 \nWindows Server 2008 for 32-bit Systems Service Pack 2 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037800  \n\uf35f \n5037836  \n\uf35f \nMonthly Rollup  \n\uf35f \nSecurity Only  \n\uf35f \n6. \n.\n 0.6003.22668 \n6.0.6003.22668 \n14 May 2024 \nWindows Server 2008 for 32-bit Systems Service Pack 2 \n- \nRemote Code Execution \nImportant \n5037800  \n\uf35f \n5037836  \n\uf35f \nMonthly Rollup  \n\uf35f \nSecurity Only  \n\uf35f \n6.0.6003.22668 \n6.0.6003.22668 \n14 May 2024 \nWindows Server 2016 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows Server 2016 \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows 10 Version 1607 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows 10 Version 1607 for 32-bit Systems \n- \nRemote Code Execution \nImportant \n5037763  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.14393.6981 \n14 May 2024 \nWindows 10 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037788  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.10240.20651 \n14 May 2024 \nWindows 10 for 32-bit Systems \n- \nRemote Code Execution \nImportant \n5037788  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.10240.20651 \n14 May 2024 \nWindows Server 2022, 23H2 Edition (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037781  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.25398. \n.\n 887 \n14 May 2024 \nWindows 11 Version 23H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22631.3593 \n14 May 2024 \nWindows 11 Version 23H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22631.3593 \n14 May 2024 \nWindows 10 Version 22H2 for 32-bit Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19045.4412 \n14 May 2024 \nWindows 10 Version 22H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19045.4412 \n14 May 2024 \nWindows 10 Version 22H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19045.4412 \n14 May 2024 \nWindows 11 Version 22H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22621.3593 \n14 May 2024 \nWindows 11 Version 22H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037771  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22621.3593 \n14 May 2024 \nWindows 10 Version 21H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19044. \n.\n 4412 \n14 May 2024 \nWindows 10 Version 21H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19044.4412 \n14 May 2024 \nWindows 10 Version 21H2 for 32-bit Systems \n- \nRemote Code Execution \nImportant \n5037768  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.19044.4412 \n14 May 2024 \nWindows 11 version 21H2 for ARM64-based Systems \n- \nRemote Code Execution \nImportant \n5037770  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22000.2960 \n14 May 2024 \nWindows 11 version 21H2 for x64-based Systems \n- \nRemote Code Execution \nImportant \n5037770  \n\uf35f \nSecurity Update  \n\uf35f \n10.0.22000.2960 \n14 May 2024 \nWindows Server 2022 (Server Core installation) \n- \nRemote Code Execution \nImportant \n5037782  \n\uf35f \n5037848  \n\uf35f \nSecurity Update  \n\uf35f \nSecurityHotpatchUpdate  \n\uf35f \n10.0.20348.2461 \n10.0.20348.2458 \nAll results loaded \nLoaded all 36 rows \n.\n ",
+            "build_number_str": [
+                "10.0.22631.3593",
+                "10.0.22621.3593",
+                "10.0.22000.2960",
+                "10.0.19045.4412",
+                "10.0.19044.4412",
+                "10.0.10240.20651"
+            ],
+            "core_products": [
+                "windows 10  32-bit_systems",
+                "windows 10  x64-based_systems",
+                "windows 10 21H2 32-bit_systems",
+                "windows 10 21H2 x64-based_systems",
+                "windows 11 21H2 x64-based_systems",
+                "windows 10 22H2 32-bit_systems",
+                "windows 10 22H2 x64-based_systems",
+                "windows 11 22H2 x64-based_systems",
+                "windows 11 23H2 x64-based_systems"
+            ],
+            "kb_article_pairs": [
+                {
+                    "kb_id": "kb5037788",
+                    "kb_link": "https://support.microsoft.com/help/5037788#may-14-2024"
+                },
+                {
+                    "kb_id": "kb5037771",
+                    "kb_link": "https://support.microsoft.com/help/5037771#may-14-2024"
+                },
+                {
+                    "kb_id": "kb5037770",
+                    "kb_link": "https://support.microsoft.com/help/5037770#may-14-2024"
+                },
+                {
+                    "kb_id": "kb5037768",
+                    "kb_link": "https://support.microsoft.com/help/5037768#may-14-2024"
+                }
+            ],
+            "package_pairs": [
+                {
+                    "package_type": "Security Update (KB5037771)",
+                    "package_url": "https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037771",
+                    "kbid": 5037771,
+                    "downloadable_packages": [
+                        {
+                            "product_name": "windows_11",
+                            "product_version": "22H2",
+                            "product_architecture": "x64",
+                            "update_type": "Cumulative",
+                            "file_size": "712.5 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "n/a",
+                            "restart_behavior_matches_baseline": true
+                        },
+                        {
+                            "product_name": "windows_11",
+                            "product_version": "23H2",
+                            "product_architecture": "x64",
+                            "update_type": "Cumulative",
+                            "file_size": "712.5 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "n/a",
+                            "restart_behavior_matches_baseline": true
+                        }
+                    ]
+                },
+                {
+                    "package_type": "Security Update (KB5037770)",
+                    "package_url": "https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037770",
+                    "kbid": 5037770,
+                    "downloadable_packages": [
+                        {
+                            "product_name": "windows_11",
+                            "product_version": null,
+                            "product_architecture": "x64",
+                            "update_type": "Dynamic Cumulative",
+                            "file_size": "402.7 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.",
+                            "restart_behavior_matches_baseline": true
+                        },
+                        {
+                            "product_name": "windows_11",
+                            "product_version": null,
+                            "product_architecture": "x64",
+                            "update_type": "Cumulative",
+                            "file_size": "402.7 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.",
+                            "restart_behavior_matches_baseline": true
+                        }
+                    ]
+                },
+                {
+                    "package_type": "Security Update (KB5037768)",
+                    "package_url": "https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037768",
+                    "kbid": 5037768,
+                    "downloadable_packages": [
+                        {
+                            "product_name": "windows_10",
+                            "product_version": "21H2",
+                            "product_architecture": "x64",
+                            "update_type": "Dynamic Cumulative",
+                            "file_size": "633.6 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.",
+                            "restart_behavior_matches_baseline": true
+                        },
+                        {
+                            "product_name": "windows_10",
+                            "product_version": "21H2",
+                            "product_architecture": "x86",
+                            "update_type": "Dynamic Cumulative",
+                            "file_size": "358.8 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.",
+                            "restart_behavior_matches_baseline": true
+                        },
+                        {
+                            "product_name": "windows_10",
+                            "product_version": "22H2",
+                            "product_architecture": "x64",
+                            "update_type": "Dynamic Cumulative",
+                            "file_size": "633.6 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.",
+                            "restart_behavior_matches_baseline": true
+                        },
+                        {
+                            "product_name": "windows_10",
+                            "product_version": "22H2",
+                            "product_architecture": "x86",
+                            "update_type": "Dynamic Cumulative",
+                            "file_size": "358.8 MB",
+                            "restart_behavior": "Can request restart",
+                            "request_user_input": "No",
+                            "installed_exclusively": "",
+                            "requires_network": "No",
+                            "uninstall_notes": "This software update can be removed by selecting View installed updates in the Programs and Features Control Panel.",
+                            "restart_behavior_matches_baseline": true
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "5886fcc2-1f96-c048-389e-1975f864eee0",
+            "post_id": "CVE-2024-4950",
+            "published": "16-05-2024",
+            "revision": "1.0",
+            "post_type": "Information only",
+            "title": "Chromium: CVE-2024-4950 Inappropriate implementation in Downloads",
+            "description": "Information published.",
+            "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4950",
+            "related_posts": "[]",
+            "summary": "This post is an informational update regarding CVE-2024-4950, an inappropriate implementation vulnerability in the Downloads component of Chromium, which affects Microsoft Edge (Chromium-based). The vulnerability has been addressed by the latest version of Microsoft Edge (Chromium-based), which now ingests the updated Chromium version. No further action is required from administrators as the update ensures that the browser is no longer vulnerable. For more details, refer to the Google Chrome Releases page.",
+            "summarization_payload": NaN,
+            "build_numbers": "[[124, 0, 2478, 109]]",
+            "product_build_ids": "['88a83758-4fe9-8cc0-b57f-f2eb548fdce1']",
+            "products": "['microsoft edge (chromium-based)  ']",
+            "report_category": "microsoft_edge",
+            "text": "Information published. \nChromium: CVE-2024-4950 Inappropriate implementation in Downloads  \nNew \nOn this page \n\ue70d \nCVE-2024-4950 \n\ue715 \nSubscribe \nRSS \nPowerShell \n\ue943 \nAPI \nSecurity Vulnerability \nReleased: 16 May 2024 \nAssigning CNA: \nChrome \nCVE-2024-4950  \n\uf35f \nThis CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  \nGoogle Chrome Releases \n for more information. \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n124.0.2478.109 \n5/16/2024 \n124.0.6367.221 \nMicrosoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  \nAcknowledgements \n for more information. \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n16 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n124.0.2478.109 \nAll results loaded \nLoaded all 1 rows \nThe information provided in the Microsoft Knowledge Base is provided \"as is\" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. \nversion \nrevisionDate \ndescription \n1.0 \n16 May 2024 \nInformation published. \nFAQ \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n124.0.2478.109 \n5/16/2024 \n124.0.6367.221 \nSecurity Updates \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n16 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n124.0.2478.109 \nAll results loaded \nLoaded all 1 rows",
+            "build_number_str": [
+                "124.0.2478.109"
+            ],
+            "core_products": [
+                "microsoft edge (chromium-based)  "
+            ],
+            "kb_article_pairs": [
+                {
+                    "kb_id": "Release Note (16-05-2024)",
+                    "kb_link": "https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-16-2024"
+                }
+            ],
+            "package_pairs": []
+        },
+        {
+            "id": "6f07e101-bcf2-c403-5bc6-a6adfc0c6d8c",
+            "post_id": "CVE-2024-4949",
+            "published": "16-05-2024",
+            "revision": "1.0",
+            "post_type": "Information only",
+            "title": "Chromium: CVE-2024-4949 Use after free in V8",
+            "description": "Information published.",
+            "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4949",
+            "related_posts": "[]",
+            "summary": "This post is an informational update regarding CVE-2024-4949, a use after free vulnerability in the V8 engine of Chromium, which affects Microsoft Edge (Chromium-based). The vulnerability was assigned by Chrome and has been addressed by ingesting the latest version of Chromium. Consequently, the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. No new fixes or workarounds are provided in this update. For more details, refer to the Google Chrome Releases page.",
+            "summarization_payload": NaN,
+            "build_numbers": "[[124, 0, 2478, 109]]",
+            "product_build_ids": "['88a83758-4fe9-8cc0-b57f-f2eb548fdce1']",
+            "products": "['microsoft edge (chromium-based)  ']",
+            "report_category": "microsoft_edge",
+            "text": "Information published. \nChromium: CVE-2024-4949 Use after free in V8  \nNew \nOn this page \n\ue70d \nCVE-2024-4949 \n\ue715 \nSubscribe \nRSS \nPowerShell \n\ue943 \nAPI \nSecurity Vulnerability \nReleased: 16 May 2024 \nAssigning CNA: \nChrome \nCVE-2024-4949  \n\uf35f \nThis CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  \nGoogle Chrome Releases \n for more information. \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n124.0.2478.109 \n5/16/2024 \n124.0.6367.221 \nMicrosoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  \nAcknowledgements \n for more information. \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n16 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n124.0.2478.109 \nAll results loaded \nLoaded all 1 rows \nThe information provided in the Microsoft Knowledge Base is provided \"as is\" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. \nversion \nrevisionDate \ndescription \n1.0 \n16 May 2024 \nInformation published. \nFAQ \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n124.0.2478.109 \n5/16/2024 \n124.0.6367.221 \nSecurity Updates \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n16 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n124.0.2478.109 \nAll results loaded \nLoaded all 1 rows",
+            "build_number_str": [
+                "124.0.2478.109"
+            ],
+            "core_products": [
+                "microsoft edge (chromium-based)  "
+            ],
+            "kb_article_pairs": [
+                {
+                    "kb_id": "Release Note (16-05-2024)",
+                    "kb_link": "https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-16-2024"
+                }
+            ],
+            "package_pairs": []
+        },
+        {
+            "id": "bfa3bdd8-c7c6-104b-d719-b0d44cc0f542",
+            "post_id": "CVE-2024-4948",
+            "published": "16-05-2024",
+            "revision": "1.0",
+            "post_type": "Information only",
+            "title": "Chromium: CVE-2024-4948 Use after free in Dawn",
+            "description": "Information published.",
+            "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4948",
+            "related_posts": "[]",
+            "summary": "This post is an informational update regarding CVE-2024-4948, a use after free vulnerability in the Chromium Open Source Software (OSS) consumed by Microsoft Edge (Chromium-based). The vulnerability was assigned by Chrome and has been addressed in the latest version of Microsoft Edge. The updated version, 124.0.2478.109, is no longer vulnerable to this issue. System administrators should ensure their Microsoft Edge installations are updated to this version to mitigate any potential risks. For more details, refer to the Google Chrome Releases page.",
+            "summarization_payload": NaN,
+            "build_numbers": "[[124, 0, 2478, 109]]",
+            "product_build_ids": "['88a83758-4fe9-8cc0-b57f-f2eb548fdce1']",
+            "products": "['microsoft edge (chromium-based)  ']",
+            "report_category": "microsoft_edge",
+            "text": "Information published. \nChromium: CVE-2024-4948 Use after free in Dawn  \nNew \nOn this page \n\ue70d \nCVE-2024-4948 \n\ue715 \nSubscribe \nRSS \nPowerShell \n\ue943 \nAPI \nSecurity Vulnerability \nReleased: 16 May 2024 \nAssigning CNA: \nChrome \nCVE-2024-4948  \n\uf35f \nThis CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  \nGoogle Chrome Releases \n for more information. \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n124.0.2478.109 \n5/16/2024 \n124.0.6367.221 \nMicrosoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  \nAcknowledgements \n for more information. \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n16 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n124.0.2478.109 \nAll results loaded \nLoaded all 1 rows \nThe information provided in the Microsoft Knowledge Base is provided \"as is\" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. \nversion \nrevisionDate \ndescription \n1.0 \n16 May 2024 \nInformation published. \nFAQ \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n124.0.2478.109 \n5/16/2024 \n124.0.6367.221 \nSecurity Updates \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n16 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n124.0.2478.109 \nAll results loaded \nLoaded all 1 rows",
+            "build_number_str": [
+                "124.0.2478.109"
+            ],
+            "core_products": [
+                "microsoft edge (chromium-based)  "
+            ],
+            "kb_article_pairs": [
+                {
+                    "kb_id": "Release Note (16-05-2024)",
+                    "kb_link": "https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-16-2024"
+                }
+            ],
+            "package_pairs": []
+        }
+    ],
+    "section_1_metadata": {
+        "total_cves": 5,
+        "new_cves": 3,
+        "updated_cves": 2
+    },
+    "section_2_data": [],
+    "section_2_metadata": {
+        "total_products": 0
+    },
+    "section_3_data": [],
+    "section_3_metadata": {
+        "total_tools": 0
+    },
+    "section_4_data": {
+        "security_update_notes": [
+            {
+                "id": "30c4f88e-ad42-ac6c-81c5-6f2927319980",
+                "source": "#may-21-2024",
+                "collection": "security_update_notes",
+                "published": "2024-05-21",
+                "title": "May 21, 2024"
+            },
+            {
+                "id": "80a4df3e-184f-c1ee-355b-e1114c0dc207",
+                "source": "#may-17-2024",
+                "collection": "security_update_notes",
+                "published": "2024-05-17",
+                "title": "May 17, 2024"
+            },
+            {
+                "id": "a8c700bf-1d89-bf3e-9708-5a26330d7019",
+                "source": "#may-16-2024",
+                "collection": "security_update_notes",
+                "published": "2024-05-16",
+                "title": "May 16, 2024"
+            },
+            {
+                "id": "e6bbb6b0-c274-f962-3ea5-91a0da395bf0",
+                "source": "#may-14-2024",
+                "collection": "security_update_notes",
+                "published": "2024-05-14",
+                "title": "May 14, 2024"
+            }
+        ],
+        "stable_channel_notes": [
+            {
+                "id": "a3e6ea4e-ed26-af87-5235-c4152f0a5df4",
+                "source": "#version-12402478109-may-16-2024",
+                "collection": "stable_channel_notes",
+                "published": "2024-05-16",
+                "title": "Version 124.0.2478.109: May 16, 2024"
+            },
+            {
+                "id": "3eebba1f-9a99-dcfc-38d8-7fda1fce5a0b",
+                "source": "#version-12402478105-may-14-2024",
+                "collection": "stable_channel_notes",
+                "published": "2024-05-14",
+                "title": "Version 124.0.2478.105: May 14, 2024"
+            }
+        ],
+        "windows_10": [
+            {
+                "id": "55c46658-682b-c93a-ee52-815015bf8c67",
+                "source": "https://support.microsoft.com/en-us/windows/personalize-your-lock-screen-81dab9b0-35cf-887c-84a0-6de8ef72bea0",
+                "collection": "windows_10",
+                "published": "2024-05-21",
+                "title": "Personalize your lock screen - Microsoft Support"
+            },
+            {
+                "id": "8bc980ad-0363-de6f-f074-45ffa35a5c6c",
+                "source": "https://support.microsoft.com/en-us/windows/manage-cookies-in-microsoft-edge-view-allow-block-delete-and-use-168dab11-0753-043d-7c16-ede5947fc64d",
+                "collection": "windows_10",
+                "published": "2024-05-21",
+                "title": "Manage cookies in Microsoft Edge: View, allow, block, delete and use - Microsoft Support"
+            },
+            {
+                "id": "5ecc3491-2d6e-ca49-858c-d294445ea84f",
+                "source": "https://support.microsoft.com/en-us/topic/deploy-windows-malicious-software-removal-tool-in-an-enterprise-environment-kb891716-a10cc756-2b3b-32e3-9ee3-2c1298ea3538",
+                "collection": "windows_10",
+                "published": "2024-05-14",
+                "title": "Deploy Windows Malicious Software Removal Tool in an enterprise environment (KB891716) - Microsoft Support"
+            },
+            {
+                "id": "432ac99b-4d70-f191-829f-a05741c0a557",
+                "source": "https://support.microsoft.com/en-us/topic/may-14-2024-kb5037788-os-build-10240-20651-6efe4a43-3962-4585-88af-3a3369ee561c",
+                "collection": "windows_10",
+                "published": "2024-05-14",
+                "title": "May 14, 2024 KB5037788 (OS Build 10240.20651) - Microsoft Support"
+            },
+            {
+                "id": "b710a099-7e90-723b-c2c9-d9b9e61dfb2b",
+                "source": "https://support.microsoft.com/en-us/topic/may-14-2024-kb5037768-os-builds-19044-4412-and-19045-4412-cb676101-1641-4a6c-b512-8b277606c6e3",
+                "collection": "windows_10",
+                "published": "2024-05-14",
+                "title": "May 14, 2024 KB5037768 (OS Builds 19044.4412 and 19045.4412) - Microsoft Support"
+            },
+            {
+                "id": "b314ecc5-b079-823a-e65e-d759bbf04ffa",
+                "source": "https://support.microsoft.com/en-us/topic/may-14-2024-kb5037765-os-build-17763-5820-82d1aefb-093c-4e4a-a729-cd4a829750ad",
+                "collection": "windows_10",
+                "published": "2024-05-14",
+                "title": "May 14, 2024 KB5037765 (OS Build 17763.5820) - Microsoft Support"
+            },
+            {
+                "id": "6cfe3be3-3b70-e31a-430f-d45b9a0b9aca",
+                "source": "https://support.microsoft.com/en-us/topic/may-14-2024-kb5037763-os-build-14393-6981-0c46e802-c9a9-4ad3-816b-c7fa378d3dd3",
+                "collection": "windows_10",
+                "published": "2024-05-14",
+                "title": "May 14, 2024 KB5037763 (OS Build 14393.6981) - Microsoft Support"
+            },
+            {
+                "id": "aae0b794-f98a-d949-5378-f21abe5fd6af",
+                "source": "https://support.microsoft.com/en-us/topic/kb5001716-update-for-windows-update-service-components-fb9dd3d3-d702-4f8a-af10-b9551cfa6e13",
+                "collection": "windows_10",
+                "published": "2024-05-14",
+                "title": "KB5001716: Update for Windows Update Service components - Microsoft Support"
+            },
+            {
+                "id": "153974d3-23ac-a45c-e4a1-4a1ecc2974ad",
+                "source": "https://support.microsoft.com/en-us/windows/get-help-for-microsoft-personal-account-users-aaf7f74b-026e-489b-a102-0570dfbfb192",
+                "collection": "windows_10",
+                "published": "2024-05-14",
+                "title": "Get Help for Microsoft personal account users - Microsoft Support"
+            },
+            {
+                "id": "ddf69e3a-9882-518c-367e-934bcf84affb",
+                "source": "https://support.microsoft.com/en-us/windows/about-get-help-717c7ae9-5c45-45f0-b637-900b7437a395",
+                "collection": "windows_10",
+                "published": "2024-05-14",
+                "title": "About Get Help - Microsoft Support"
+            },
+            {
+                "id": "e6b4f663-531b-fbe5-88b5-eb369fd8dcf7",
+                "source": "https://support.microsoft.com/en-us/windows/give-feedback-about-get-help-54a5b02a-071c-4b02-83d0-00c6ed99845b",
+                "collection": "windows_10",
+                "published": "2024-05-14",
+                "title": "Give feedback about Get Help - Microsoft Support"
+            },
+            {
+                "id": "0515a186-5c9b-67ab-d23c-d20f9e0f72ee",
+                "source": "https://support.microsoft.com/en-us/windows/running-troubleshooters-in-get-help-23bddffd-5495-47f6-a419-7efe166bf1a8",
+                "collection": "windows_10",
+                "published": "2024-05-14",
+                "title": "Running troubleshooters in Get Help - Microsoft Support"
+            },
+            {
+                "id": "bc8d10c7-2bcb-4362-a8dc-a5d37c4ff915",
+                "source": "https://support.microsoft.com/en-us/windows/get-help-for-microsoft-work-or-school-account-users-215deae6-5cc6-4ba0-9f7b-d75933ce179b",
+                "collection": "windows_10",
+                "published": "2024-05-14",
+                "title": "Get Help for Microsoft work or school account users - Microsoft Support"
+            },
+            {
+                "id": "7266a57e-3107-f1bd-c964-fdfa336f9871",
+                "source": "https://support.microsoft.com/en-us/account-billing/prevent-unauthorized-purchases-from-microsoft-store-21436cce-cd26-da18-f522-bb766a9dc8dd",
+                "collection": "windows_10",
+                "published": "2024-05-14",
+                "title": "Prevent unauthorized purchases from Microsoft Store - Microsoft Support"
+            }
+        ],
+        "windows_11": [
+            {
+                "id": "e837f877-3798-2c4f-2124-b7dba2d2ff28",
+                "source": "https://support.microsoft.com/en-us/windows/personalize-your-lock-screen-81dab9b0-35cf-887c-84a0-6de8ef72bea0",
+                "collection": "windows_11",
+                "published": "2024-05-21",
+                "title": "Personalize your lock screen - Microsoft Support"
+            },
+            {
+                "id": "9b9aefae-4cb6-e8f8-0e8f-110e92226d25",
+                "source": "https://support.microsoft.com/en-us/windows/automatic-super-resolution-5d6d95fa-cc02-4673-b62c-2c50f06385aa",
+                "collection": "windows_11",
+                "published": "2024-05-21",
+                "title": "Automatic Super Resolution - Microsoft Support"
+            },
+            {
+                "id": "6bcff56f-dc99-922a-385c-730196dbd9db",
+                "source": "https://support.microsoft.com/en-us/windows/manage-cookies-in-microsoft-edge-view-allow-block-delete-and-use-168dab11-0753-043d-7c16-ede5947fc64d",
+                "collection": "windows_11",
+                "published": "2024-05-21",
+                "title": "Manage cookies in Microsoft Edge: View, allow, block, delete and use - Microsoft Support"
+            },
+            {
+                "id": "76752a11-54cf-4010-da2e-3cf239ad2953",
+                "source": "https://support.microsoft.com/en-us/topic/may-14-2024-kb5037771-os-builds-22621-3593-and-22631-3593-e633ff2f-a021-4abb-bd2e-7f3687f166fe",
+                "collection": "windows_11",
+                "published": "2024-05-14",
+                "title": "May 14, 2024 KB5037771 (OS Builds 22621.3593 and 22631.3593) - Microsoft Support"
+            },
+            {
+                "id": "a523c640-2fc4-101c-d281-84f37454aab4",
+                "source": "https://support.microsoft.com/en-us/topic/may-14-2024-kb5037770-os-build-22000-2960-d0f9634b-e368-4397-96f1-74a42723b12f",
+                "collection": "windows_11",
+                "published": "2024-05-14",
+                "title": "May 14, 2024 KB5037770 (OS Build 22000.2960) - Microsoft Support"
+            },
+            {
+                "id": "8da33a0f-4daa-e1d2-bb15-085703ba4a2e",
+                "source": "https://support.microsoft.com/en-us/windows/get-help-for-microsoft-personal-account-users-aaf7f74b-026e-489b-a102-0570dfbfb192",
+                "collection": "windows_11",
+                "published": "2024-05-14",
+                "title": "Get Help for Microsoft personal account users - Microsoft Support"
+            },
+            {
+                "id": "2d8d3905-df2a-36c4-caa2-e77412f7aeb2",
+                "source": "https://support.microsoft.com/en-us/windows/about-get-help-717c7ae9-5c45-45f0-b637-900b7437a395",
+                "collection": "windows_11",
+                "published": "2024-05-14",
+                "title": "About Get Help - Microsoft Support"
+            },
+            {
+                "id": "538107a3-d038-73e4-d7ed-87442dcf84fd",
+                "source": "https://support.microsoft.com/en-us/windows/give-feedback-about-get-help-54a5b02a-071c-4b02-83d0-00c6ed99845b",
+                "collection": "windows_11",
+                "published": "2024-05-14",
+                "title": "Give feedback about Get Help - Microsoft Support"
+            },
+            {
+                "id": "42154551-5cc5-cd6f-c588-32cf68d2c5a4",
+                "source": "https://support.microsoft.com/en-us/windows/running-troubleshooters-in-get-help-23bddffd-5495-47f6-a419-7efe166bf1a8",
+                "collection": "windows_11",
+                "published": "2024-05-14",
+                "title": "Running troubleshooters in Get Help - Microsoft Support"
+            },
+            {
+                "id": "cd14ecae-684e-0832-fdd6-ee61f4d0714c",
+                "source": "https://support.microsoft.com/en-us/windows/get-help-for-microsoft-work-or-school-account-users-215deae6-5cc6-4ba0-9f7b-d75933ce179b",
+                "collection": "windows_11",
+                "published": "2024-05-14",
+                "title": "Get Help for Microsoft work or school account users - Microsoft Support"
+            },
+            {
+                "id": "62e58fac-4205-2527-b8ba-49ed1b822d5b",
+                "source": "https://support.microsoft.com/en-us/account-billing/prevent-unauthorized-purchases-from-microsoft-store-21436cce-cd26-da18-f522-bb766a9dc8dd",
+                "collection": "windows_11",
+                "published": "2024-05-14",
+                "title": "Prevent unauthorized purchases from Microsoft Store - Microsoft Support"
+            }
+        ]
+    },
+    "section_4_metadata": {}
+}

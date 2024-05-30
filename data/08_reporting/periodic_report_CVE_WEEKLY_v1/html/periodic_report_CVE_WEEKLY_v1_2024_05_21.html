@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PortalFuse Weekly Security Update Report - (Windows and Edge Edition)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function toggleSummary(id) {
+            var summary = document.getElementById(id);
+            var btn = document.querySelector("a[onclick='toggleSummary(\"" + id + "\")']");
+
+            if (summary.classList.contains('expanded')) {
+            summary.classList.remove('expanded');
+            btn.textContent = 'Show More'; 
+            } else {
+            summary.classList.add('expanded');
+            btn.textContent = 'Show Less';
+            }
+        }
+        function toggleCoreProducts(elementId, button) {
+            var element = document.getElementById(elementId);
+            // Toggle the 'expanded' class
+            element.classList.toggle('expanded');
+        
+            // Check if the element has the class after the toggle and update the button text
+            if (element.classList.contains('expanded')) {
+                button.textContent = 'Show Less'; 
+            } else {
+                button.textContent = 'Show More';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipDiv = document.createElement('div');
+            tooltipDiv.className = 'tooltip';
+            document.body.appendChild(tooltipDiv);
+        
+            window.showTooltip = function(event) {
+                var target = event.target.closest('[data-update-type]');
+                if (!target) return;
+        
+                var productName = target.getAttribute('data-product-name');
+                var productVersion = target.getAttribute('data-product-version') || '';
+                var productArchitecture = target.getAttribute('data-product-architecture');
+                var restartBehaviorMatchesBaseline = target.getAttribute('data-restart-behavior-matches-baseline') === 'False';
+        
+                var metadata = {
+                    productDetails: productVersion ? `${productName} ${productVersion} ${productArchitecture}` : `${productName} ${productArchitecture}`,
+                    updateType: target.getAttribute('data-update-type'),
+                    restartBehavior: target.getAttribute('data-restart-behavior'),
+                    requestUserInput: target.getAttribute('data-request-user-input'),
+                    requiresNetwork: target.getAttribute('data-requires-network'),
+                    fileSize: target.getAttribute('data-file-size')
+                };
+        
+                tooltipDiv.innerHTML = 
+                    `<span>${metadata.productDetails}</span><br>` +
+                    `<b>Update type:</b> ${metadata.updateType}<br>` +
+                    `<b>Restart Behavior:</b> <span${restartBehaviorMatchesBaseline ? ' class="text-red-500"' : ''}>${metadata.restartBehavior}</span><br>` +
+                    `<b>Request user input:</b> ${metadata.requestUserInput}<br>` +
+                    `<b>Requires Network:</b> ${metadata.requiresNetwork}<br>` +
+                    `<b>File size:</b> ${metadata.fileSize}`;
+        
+                var rect = target.getBoundingClientRect();
+                tooltipDiv.style.top = (window.scrollY + rect.top - tooltipDiv.offsetHeight - 10) + 'px';
+                tooltipDiv.style.left = (rect.left - 30) + 'px';
+                tooltipDiv.classList.add('tooltip-visible');
+            };
+        
+            window.hideTooltip = function() {
+                tooltipDiv.classList.remove('tooltip-visible');
+            };
+        
+            document.addEventListener('mouseover', function(event) {
+                if (event.target.closest('[data-update-type]')) {
+                    showTooltip(event);
+                }
+            });
+        
+            document.addEventListener('mouseout', function(event) {
+                if (event.target.closest('[data-update-type]')) {
+                    hideTooltip();
+                }
+            });
+        });
+        
+        
+    </script>
+    <style>
+        /* General Styles */
+        body {
+            font-size: 14px;
+        }
+        body.report-body {
+            background-color: #f8f8f8;
+            font-family: 'Sora', sans-serif;
+            display: flex;
+            justify-content: center;
+        }
+
+        .report {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .section-container {
+            background-color: #ffffff;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .data-container, .metadata-container {
+            margin-bottom: 16px;
+        }
+
+        .metadata-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 2em;
+            font-weight: 700;
+            line-height: 1.6;
+            letter-spacing: 1px;
+            font-family: 'Sora', sans-serif;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.8em!important;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #333333;
+            letter-spacing: 0.5px;
+            font-family: 'Sora', sans-serif;
+        }
+        h3 {
+            font-size: 1.4em!important;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #333333;
+            letter-spacing: 0.5px;
+            font-family: 'Sora', sans-serif;
+        }
+        h4 {
+            font-size: 1.2em!important;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #333333;
+            letter-spacing: 0.5px;
+            font-family: 'Sora', sans-serif;
+        }
+
+        p {
+            font-size: 1em;
+            font-weight: 400;
+            line-height: 1.6;
+            color: #302f2f;
+            letter-spacing: 0.5px;
+            font-family: 'Sora', sans-serif;
+        }
+
+        a {
+            font-weight: 400;
+            color: #1a0dab;
+            letter-spacing: 0.5px;
+            font-family: 'Roboto', sans-serif;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #ff5722;
+        }
+
+        /* Button Class */
+        .button {
+            display: inline-block;
+            padding: 3px 6px;
+            background-color: #babbbb;
+            color: #111111;
+            text-align: center;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 4px;
+            font-size:11px;
+            position: relative;
+            right: 0;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+            color: #ffffff;
+        }
+
+        /* Data Item Styles */
+        .data-item {
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+        }
+
+        .data-item-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-top:6px;
+        }
+        .data-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .data-item-link, .data-item-property, .data-item-summary, .data-item-products, .data-item-symptoms, .data-item-fixes, .data-item-tools {
+            margin-bottom: 4px;
+            font-family: "Sora", sans-serif;
+        }
+        .data-item-link{
+            font-weight: 500;
+            line-height: 1.2em;
+        }
+        /* Metadata Item Styles */
+        .metadata-item {
+            background-color: #ffffff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: "Sora", sans-serif;
+        }
+        /* default font-size for property text */
+        .data-item-property{
+            font-family: "Sora", sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+        }
+        /* Label Class */
+        .label {
+            font-family: "Sora", sans-serif;
+            font-weight: 600;
+            color: #383838 !important;
+            font-size: 14px;
+        }
+
+        /* New Revision Class */
+        .new-revision {
+            color: #ff5722;
+            font-weight: bold;
+        }
+        .expandable-core_products {
+            /* Initial state with overflow hidden */
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Number of lines when contracted */
+            -webkit-box-orient: vertical;
+            height: calc(1.6em * 1); /* Assuming line height is 1.2em */
+        }
+        
+        .expandable-core_products.expanded {
+            /* State when expanded */
+            -webkit-line-clamp: 5; /* Number of lines when expanded */
+            height: calc(1.2em * 5); /* Adjust line height accordingly */
+            overflow-y: auto; /* Show scrollbar if content overflows */
+        }
+
+        /* Summary Content Limit */
+        .data-item-summary {
+            max-height: 88px;
+            overflow: hidden;
+            color: #302f2f;
+        }
+
+        /* Summary Expanded */
+        .data-item-summary.expanded {
+            max-height: none;
+        }
+        /* Additional CSS class definitions for pm_fixes and pm_tools */
+
+        .fix-link, .tool-link {
+            font-size: 1em;
+            font-weight: 400;
+            line-height: 1.6;
+            color: #1a0dab;
+            letter-spacing: 0.5px;
+            font-family: 'Roboto', sans-serif;
+            text-decoration: none;
+        }
+
+        .fix-link:hover, .tool-link:hover {
+            color: #ff5722;
+        }
+
+        .report-dates {
+            font-family: "Source Code Pro", monospace;
+            margin-bottom:6px;
+            display: flex;
+            justify-content: center;
+        }
+        .report-dates span {
+            white-space: nowrap;
+        }
+        .month {
+            font-size: 1.2em;
+            color: #131269;
+            margin-left: 8px;}
+
+        .day {font-size: 1.23em;}
+
+        .year {
+            font-size: 1.2em;
+            color: #131269;}
+        
+        li {
+            margin-bottom: 8px;
+        }
+        .image-wrapper {
+            text-align: center;
+            border-radius: 0px;
+            overflow: hidden;
+            line-height: 0; 
+        }
+        .image-wrapper img {
+            width: auto;
+            max-width: 100%;
+            height: auto;
+        }
+        .report-description {
+            font-size: 0.85em;
+            font-weight: 400;
+            line-height: 1.7;
+            font-family: 'Roboto', sans-serif;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        .data-item-kb-articles ul.kb-articles-list {
+            list-style-type: none; /* Remove default list bullet */
+            padding: 0; /* Remove default padding */
+            margin: 0; /* Remove default margin */
+            display: flex; /* Display list items in a row */
+            flex-wrap: wrap; /* Allow list items to wrap onto the next line if necessary */
+        }
+
+        .data-item-kb-articles ul.kb-articles-list li {
+            display: inline-block; /* Display list items inline */
+            margin-right: 2px; /* Control spacing between items - adjust as needed */
+        }
+
+        .data-item-kb-articles ul.kb-articles-list li::after {
+            content: ", "; /* Add a comma after each list item */
+        }
+
+        .data-item-kb-articles ul.kb-articles-list li:last-child::after {
+            content: ""; /* Remove the comma after the last list item */
+        }
+        .pill-banner {
+            background: linear-gradient(90deg, rgb(253, 253, 253) 0%, rgb(184, 245, 225) 10%);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .data-item-build-numbers span {
+            font-family: 'Sora', sans-serif;
+        }
+
+        .icon-container > a:last-child .fa-info-circle {
+            padding-right: 0px; 
+            margin-right: -5px;
+        }
+
+        .tooltip {
+            position: absolute;
+            z-index: 10;
+            background-color: white;
+            color: black;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.18);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .tooltip-visible {
+            opacity: 1;
+        }
+
+        @media (max-width: 300px) {
+            .card {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body class='report-body'>
+    <div class="report">
+        <h1 class="text-4xl" style="margin-top: 16px;">PortalFuse Weekly Security Update Report</h1>
+        <h4 class="text-2xl text-center">(Windows and Edge Edition)</h4>
+        <div class="report-dates">
+            <span class="month">May</span>&nbsp;<span class="day">14</span>&nbsp;-&nbsp;<span class="month">May</span>&nbsp;<span class="day">21</span>,&nbsp;<span class="year">2024</span>
+        </div>
+        <div class="flex">
+            <div class="flex-1">
+                <div class='image-wrapper'>
+                    <img src="../plots/posts_by_day_2024_05_21.png" alt="Publication Days"> 
+                </div>
+            </div>
+            <div class="flex-1 bg-white p-2 flex flex-col justify-center">
+                <div class="max-w-md mx-auto">
+                    <p class="report-description mb-4">The PortalFuse Weekly Security Update Report is a resource for System Administrators and Security Professionals looking to keep their systems secure. With a comprehensive compilation of Microsoft Security Response Center posts and Microsoft Support documentation, users can easily access critical KB articles and update packages for their Windows devices without having to spend time searching across multiple sources. This report helps busy Microsoft professionals to stay up-to-date with security issues and new features.</p>
+                </div>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+        <div class='section-container'>
+            <div class='section' id='section_1'>
+                <h2 class="text-3xl mb-1">MSRC Posts</h2>
+                <div class='metadata-container'>
+                    <div class='metadata-item'><span class="label">Total CVEs:</span> 5</div>
+                    <div class='metadata-item'><span class="label">New CVEs:</span> 3</div>
+                    <div class='metadata-item'><span class="label">Updated CVEs:</span> 2</div>
+                </div>
+                <div class='data-container mb-3'>
+                    
+                    
+                        
+                            
+                            
+                        
+                        <div class='data-item'>
+                            <h3 class="text-blue-900 underline  mb-2"><a href='https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-30017' class='data-item-link' id='07d7fb0d-d625-0e0c-9c8e-4e38be0901ac' target='_blank'>CVE-2024-30017 Windows Hyper-V Remote Code Execution Vulnerability</a></h3>
+                            <div class="text-xs text-blue-900">Updated FAQ information. This is an informational change only.</div>
+                            <div class='data-item-info' style='display: flex; align-items: center; flex-wrap: nowrap; gap: 8px;'>
+                                <div class='data-item-property' style="margin-right: 6px;">
+                                    <span class="label">Revision:</span> 1.1
+                                    
+                                </div>
+                                <div class='data-item-property'>
+                                    <span class="label">Published:</span> 15-05-2024
+                                </div>
+                                <div class='data-item-property flex items-center'>
+                                    <span class="label mr-1">Official Fix:</span>
+                                    
+                                        <div class="bg-green-500 border-green-700 w-3 h-3 rounded-full border-2 inline-block"></div>
+                                        <span class="ml-1">Yes</span>
+                                    
+                                </div>
+                            </div>
+                            <!-- Windows Info -->
+                            <div class='data-item-property expandable-core_products' id="product-family-info-07d7fb0d-d625-0e0c-9c8e-4e38be0901ac">
+                                <span class="label">Product family info:</span> windows 10  x64-based_systems, windows 10 21H2 x64-based_systems, windows 11 21H2 x64-based_systems, windows 10 22H2 x64-based_systems, windows 11 22H2 x64-based_systems, windows 11 23H2 x64-based_systems
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; width: auto;">
+                                <a href='javascript:void(0);' class='button' onclick='toggleCoreProducts("product-family-info-07d7fb0d-d625-0e0c-9c8e-4e38be0901ac", this)'>Show More</a>
+                            </div>
+                            <div class="flex flex-wrap -mx-2" style="margin-bottom: 16px;">
+                                <!-- Build numbers card -->
+                                <div class="w-full px-2 card">
+                                    <div class="rounded overflow-hidden p-1 bg-white">
+                                        <div class='data-item-build-numbers mb-1'>
+                                            <span class="label mb-1 block">Build numbers:</span>
+                                            <div class="flex flex-wrap gap-2">
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        10.0.22631.3593
+                                                    </span>
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        10.0.22621.3593
+                                                    </span>
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        10.0.22000.2960
+                                                    </span>
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        10.0.19045.4412
+                                                    </span>
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        10.0.19044.4412
+                                                    </span>
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        10.0.10240.20651
+                                                    </span>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <!-- KB Articles card -->
+                                
+                                <div class="w-1/2 px-2 card">
+                                    <div class="rounded overflow-hidden p-1 bg-white">
+                                        <div class='data-item-kb-articles'>
+                                            <span class="label mb-1 block">KB Articles:</span>
+                                            <ul class="list-none">
+                                                
+                                                    <li style="list-style-type: none;" class="inline  after:mr-1 last:after:content-['']" >
+                                                        <a href="https://support.microsoft.com/help/5037788#may-14-2024" target="_blank" class="text-blue-500 hover:text-blue-600" style="font-size: 12.5px;line-height:12.5px;">kb5037788</a>
+                                                    </li>
+                                                
+                                                    <li style="list-style-type: none;" class="inline  after:mr-1 last:after:content-['']" >
+                                                        <a href="https://support.microsoft.com/help/5037771#may-14-2024" target="_blank" class="text-blue-500 hover:text-blue-600" style="font-size: 12.5px;line-height:12.5px;">kb5037771</a>
+                                                    </li>
+                                                
+                                                    <li style="list-style-type: none;" class="inline  after:mr-1 last:after:content-['']" >
+                                                        <a href="https://support.microsoft.com/help/5037770#may-14-2024" target="_blank" class="text-blue-500 hover:text-blue-600" style="font-size: 12.5px;line-height:12.5px;">kb5037770</a>
+                                                    </li>
+                                                
+                                                    <li style="list-style-type: none;" class="inline  after:mr-1 last:after:content-['']" >
+                                                        <a href="https://support.microsoft.com/help/5037768#may-14-2024" target="_blank" class="text-blue-500 hover:text-blue-600" style="font-size: 12.5px;line-height:12.5px;">kb5037768</a>
+                                                    </li>
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            
+                                <!-- Package pairs card -->
+                                
+                                <div class="mb-4 px-3 w-full">
+                                    <span class="label mb-1 block">Update Packages:</span>
+                                    <div class="grid grid-cols-2 gap-4"> 
+                                        
+                                            
+                                                <div class="rounded shadow-lg overflow-hidden bg-blue-200 border-l-4 border-blue-400 py-2">
+                                                    <div class="px-4">
+                                                        <div class="flex justify-between items-start mb-1">
+                                                            <a href="https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037771" target="_blank" class="text-blue-800 text-sm font-semibold truncate" title="Click to access update package">Security Update (KB5037771)</a>
+                                                            <span class="text-blue-800 text-xs">File details</span>
+                                                        </div>
+                                                        <div class="flex justify-end space-x-1 icon-container">
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_11"
+                                                                data-product-version="22H2"
+                                                                data-product-architecture="x64"
+                                                                data-file-size="712.5 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_11"
+                                                                data-product-version="23H2"
+                                                                data-product-architecture="x64"
+                                                                data-file-size="712.5 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
+                                        
+                                            
+                                                <div class="rounded shadow-lg overflow-hidden bg-blue-200 border-l-4 border-blue-400 py-2">
+                                                    <div class="px-4">
+                                                        <div class="flex justify-between items-start mb-1">
+                                                            <a href="https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037770" target="_blank" class="text-blue-800 text-sm font-semibold truncate" title="Click to access update package">Security Update (KB5037770)</a>
+                                                            <span class="text-blue-800 text-xs">File details</span>
+                                                        </div>
+                                                        <div class="flex justify-end space-x-1 icon-container">
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_11"
+                                                                data-product-version="None"
+                                                                data-product-architecture="x64"
+                                                                data-file-size="402.7 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Dynamic Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_11"
+                                                                data-product-version="None"
+                                                                data-product-architecture="x64"
+                                                                data-file-size="402.7 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
+                                        
+                                            
+                                                <div class="rounded shadow-lg overflow-hidden bg-blue-200 border-l-4 border-blue-400 py-2">
+                                                    <div class="px-4">
+                                                        <div class="flex justify-between items-start mb-1">
+                                                            <a href="https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037768" target="_blank" class="text-blue-800 text-sm font-semibold truncate" title="Click to access update package">Security Update (KB5037768)</a>
+                                                            <span class="text-blue-800 text-xs">File details</span>
+                                                        </div>
+                                                        <div class="flex justify-end space-x-1 icon-container">
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_10"
+                                                                data-product-version="21H2"
+                                                                data-product-architecture="x64"
+                                                                data-file-size="633.6 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Dynamic Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_10"
+                                                                data-product-version="21H2"
+                                                                data-product-architecture="x86"
+                                                                data-file-size="358.8 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Dynamic Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_10"
+                                                                data-product-version="22H2"
+                                                                data-product-architecture="x64"
+                                                                data-file-size="633.6 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Dynamic Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_10"
+                                                                data-product-version="22H2"
+                                                                data-product-architecture="x86"
+                                                                data-file-size="358.8 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Dynamic Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
+                                        
+                                    </div>
+                                </div>
+                                
+
+                            <div class='data-item-summary px-3' id='summary-07d7fb0d-d625-0e0c-9c8e-4e38be0901ac'>
+                                <span class="label">Summary:</span> This post is an informational update only, providing revised FAQ information for CVE-2024-30017. No new substantive details or changes to the vulnerability or its mitigations have been introduced. 
+                            </div>
+                            <div style="display: flex; justify-content: flex-end;width: 100%; padding-right: 8px;">
+                                <a href='javascript:void(0);' class='button' onclick='toggleSummary("summary-07d7fb0d-d625-0e0c-9c8e-4e38be0901ac")'>Show More</a>
+                            </div>
+                        </div>
+                    
+                        
+                        <div class='data-item'>
+                            <h3 class="text-blue-900 underline  mb-2"><a href='https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-30009' class='data-item-link' id='70ddb430-333f-ef57-9c49-5b2665f25a7c' target='_blank'>CVE-2024-30009 Windows Routing and Remote Access Service (RRAS) Remote Code Execution Vulnerability</a></h3>
+                            <div class="text-xs text-blue-900">Removed one of the FAQs. This is an information change only.</div>
+                            <div class='data-item-info' style='display: flex; align-items: center; flex-wrap: nowrap; gap: 8px;'>
+                                <div class='data-item-property' style="margin-right: 6px;">
+                                    <span class="label">Revision:</span> 1.1
+                                    
+                                </div>
+                                <div class='data-item-property'>
+                                    <span class="label">Published:</span> 15-05-2024
+                                </div>
+                                <div class='data-item-property flex items-center'>
+                                    <span class="label mr-1">Official Fix:</span>
+                                    
+                                        <div class="bg-green-500 border-green-700 w-3 h-3 rounded-full border-2 inline-block"></div>
+                                        <span class="ml-1">Yes</span>
+                                    
+                                </div>
+                            </div>
+                            <!-- Windows Info -->
+                            <div class='data-item-property expandable-core_products' id="product-family-info-70ddb430-333f-ef57-9c49-5b2665f25a7c">
+                                <span class="label">Product family info:</span> windows 10  32-bit_systems, windows 10  x64-based_systems, windows 10 21H2 32-bit_systems, windows 10 21H2 x64-based_systems, windows 11 21H2 x64-based_systems, windows 10 22H2 32-bit_systems, windows 10 22H2 x64-based_systems, windows 11 22H2 x64-based_systems, windows 11 23H2 x64-based_systems
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; width: auto;">
+                                <a href='javascript:void(0);' class='button' onclick='toggleCoreProducts("product-family-info-70ddb430-333f-ef57-9c49-5b2665f25a7c", this)'>Show More</a>
+                            </div>
+                            <div class="flex flex-wrap -mx-2" style="margin-bottom: 16px;">
+                                <!-- Build numbers card -->
+                                <div class="w-full px-2 card">
+                                    <div class="rounded overflow-hidden p-1 bg-white">
+                                        <div class='data-item-build-numbers mb-1'>
+                                            <span class="label mb-1 block">Build numbers:</span>
+                                            <div class="flex flex-wrap gap-2">
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        10.0.22631.3593
+                                                    </span>
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        10.0.22621.3593
+                                                    </span>
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        10.0.22000.2960
+                                                    </span>
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        10.0.19045.4412
+                                                    </span>
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        10.0.19044.4412
+                                                    </span>
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        10.0.10240.20651
+                                                    </span>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <!-- KB Articles card -->
+                                
+                                <div class="w-1/2 px-2 card">
+                                    <div class="rounded overflow-hidden p-1 bg-white">
+                                        <div class='data-item-kb-articles'>
+                                            <span class="label mb-1 block">KB Articles:</span>
+                                            <ul class="list-none">
+                                                
+                                                    <li style="list-style-type: none;" class="inline  after:mr-1 last:after:content-['']" >
+                                                        <a href="https://support.microsoft.com/help/5037788#may-14-2024" target="_blank" class="text-blue-500 hover:text-blue-600" style="font-size: 12.5px;line-height:12.5px;">kb5037788</a>
+                                                    </li>
+                                                
+                                                    <li style="list-style-type: none;" class="inline  after:mr-1 last:after:content-['']" >
+                                                        <a href="https://support.microsoft.com/help/5037771#may-14-2024" target="_blank" class="text-blue-500 hover:text-blue-600" style="font-size: 12.5px;line-height:12.5px;">kb5037771</a>
+                                                    </li>
+                                                
+                                                    <li style="list-style-type: none;" class="inline  after:mr-1 last:after:content-['']" >
+                                                        <a href="https://support.microsoft.com/help/5037770#may-14-2024" target="_blank" class="text-blue-500 hover:text-blue-600" style="font-size: 12.5px;line-height:12.5px;">kb5037770</a>
+                                                    </li>
+                                                
+                                                    <li style="list-style-type: none;" class="inline  after:mr-1 last:after:content-['']" >
+                                                        <a href="https://support.microsoft.com/help/5037768#may-14-2024" target="_blank" class="text-blue-500 hover:text-blue-600" style="font-size: 12.5px;line-height:12.5px;">kb5037768</a>
+                                                    </li>
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            
+                                <!-- Package pairs card -->
+                                
+                                <div class="mb-4 px-3 w-full">
+                                    <span class="label mb-1 block">Update Packages:</span>
+                                    <div class="grid grid-cols-2 gap-4"> 
+                                        
+                                            
+                                                <div class="rounded shadow-lg overflow-hidden bg-blue-200 border-l-4 border-blue-400 py-2">
+                                                    <div class="px-4">
+                                                        <div class="flex justify-between items-start mb-1">
+                                                            <a href="https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037771" target="_blank" class="text-blue-800 text-sm font-semibold truncate" title="Click to access update package">Security Update (KB5037771)</a>
+                                                            <span class="text-blue-800 text-xs">File details</span>
+                                                        </div>
+                                                        <div class="flex justify-end space-x-1 icon-container">
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_11"
+                                                                data-product-version="22H2"
+                                                                data-product-architecture="x64"
+                                                                data-file-size="712.5 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_11"
+                                                                data-product-version="23H2"
+                                                                data-product-architecture="x64"
+                                                                data-file-size="712.5 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
+                                        
+                                            
+                                                <div class="rounded shadow-lg overflow-hidden bg-blue-200 border-l-4 border-blue-400 py-2">
+                                                    <div class="px-4">
+                                                        <div class="flex justify-between items-start mb-1">
+                                                            <a href="https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037770" target="_blank" class="text-blue-800 text-sm font-semibold truncate" title="Click to access update package">Security Update (KB5037770)</a>
+                                                            <span class="text-blue-800 text-xs">File details</span>
+                                                        </div>
+                                                        <div class="flex justify-end space-x-1 icon-container">
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_11"
+                                                                data-product-version="None"
+                                                                data-product-architecture="x64"
+                                                                data-file-size="402.7 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Dynamic Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_11"
+                                                                data-product-version="None"
+                                                                data-product-architecture="x64"
+                                                                data-file-size="402.7 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
+                                        
+                                            
+                                                <div class="rounded shadow-lg overflow-hidden bg-blue-200 border-l-4 border-blue-400 py-2">
+                                                    <div class="px-4">
+                                                        <div class="flex justify-between items-start mb-1">
+                                                            <a href="https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5037768" target="_blank" class="text-blue-800 text-sm font-semibold truncate" title="Click to access update package">Security Update (KB5037768)</a>
+                                                            <span class="text-blue-800 text-xs">File details</span>
+                                                        </div>
+                                                        <div class="flex justify-end space-x-1 icon-container">
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_10"
+                                                                data-product-version="21H2"
+                                                                data-product-architecture="x64"
+                                                                data-file-size="633.6 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Dynamic Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_10"
+                                                                data-product-version="21H2"
+                                                                data-product-architecture="x86"
+                                                                data-file-size="358.8 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Dynamic Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_10"
+                                                                data-product-version="22H2"
+                                                                data-product-architecture="x64"
+                                                                data-file-size="633.6 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Dynamic Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                            <a href="#"
+                                                                data-product-name="windows_10"
+                                                                data-product-version="22H2"
+                                                                data-product-architecture="x86"
+                                                                data-file-size="358.8 MB"
+                                                                data-restart-behavior="Can request restart"
+                                                                data-request-user-input="No"
+                                                                data-requires-network="No"
+                                                                data-update-type="Dynamic Cumulative"
+                                                                data-restart-behavior-matches-baseline="True"
+                                                                class="text-white hover:text-gray-300 text-xs p-1" 
+                                                                title="Hover to reveal installation details"
+                                                                onmouseover="showTooltip(event)" 
+                                                                onmouseout="hideTooltip()">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
+                                        
+                                    </div>
+                                </div>
+                                
+
+                            <div class='data-item-summary px-3' id='summary-70ddb430-333f-ef57-9c49-5b2665f25a7c'>
+                                <span class="label">Summary:</span> This post is an updated revision and is for information only. No new substantive information beyond the previous revision has been provided. 
+                            </div>
+                            <div style="display: flex; justify-content: flex-end;width: 100%; padding-right: 8px;">
+                                <a href='javascript:void(0);' class='button' onclick='toggleSummary("summary-70ddb430-333f-ef57-9c49-5b2665f25a7c")'>Show More</a>
+                            </div>
+                        </div>
+                    
+                        
+                            
+                                <!-- This div serves as a section header for Edge posts -->
+                                <div class="section-header my-4">
+                                    <hr class="border-2 border-gray-200 w-1/4 mx-auto">
+                                    <h2 class="text-center text-lg font-bold my-2">Chromium and Edge</h2>
+                                    <hr class="border-2 border-gray-200 w-1/4 mx-auto">
+                                </div>
+                            
+                            
+                        
+                        <div class='data-item'>
+                            <h3 class="text-blue-900 underline  mb-2"><a href='https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4950' class='data-item-link' id='5886fcc2-1f96-c048-389e-1975f864eee0' target='_blank'>Chromium: CVE-2024-4950 Inappropriate implementation in Downloads</a></h3>
+                            <div class="text-xs text-blue-900">Information published.</div>
+                            <div class='data-item-info' style='display: flex; align-items: center; flex-wrap: nowrap; gap: 8px;'>
+                                <div class='data-item-property' style="margin-right: 6px;">
+                                    <span class="label">Revision:</span> 1.0
+                                     <span class="text-green-600">(NEW)</span>
+                                </div>
+                                <div class='data-item-property'>
+                                    <span class="label">Published:</span> 16-05-2024
+                                </div>
+                                <div class='data-item-property flex items-center'>
+                                    <span class="label mr-1">Official Fix:</span>
+                                    
+                                        <div class="bg-green-500 border-green-700 w-3 h-3 rounded-full border-2 inline-block"></div>
+                                        <span class="ml-1">Yes</span>
+                                    
+                                </div>
+                            </div>
+                            <!-- Windows Info -->
+                            <div class='data-item-property expandable-core_products' id="product-family-info-5886fcc2-1f96-c048-389e-1975f864eee0">
+                                <span class="label">Product family info:</span> microsoft edge (chromium-based)  
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; width: auto;">
+                                <a href='javascript:void(0);' class='button' onclick='toggleCoreProducts("product-family-info-5886fcc2-1f96-c048-389e-1975f864eee0", this)'>Show More</a>
+                            </div>
+                            <div class="flex flex-wrap -mx-2" style="margin-bottom: 16px;">
+                                <!-- Build numbers card -->
+                                <div class="w-full px-2 card">
+                                    <div class="rounded overflow-hidden p-1 bg-white">
+                                        <div class='data-item-build-numbers mb-1'>
+                                            <span class="label mb-1 block">Build numbers:</span>
+                                            <div class="flex flex-wrap gap-2">
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        124.0.2478.109
+                                                    </span>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <!-- KB Articles card -->
+                                
+                                <div class="w-1/2 px-2 card">
+                                    <div class="rounded overflow-hidden p-1 bg-white">
+                                        <div class='data-item-kb-articles'>
+                                            <span class="label mb-1 block">KB Articles:</span>
+                                            <ul class="list-none">
+                                                
+                                                    <li style="list-style-type: none;" class="inline  after:mr-1 last:after:content-['']" >
+                                                        <a href="https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-16-2024" target="_blank" class="text-blue-500 hover:text-blue-600" style="font-size: 12.5px;line-height:12.5px;">Release Note (16-05-2024)</a>
+                                                    </li>
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            
+                                <!-- Package pairs card -->
+                                
+                                <div class="mb-4 px-4">
+                                    <span class="label mb-1 block">Update Packages:</span>
+                                    <p>No Update Packages</p>
+                                </div>
+                                
+
+                            <div class='data-item-summary px-3' id='summary-5886fcc2-1f96-c048-389e-1975f864eee0'>
+                                <span class="label">Summary:</span> This post is an informational update regarding CVE-2024-4950, an inappropriate implementation vulnerability in the Downloads component of Chromium, which affects Microsoft Edge (Chromium-based). The vulnerability has been addressed by the latest version of Microsoft Edge (Chromium-based), which now ingests the updated Chromium version. No further action is required from administrators as the update ensures that the browser is no longer vulnerable. For more details, refer to the Google Chrome Releases page. 
+                            </div>
+                            <div style="display: flex; justify-content: flex-end;width: 100%; padding-right: 8px;">
+                                <a href='javascript:void(0);' class='button' onclick='toggleSummary("summary-5886fcc2-1f96-c048-389e-1975f864eee0")'>Show More</a>
+                            </div>
+                        </div>
+                    
+                        
+                        <div class='data-item'>
+                            <h3 class="text-blue-900 underline  mb-2"><a href='https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4949' class='data-item-link' id='6f07e101-bcf2-c403-5bc6-a6adfc0c6d8c' target='_blank'>Chromium: CVE-2024-4949 Use after free in V8</a></h3>
+                            <div class="text-xs text-blue-900">Information published.</div>
+                            <div class='data-item-info' style='display: flex; align-items: center; flex-wrap: nowrap; gap: 8px;'>
+                                <div class='data-item-property' style="margin-right: 6px;">
+                                    <span class="label">Revision:</span> 1.0
+                                     <span class="text-green-600">(NEW)</span>
+                                </div>
+                                <div class='data-item-property'>
+                                    <span class="label">Published:</span> 16-05-2024
+                                </div>
+                                <div class='data-item-property flex items-center'>
+                                    <span class="label mr-1">Official Fix:</span>
+                                    
+                                        <div class="bg-green-500 border-green-700 w-3 h-3 rounded-full border-2 inline-block"></div>
+                                        <span class="ml-1">Yes</span>
+                                    
+                                </div>
+                            </div>
+                            <!-- Windows Info -->
+                            <div class='data-item-property expandable-core_products' id="product-family-info-6f07e101-bcf2-c403-5bc6-a6adfc0c6d8c">
+                                <span class="label">Product family info:</span> microsoft edge (chromium-based)  
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; width: auto;">
+                                <a href='javascript:void(0);' class='button' onclick='toggleCoreProducts("product-family-info-6f07e101-bcf2-c403-5bc6-a6adfc0c6d8c", this)'>Show More</a>
+                            </div>
+                            <div class="flex flex-wrap -mx-2" style="margin-bottom: 16px;">
+                                <!-- Build numbers card -->
+                                <div class="w-full px-2 card">
+                                    <div class="rounded overflow-hidden p-1 bg-white">
+                                        <div class='data-item-build-numbers mb-1'>
+                                            <span class="label mb-1 block">Build numbers:</span>
+                                            <div class="flex flex-wrap gap-2">
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        124.0.2478.109
+                                                    </span>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <!-- KB Articles card -->
+                                
+                                <div class="w-1/2 px-2 card">
+                                    <div class="rounded overflow-hidden p-1 bg-white">
+                                        <div class='data-item-kb-articles'>
+                                            <span class="label mb-1 block">KB Articles:</span>
+                                            <ul class="list-none">
+                                                
+                                                    <li style="list-style-type: none;" class="inline  after:mr-1 last:after:content-['']" >
+                                                        <a href="https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-16-2024" target="_blank" class="text-blue-500 hover:text-blue-600" style="font-size: 12.5px;line-height:12.5px;">Release Note (16-05-2024)</a>
+                                                    </li>
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            
+                                <!-- Package pairs card -->
+                                
+                                <div class="mb-4 px-4">
+                                    <span class="label mb-1 block">Update Packages:</span>
+                                    <p>No Update Packages</p>
+                                </div>
+                                
+
+                            <div class='data-item-summary px-3' id='summary-6f07e101-bcf2-c403-5bc6-a6adfc0c6d8c'>
+                                <span class="label">Summary:</span> This post is an informational update regarding CVE-2024-4949, a use after free vulnerability in the V8 engine of Chromium, which affects Microsoft Edge (Chromium-based). The vulnerability was assigned by Chrome and has been addressed by ingesting the latest version of Chromium. Consequently, the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. No new fixes or workarounds are provided in this update. For more details, refer to the Google Chrome Releases page. 
+                            </div>
+                            <div style="display: flex; justify-content: flex-end;width: 100%; padding-right: 8px;">
+                                <a href='javascript:void(0);' class='button' onclick='toggleSummary("summary-6f07e101-bcf2-c403-5bc6-a6adfc0c6d8c")'>Show More</a>
+                            </div>
+                        </div>
+                    
+                        
+                        <div class='data-item'>
+                            <h3 class="text-blue-900 underline  mb-2"><a href='https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-4948' class='data-item-link' id='bfa3bdd8-c7c6-104b-d719-b0d44cc0f542' target='_blank'>Chromium: CVE-2024-4948 Use after free in Dawn</a></h3>
+                            <div class="text-xs text-blue-900">Information published.</div>
+                            <div class='data-item-info' style='display: flex; align-items: center; flex-wrap: nowrap; gap: 8px;'>
+                                <div class='data-item-property' style="margin-right: 6px;">
+                                    <span class="label">Revision:</span> 1.0
+                                     <span class="text-green-600">(NEW)</span>
+                                </div>
+                                <div class='data-item-property'>
+                                    <span class="label">Published:</span> 16-05-2024
+                                </div>
+                                <div class='data-item-property flex items-center'>
+                                    <span class="label mr-1">Official Fix:</span>
+                                    
+                                        <div class="bg-green-500 border-green-700 w-3 h-3 rounded-full border-2 inline-block"></div>
+                                        <span class="ml-1">Yes</span>
+                                    
+                                </div>
+                            </div>
+                            <!-- Windows Info -->
+                            <div class='data-item-property expandable-core_products' id="product-family-info-bfa3bdd8-c7c6-104b-d719-b0d44cc0f542">
+                                <span class="label">Product family info:</span> microsoft edge (chromium-based)  
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; width: auto;">
+                                <a href='javascript:void(0);' class='button' onclick='toggleCoreProducts("product-family-info-bfa3bdd8-c7c6-104b-d719-b0d44cc0f542", this)'>Show More</a>
+                            </div>
+                            <div class="flex flex-wrap -mx-2" style="margin-bottom: 16px;">
+                                <!-- Build numbers card -->
+                                <div class="w-full px-2 card">
+                                    <div class="rounded overflow-hidden p-1 bg-white">
+                                        <div class='data-item-build-numbers mb-1'>
+                                            <span class="label mb-1 block">Build numbers:</span>
+                                            <div class="flex flex-wrap gap-2">
+                                                
+                                                    <span class="text-green-700 border border-green-700 bg-white px-1 py-1 rounded" style="border-radius: 4px; font-size: 11.5px;line-height:12.5px;letter-spacing: 0.75px;">
+                                                        124.0.2478.109
+                                                    </span>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <!-- KB Articles card -->
+                                
+                                <div class="w-1/2 px-2 card">
+                                    <div class="rounded overflow-hidden p-1 bg-white">
+                                        <div class='data-item-kb-articles'>
+                                            <span class="label mb-1 block">KB Articles:</span>
+                                            <ul class="list-none">
+                                                
+                                                    <li style="list-style-type: none;" class="inline  after:mr-1 last:after:content-['']" >
+                                                        <a href="https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-16-2024" target="_blank" class="text-blue-500 hover:text-blue-600" style="font-size: 12.5px;line-height:12.5px;">Release Note (16-05-2024)</a>
+                                                    </li>
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            
+                                <!-- Package pairs card -->
+                                
+                                <div class="mb-4 px-4">
+                                    <span class="label mb-1 block">Update Packages:</span>
+                                    <p>No Update Packages</p>
+                                </div>
+                                
+
+                            <div class='data-item-summary px-3' id='summary-bfa3bdd8-c7c6-104b-d719-b0d44cc0f542'>
+                                <span class="label">Summary:</span> This post is an informational update regarding CVE-2024-4948, a use after free vulnerability in the Chromium Open Source Software (OSS) consumed by Microsoft Edge (Chromium-based). The vulnerability was assigned by Chrome and has been addressed in the latest version of Microsoft Edge. The updated version, 124.0.2478.109, is no longer vulnerable to this issue. System administrators should ensure their Microsoft Edge installations are updated to this version to mitigate any potential risks. For more details, refer to the Google Chrome Releases page. 
+                            </div>
+                            <div style="display: flex; justify-content: flex-end;width: 100%; padding-right: 8px;">
+                                <a href='javascript:void(0);' class='button' onclick='toggleSummary("summary-bfa3bdd8-c7c6-104b-d719-b0d44cc0f542")'>Show More</a>
+                            </div>
+                        </div>
+                    
+                </div>
+            </div>
+            <div class='section' id='section_4'>
+                <h2 class="text-xl mb-1">Appendix</h2>
+                
+                    
+                        
+                        
+                            <h3 style="margin:8px 0px">Edge Security update notes</h3>
+                        
+                        <ul class="list-disc list-inside" style="list-style-type: disc;">
+                            
+                                <li><a href="#may-21-2024" class="data-item-link text-blue-500 hover:text-blue-600" id="30c4f88e-ad42-ac6c-81c5-6f2927319980" target="_blank">May 21, 2024</a></li>
+                            
+                                <li><a href="#may-17-2024" class="data-item-link text-blue-500 hover:text-blue-600" id="80a4df3e-184f-c1ee-355b-e1114c0dc207" target="_blank">May 17, 2024</a></li>
+                            
+                                <li><a href="#may-16-2024" class="data-item-link text-blue-500 hover:text-blue-600" id="a8c700bf-1d89-bf3e-9708-5a26330d7019" target="_blank">May 16, 2024</a></li>
+                            
+                                <li><a href="#may-14-2024" class="data-item-link text-blue-500 hover:text-blue-600" id="e6bbb6b0-c274-f962-3ea5-91a0da395bf0" target="_blank">May 14, 2024</a></li>
+                            
+                        </ul>
+                    
+                        
+                        
+                            <h3 style="margin:8px 0px">Edge Stable channel notes</h3>
+                        
+                        <ul class="list-disc list-inside" style="list-style-type: disc;">
+                            
+                                <li><a href="#version-12402478109-may-16-2024" class="data-item-link text-blue-500 hover:text-blue-600" id="a3e6ea4e-ed26-af87-5235-c4152f0a5df4" target="_blank">Version 124.0.2478.109: May 16, 2024</a></li>
+                            
+                                <li><a href="#version-12402478105-may-14-2024" class="data-item-link text-blue-500 hover:text-blue-600" id="3eebba1f-9a99-dcfc-38d8-7fda1fce5a0b" target="_blank">Version 124.0.2478.105: May 14, 2024</a></li>
+                            
+                        </ul>
+                    
+                        
+                        
+                            <h3 style="margin:8px 0px">Windows 10</h3>
+                        
+                        <ul class="list-disc list-inside" style="list-style-type: disc;">
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/personalize-your-lock-screen-81dab9b0-35cf-887c-84a0-6de8ef72bea0" class="data-item-link text-blue-500 hover:text-blue-600" id="55c46658-682b-c93a-ee52-815015bf8c67" target="_blank">Personalize your lock screen - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/manage-cookies-in-microsoft-edge-view-allow-block-delete-and-use-168dab11-0753-043d-7c16-ede5947fc64d" class="data-item-link text-blue-500 hover:text-blue-600" id="8bc980ad-0363-de6f-f074-45ffa35a5c6c" target="_blank">Manage cookies in Microsoft Edge: View, allow, block, delete and use - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/topic/deploy-windows-malicious-software-removal-tool-in-an-enterprise-environment-kb891716-a10cc756-2b3b-32e3-9ee3-2c1298ea3538" class="data-item-link text-blue-500 hover:text-blue-600" id="5ecc3491-2d6e-ca49-858c-d294445ea84f" target="_blank">Deploy Windows Malicious Software Removal Tool in an enterprise environment (KB891716) - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/topic/may-14-2024-kb5037788-os-build-10240-20651-6efe4a43-3962-4585-88af-3a3369ee561c" class="data-item-link text-blue-500 hover:text-blue-600" id="432ac99b-4d70-f191-829f-a05741c0a557" target="_blank">May 14, 2024 KB5037788 (OS Build 10240.20651) - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/topic/may-14-2024-kb5037768-os-builds-19044-4412-and-19045-4412-cb676101-1641-4a6c-b512-8b277606c6e3" class="data-item-link text-blue-500 hover:text-blue-600" id="b710a099-7e90-723b-c2c9-d9b9e61dfb2b" target="_blank">May 14, 2024 KB5037768 (OS Builds 19044.4412 and 19045.4412) - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/topic/may-14-2024-kb5037765-os-build-17763-5820-82d1aefb-093c-4e4a-a729-cd4a829750ad" class="data-item-link text-blue-500 hover:text-blue-600" id="b314ecc5-b079-823a-e65e-d759bbf04ffa" target="_blank">May 14, 2024 KB5037765 (OS Build 17763.5820) - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/topic/may-14-2024-kb5037763-os-build-14393-6981-0c46e802-c9a9-4ad3-816b-c7fa378d3dd3" class="data-item-link text-blue-500 hover:text-blue-600" id="6cfe3be3-3b70-e31a-430f-d45b9a0b9aca" target="_blank">May 14, 2024 KB5037763 (OS Build 14393.6981) - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/topic/kb5001716-update-for-windows-update-service-components-fb9dd3d3-d702-4f8a-af10-b9551cfa6e13" class="data-item-link text-blue-500 hover:text-blue-600" id="aae0b794-f98a-d949-5378-f21abe5fd6af" target="_blank">KB5001716: Update for Windows Update Service components - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/get-help-for-microsoft-personal-account-users-aaf7f74b-026e-489b-a102-0570dfbfb192" class="data-item-link text-blue-500 hover:text-blue-600" id="153974d3-23ac-a45c-e4a1-4a1ecc2974ad" target="_blank">Get Help for Microsoft personal account users - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/about-get-help-717c7ae9-5c45-45f0-b637-900b7437a395" class="data-item-link text-blue-500 hover:text-blue-600" id="ddf69e3a-9882-518c-367e-934bcf84affb" target="_blank">About Get Help - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/give-feedback-about-get-help-54a5b02a-071c-4b02-83d0-00c6ed99845b" class="data-item-link text-blue-500 hover:text-blue-600" id="e6b4f663-531b-fbe5-88b5-eb369fd8dcf7" target="_blank">Give feedback about Get Help - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/running-troubleshooters-in-get-help-23bddffd-5495-47f6-a419-7efe166bf1a8" class="data-item-link text-blue-500 hover:text-blue-600" id="0515a186-5c9b-67ab-d23c-d20f9e0f72ee" target="_blank">Running troubleshooters in Get Help - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/get-help-for-microsoft-work-or-school-account-users-215deae6-5cc6-4ba0-9f7b-d75933ce179b" class="data-item-link text-blue-500 hover:text-blue-600" id="bc8d10c7-2bcb-4362-a8dc-a5d37c4ff915" target="_blank">Get Help for Microsoft work or school account users - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/account-billing/prevent-unauthorized-purchases-from-microsoft-store-21436cce-cd26-da18-f522-bb766a9dc8dd" class="data-item-link text-blue-500 hover:text-blue-600" id="7266a57e-3107-f1bd-c964-fdfa336f9871" target="_blank">Prevent unauthorized purchases from Microsoft Store - Microsoft Support</a></li>
+                            
+                        </ul>
+                    
+                        
+                        
+                            <h3 style="margin:8px 0px">Windows 11</h3>
+                        
+                        <ul class="list-disc list-inside" style="list-style-type: disc;">
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/personalize-your-lock-screen-81dab9b0-35cf-887c-84a0-6de8ef72bea0" class="data-item-link text-blue-500 hover:text-blue-600" id="e837f877-3798-2c4f-2124-b7dba2d2ff28" target="_blank">Personalize your lock screen - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/automatic-super-resolution-5d6d95fa-cc02-4673-b62c-2c50f06385aa" class="data-item-link text-blue-500 hover:text-blue-600" id="9b9aefae-4cb6-e8f8-0e8f-110e92226d25" target="_blank">Automatic Super Resolution - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/manage-cookies-in-microsoft-edge-view-allow-block-delete-and-use-168dab11-0753-043d-7c16-ede5947fc64d" class="data-item-link text-blue-500 hover:text-blue-600" id="6bcff56f-dc99-922a-385c-730196dbd9db" target="_blank">Manage cookies in Microsoft Edge: View, allow, block, delete and use - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/topic/may-14-2024-kb5037771-os-builds-22621-3593-and-22631-3593-e633ff2f-a021-4abb-bd2e-7f3687f166fe" class="data-item-link text-blue-500 hover:text-blue-600" id="76752a11-54cf-4010-da2e-3cf239ad2953" target="_blank">May 14, 2024 KB5037771 (OS Builds 22621.3593 and 22631.3593) - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/topic/may-14-2024-kb5037770-os-build-22000-2960-d0f9634b-e368-4397-96f1-74a42723b12f" class="data-item-link text-blue-500 hover:text-blue-600" id="a523c640-2fc4-101c-d281-84f37454aab4" target="_blank">May 14, 2024 KB5037770 (OS Build 22000.2960) - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/get-help-for-microsoft-personal-account-users-aaf7f74b-026e-489b-a102-0570dfbfb192" class="data-item-link text-blue-500 hover:text-blue-600" id="8da33a0f-4daa-e1d2-bb15-085703ba4a2e" target="_blank">Get Help for Microsoft personal account users - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/about-get-help-717c7ae9-5c45-45f0-b637-900b7437a395" class="data-item-link text-blue-500 hover:text-blue-600" id="2d8d3905-df2a-36c4-caa2-e77412f7aeb2" target="_blank">About Get Help - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/give-feedback-about-get-help-54a5b02a-071c-4b02-83d0-00c6ed99845b" class="data-item-link text-blue-500 hover:text-blue-600" id="538107a3-d038-73e4-d7ed-87442dcf84fd" target="_blank">Give feedback about Get Help - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/running-troubleshooters-in-get-help-23bddffd-5495-47f6-a419-7efe166bf1a8" class="data-item-link text-blue-500 hover:text-blue-600" id="42154551-5cc5-cd6f-c588-32cf68d2c5a4" target="_blank">Running troubleshooters in Get Help - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/windows/get-help-for-microsoft-work-or-school-account-users-215deae6-5cc6-4ba0-9f7b-d75933ce179b" class="data-item-link text-blue-500 hover:text-blue-600" id="cd14ecae-684e-0832-fdd6-ee61f4d0714c" target="_blank">Get Help for Microsoft work or school account users - Microsoft Support</a></li>
+                            
+                                <li><a href="https://support.microsoft.com/en-us/account-billing/prevent-unauthorized-purchases-from-microsoft-store-21436cce-cd26-da18-f522-bb766a9dc8dd" class="data-item-link text-blue-500 hover:text-blue-600" id="62e58fac-4205-2527-b8ba-49ed1b822d5b" target="_blank">Prevent unauthorized purchases from Microsoft Store - Microsoft Support</a></li>
+                            
+                        </ul>
+                    
+                
+            </div>
+           
+        </div>
+        <div class="flex-1 bg-white p-2 flex flex-row justify-center">
+            <div class='image-wrapper'>
+                <img src="../plots/weekly_totals_2024_05_21.png" alt="Publication activity (last 90 days)"> 
+            </div>
+        </div>
+        <div class='image-wrapper flex justify-center mt-4'>
+            <img src="https://bhgaistorage.blob.core.windows.net/msrc-summary-report/html/portalfuse-logo-v2-250px.png" alt="PortalFuse - logo">
+        </div>
+    </div>
+    
+</body>
+</html>
