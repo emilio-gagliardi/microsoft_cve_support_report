@@ -7,11 +7,18 @@ conf/local/**
 .telemetry
 
 # ignore potentially sensitive credentials files
+# Ignore credential and key files in the conf directory
 conf/**/*credentials*
 conf/**/key*
 conf/**/keys*
-# ignore everything in the following folders
+
+# Ignore everything in data and its subdirectories by default
 data/**
+logs/**
+docs/**
+notebooks/**
+
+# Allow tracking of specific data subdirectories and their contents
 !data/**/
 !data/01_raw/
 !data/02_intermediate/
@@ -21,23 +28,29 @@ data/**
 !data/06_models/
 !data/07_model_output/
 !data/08_reporting/
+!data/08_reporting/**/
+!data/08_reporting/periodic_report_CVE_WEEKLY_v1/
+!data/08_reporting/periodic_report_CVE_WEEKLY_v1/**/
 !data/09_templates/
 !data/09_templates/**
-data/08_reporting/**
-!data/08_reporting/periodic_report_CVE_WEEKLY_v1/
-!data/08_reporting/periodic_report_CVE_WEEKLY_v1/**
-logs/**
-docs/**
-notebooks/**
-!notebooks/7dayvectorindices.ipynb
-!notebooks/fetch_msrc_build_KB_data.ipynb
-!notebooks/postprocessors_retrievers_v1.ipynb
-!notebooks/preprocess_emails.ipynb
-# except their sub-folders
-!data/**/
+
+# Allow tracking of logs and their subdirectories
 !logs/**/
 
-# also keep all .gitkeep files
+# Handle notebooks: separate public and private
+notebooks/**
+!notebooks/public/
+!notebooks/public/**
+
+# Specifically track selected notebooks in the public directory
+# !notebooks/public/7dayvectorindices.ipynb
+
+
+# Ignore everything in private notebooks
+notebooks/private/**
+!notebooks/private/.gitkeep  # To keep the directory structure if needed
+
+# Ensure all .gitkeep files are tracked
 !.gitkeep
 
 # also keep the example dataset
