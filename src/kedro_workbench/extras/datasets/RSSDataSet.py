@@ -1,16 +1,16 @@
 from kedro.io import AbstractDataSet
-from typing import Any, Dict, List
-from kedro_workbench.utils.feed_utils import (
-    generate_feed_structure_text,
-    generate_feed_structure_yaml,
-)
-import pprint
-import feedparser
+from typing import Any, Dict
+# from kedro_workbench.utils.feed_utils import (
+#     generate_feed_structure_text,
+#     generate_feed_structure_yaml,
+# )
+# import pprint
+# import feedparser
 from bs4 import BeautifulSoup
 import requests
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError
-import hashlib
+# import hashlib
 import logging
 from icecream import ic
 from datetime import datetime, timedelta
@@ -19,7 +19,14 @@ logger = logging.getLogger("kedro")
 
 
 class RSSFeedExtract(AbstractDataSet):
-    def __init__(self, url, collection, day_interval=None, output_format="text", output_dir=None):
+    def __init__(
+        self,
+        url,
+        collection,
+        day_interval=None,
+        output_format="text",
+        output_dir=None
+    ):
         self._url = url
         self._collection = collection
         self._day_interval = day_interval
@@ -104,7 +111,9 @@ class RSSFeedExtract(AbstractDataSet):
 
                     # Filter based on the cutoff_date if _day_interval is not None
                     if self._day_interval is not None and pub_date_dt < cutoff_date:
-                        # print(f"Skipping item due to pubDate {pub_date_dt} being before cutoff_date {cutoff_date}")
+                        logger.debug(
+                            f"Skipping item due to pubDate {pub_date_dt} "
+                            f"being before cutoff_date {cutoff_date}")
                         continue
 
                 except ValueError as e:

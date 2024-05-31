@@ -14,16 +14,16 @@
 WORD_COUNT_OUTLIER_CUTOFF: 500
 
 collection_descriptions:
-  msrc_security_update: Important announcements, updates, and fixes for microsoft secruity updates. A high priority, frequently updated collection of resources for triaging security issues.
-  windows_10: Annoucements and updates related to Windows 10 issues, products and services.
-  windows_11: Annoucements and updates related to Windows 11 issues, products and services.
+  msrc_security_update: Important announcements, updates, and fixes for microsoft security updates. A high priority, frequently updated collection of resources for triaging security issues.
+  windows_10: Announcements and updates related to Windows 10 issues, products and services.
+  windows_11: Announcements and updates related to Windows 11 issues, products and services.
   windows_update: A collection of issues, bugs, errors, and solutions published by microsoft support. A broad collection that spans many products and services in the Microsoft ecosystem.
   stable_channel_notes: Microsoft Edge Release Notes for the Stable version channel.
-  security_update_notes: Microsoft Edge Release Notes speficially covering security updates and fixes.
+  security_update_notes: Microsoft Edge Release Notes specifically covering security updates and fixes.
   mobile_stable_channel_notes: Microsoft Edge Release Notes for the Mobile Stable version channel.
   beta_channel_notes: Microsoft Edge Release Notes for the Beta version (not yet public, may contain bugs) channel.
   archive_stable_channel_notes: Microsoft Edge Release Notes for the Archive channel. Once notes are 6-12 months old, they get recategorized as archive. Search here when 'published' date is older than 12 months.
-  patch_management: The conversations between expert microsoft system admins and architects. Text is noisy, unstructured and often contains email signitures unrelated to the topic. source material covers the wideest range of topics. May contain fixes to security issues or bugs.
+  patch_management: The conversations between expert microsoft system admins and architects. Text is noisy, unstructured and often contains email signitures unrelated to the topic. source material covers the widest range of topics. May contain fixes to security issues or bugs.
 
 chroma_store:
   persist_dir: 'C:/projects/technical-notes-llm-report/data/06_models/chroma_db'

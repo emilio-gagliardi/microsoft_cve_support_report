@@ -46,18 +46,21 @@ class HTMLExtract(AbstractDataSet):
             soup = BeautifulSoup(html_content, "html.parser")
 
             # Find all H2 headings within the specified div tags
-            h2_divs = soup.find_all("div",
-                                    class_="heading-wrapper",
-                                    attrs={"data-heading-level": "h2"}
-                                    )
+            # h2_divs = soup.find_all("div",
+            #                         class_="heading-wrapper",
+            #                         attrs={"data-heading-level": "h2"}
+            #                         )
+
+            h2_divs = soup.select('div.heading-wrapper[data-heading-level="h2"]')
 
             # Calculate cutoff date from the current date
             # based on the specified day_interval
-            cutoff_date = (
-                datetime.now() - timedelta(days=self._day_interval)
-                if self._day_interval is not None
-                else None
-            )
+            # cutoff_date = (
+            #     datetime.now() - timedelta(days=self._day_interval)
+            #     if self._day_interval is not None
+            #     else None
+            # )
+            cutoff_date = datetime.now() - timedelta(days=self._day_interval or 0)
 
             # Initialize list to store processed data chunks
             chunks = []
@@ -250,10 +253,10 @@ class HTMLDocuments(AbstractDataSet):
         existing_hashs = [doc["hash"] for doc in mongo_cursor]
         # ic(existing_hashs)
         new_entries = [doc for doc in data if doc["hash"] not in existing_hashs]
-        # ids_to_insert = [doc["id"] for doc in new_entries]
+        ids_to_insert = [doc["id"] for doc in new_entries]
         logger.info(f"Loaded {len(new_entries)} new entries in {self._mongo_collection}")
         if len(new_entries):
-            # print(f"new entries: {ids_to_insert}")
+            logger.info(f"Inserting IDs: {ids_to_insert}")
             collection.insert_many(new_entries)
 
         client.close()

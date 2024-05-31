@@ -247,6 +247,8 @@ def extract_patch_primary(data, document_limit):
 # FILES NEED TO BE MOVED ONCE PROCESSED TO A DIFFERENT DIRECTORY TO AVOID REPROCESSING
 # {'index_source_stable_2024-01-20_1': {'page_content': 'Version 120.0.2210.133: January 11, 2024 \nVersion 120.0.2210.133: January 11, 2024 \nFixed various bugs and performance issues. \nStable channel security updates are listed  \nhere \n.', 'metadata': {'id': '19db971a-9bdb-0bae-3095-dcae81bb6470', 'source': 'https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel#version-12002210133-january-11-2024', 'subject': 'Version 120.0.2210.133: January 11, 2024', 'collection': 'stable_channel_notes', 'published': '11-01-2024', 'security_link:here': 'https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnotes-security#january-11-2024'}}, 'index_source_stable_2024-01-20_2': {'page_content': "Version 120.0.2210.89: December 20, 2023 \nVersion 120.0.2210.89: December 20, 2023 \nFixed various bugs and performance issues. \nFeature updates \nMicrosoft Edge Workspaces improvements for offline functionality.", 'metadata': {'id': '57be3be6-de42-a048-e09b-8808a4551235', 'source': 'https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel#version-1200221089-december-20-2023', 'subject': 'Version 120.0.2210.89: December 20, 2023', 'collection': 'stable_channel_notes', 'published': '20-12-2023', 'content_link:display_text_2': 'https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel#feature-updates'}}}
 
+# TODO. Add document hash to document schema and check document hashes instead of 
+# requiring to move files after loading
 
 def load_rss_1_index(data, params):
     """
@@ -261,6 +263,7 @@ def load_rss_1_index(data, params):
 
     Returns:
         List[dict]: The list of rehspaped JSON objects to save to disk.
+        Boolean: memory dataset ingested by node later in pipeline
     """
     print(f"num rss_1 to load: {len(data)}")
     prefix = params["prefix"]
@@ -283,6 +286,7 @@ def load_rss_2_index(data, params):
 
     Returns:
         List[dict]: The list of rehspaped JSON objects to save to disk.
+        Boolean: memory dataset ingested by node later in pipeline
     """
     print(f"num rss_2 to load: {len(data)}")
     prefix = params["prefix"]
@@ -305,6 +309,7 @@ def load_rss_3_index(data, params):
 
     Returns:
         List[dict]: The list of rehspaped JSON objects to save to disk.
+        Boolean: memory dataset ingested by node later in pipeline
     """
     print(f"num rss_3 to load: {len(data)}")
     prefix = params["prefix"]
@@ -326,6 +331,7 @@ def load_rss_4_index(data, params):
 
     Returns:
         List[dict]: The list of rehspaped JSON objects to save to disk.
+        Boolean: memory dataset ingested by node later in pipeline
     """
     print(f"num rss_4 to load: {len(data)}")
     prefix = params["prefix"]
@@ -347,6 +353,7 @@ def load_edge_1_index(data, params):
 
     Returns:
         List[dict]: The list of rehspaped JSON objects to save to disk.
+        Boolean: memory dataset ingested by node later in pipeline
     """
     print(f"num edge_1 to load: {len(data)}")
     prefix = params["prefix"]
@@ -369,6 +376,7 @@ def load_edge_2_index(data, params):
 
     Returns:
         List[dict]: The list of rehspaped JSON objects to save to disk.
+        Boolean: memory dataset ingested by node later in pipeline
     """
     print(f"num edge_2 to load: {len(data)}")
     prefix = params["prefix"]
@@ -391,6 +399,7 @@ def load_edge_3_index(data, params):
 
     Returns:
         List[dict]: The list of rehspaped JSON objects to save to disk.
+        Boolean: memory dataset ingested by node later in pipeline
     """
     print(f"num edge_3 to load: {len(data)}")
     prefix = params["prefix"]
@@ -413,6 +422,7 @@ def load_edge_4_index(data, params):
 
     Returns:
         List[dict]: The list of rehspaped JSON objects to save to disk.
+        Boolean: memory dataset ingested by node later in pipeline
     """
     print(f"num edge_4 to load: {len(data)}")
     prefix = params["prefix"]
@@ -434,6 +444,7 @@ def load_edge_5_index(data, params):
 
     Returns:
         List[dict]: The list of rehspaped JSON objects to save to disk.
+        Boolean: memory dataset ingested by node later in pipeline
     """
     print(f"num edge_5 to load: {len(data)}")
     prefix = params["prefix"]
@@ -455,6 +466,7 @@ def load_patch_index(data, params):
 
     Returns:
         List[dict]: The list of rehspaped JSON objects to save to disk.
+        Boolean: memory dataset ingested by node later in pipeline
     """
     print(f"num patch to load: {len(data)}")
     prefix = params["prefix"]
@@ -465,11 +477,12 @@ def load_patch_index(data, params):
 
 def extract_partitioned_index_source(data):
     """
-    Load the files from the target directory via a custom dataset.
-    See pipeline.py for the dataset name.
+    Extract the partitioned json files from the target directory via a custom dataset.
+    Note. Function not currently called in the pipeline.
 
     Args:
-        data (dict): The data to be used for loading the index.
+        data (dict): The custom dataset that extracts the partitioned json files
+        from the directory specified in the catalog.
 
     Returns:
         List[dict]: The list of rehspaped JSON objects to save to disk.
@@ -480,7 +493,8 @@ def extract_partitioned_index_source(data):
 def combine_partitioned_index_source(data):
     """
     Combine the partitioned index source data into a single list.
-
+    Note. Function not currently called in the pipeline.
+    
     Args:
         data (dict): A dictionary containing the partition keys as keys and the partition load functions as values.
 
@@ -508,7 +522,8 @@ def combine_partitioned_index_source(data):
 def load_index_jsonl(data, params):
     """
     Load the JSONL index file with the provided data and parameters.
-
+    Note. Function not currently called in the pipeline.
+    
     Args:
         data (list): The data to be loaded into the index file.
         params (dict): The parameters for loading the index file.

@@ -418,7 +418,16 @@ def summarize_section_1_periodic_report_CVE_WEEKLY_v1(model, data, max_tokens, t
         if not rows_without_summary.empty:
             # If not empty, apply summarization to rows_without_summary
             summarized_rows = rows_without_summary.apply(
-                lambda row: apply_summarization(row, model, system_prompt, max_tokens, temperature, source_column_name, key_to_extract), axis=1)
+                lambda row: apply_summarization(
+                    row,
+                    model,
+                    system_prompt,
+                    max_tokens,
+                    temperature,
+                    source_column_name,
+                    key_to_extract),
+                axis=1
+                )
             # Concatenate the DataFrames back together
             updated_data = pd.concat([rows_with_summary, summarized_rows]).sort_index()
         else:
@@ -791,11 +800,13 @@ def compile_periodic_report_CVE_WEEKLY_v1(section_1_data, section_2_data, sympto
     )
     section_1_df['report_category'] = section_1_df['report_category'].astype(cat_type)
     section_1_df = section_1_df.sort_values(['report_category', 'post_id'], ascending=[True, False])
+    section_1_df['summarization_payload'] = section_1_df['summarization_payload'].apply(lambda x: '' if isinstance(x, float) else x)
+    # print('section_1_data')
     # for id, row in section_1_df.iterrows():
     #     id = row['post_id']
     #     category = row['report_category']
     #     package_pairs = row['package_pairs']
-    #     print(f"{id} - {category}\n{package_pairs}")  
+    #     print(f"{id} - {category}\n{type(row['summarization_payload'])} - {row['summarization_payload']}")  
     section_1_df['revision'] = section_1_df['revision'].apply(lambda x: '{:.1f}'.format(x) if pd.notna(x) else "1.0")
     section_1_df['published'] = section_1_df['published'].dt.strftime('%d-%m-%Y')
     section_1_df['published'] = section_1_df['published'].astype(str)

@@ -3,7 +3,6 @@ This is a boilerplate pipeline 'augment_msrc_product_build_data'
 generated using Kedro 0.18.11
 """
 from kedro_workbench.extras.datasets.MongoDataset import MongoDBDocs
-# from kedro_workbench.utils.kedro_utils import convert_to_actual_type
 from kedro_workbench.utils.update_packages_utils import (
     process_downloadable_package_additional_details,
     display_execution_time,
@@ -28,6 +27,20 @@ mongo_creds = credentials["mongo_atlas"]
 
 
 def check_for_product_build_ingestion_complete(ingestion_complete):
+    """
+    Ensures the sequential execution of the `augment_msrc_product_build_data` pipeline
+    after the `ingest_msrc_product_build_data` pipeline.
+
+    The last node of the ingestion pipeline outputs a memory dataset, which serves as
+    an input to this function.
+    This function, `check_for_product_build_ingestion_complete`,
+    then outputs a memory dataset that acts as an input for the first node in the
+    `augment_msrc_product_build_data` pipeline, `extract_existing_cve_docs_to_augment`.
+
+    Args:
+        inputs (bool): A boolean flag indicating the presence of the input memory dataset.
+        outputs (bool): A boolean flag indicating the presence of the output memory dataset.
+    """
     print(f"product build ingestion complete: {ingestion_complete}")
     return ingestion_complete
 
@@ -56,6 +69,7 @@ def extract_existing_cve_docs_to_augment(day_interval, begin_augmenting=True):
     result = mongo_to_fetch_existing_cves.collection.find(query, projection)
     list_of_dicts_to_augment = list(result)
     logger.info(f"Num msrc docs to augment: {len(list_of_dicts_to_augment)}")
+    # TODO. add debug log entry for list_of_dicts_to_augment
     # for doc in list_of_dicts_to_augment:
     #     print(f"{doc['metadata']['post_id']}")
     return list_of_dicts_to_augment
@@ -69,10 +83,9 @@ def extract_existing_product_build_data(
 ):
     if not begin_augmenting:
         logger.warning("Could not extract product build data from document store.")
-    
+
     end_date = datetime.now(timezone.utc)
     start_date = end_date - timedelta(days=day_interval+30)
-    # print(f"start_date: {start_date}, end_date: {end_date}")
     mongo_to_fetch_existing_cves = MongoDBDocs(
         mongo_db="report_docstore",
         mongo_collection="microsoft_product_builds",
@@ -160,7 +173,10 @@ def merge_product_build_data_with_msrc_docs(
                 {
                     ("kb" + str(kb_id) if not str(kb_id).startswith("kb") else str(kb_id)): url
                 }
-                for kb_id, url in zip(filtered_rows['kb_id'], filtered_rows['article_url'])
+                for kb_id, url in zip(
+                    filtered_rows['kb_id'],
+                    filtered_rows['article_url']
+                    )
             ]
 
             # Generate unique product strings by iterating over filtered rows
@@ -382,9 +398,15 @@ def augment_update_packages_additional_details(update_package_docs, search_crite
                 if 'product_name' in package and 'none' not in package['product_name'].lower()
             ]
 
-            # We need to generate a hash for each downloadable package to prevent duplicates
-            # in the monitoring collection 
-            keys_to_keep = ['parent_id', 'product_name', 'product_version','product_architecture','update_type']
+            # Generate a hash for each downloadable package to prevent duplicates
+            # in the monitoring collection
+            keys_to_keep = [
+                'parent_id',
+                'product_name',
+                'product_version',
+                'product_architecture',
+                'update_type'
+                ]
 
             # loop over each downloadable_package item
             for item in downloadable_packages:
@@ -406,7 +428,37 @@ def augment_update_packages_additional_details(update_package_docs, search_crite
     return sorted_list
 
 
+def parse_restructure_installation_details(augmented_update_package_docs):
+    '''
+    Selenium grabs the html content from the download page which is stored as-is
+    this function extracts pieces of text from the html and generates new
+    keys to add to the document that are surfaced in the report. Returns
+    augmented documents for loading in db.
+    - file_size
+    - package_type
+    inputs:
+        List[dicts]
+    outputs:
+        List[dicts]
+    '''
+    for update_package in augmented_update_package_docs:
+        update_package = extract_html_and_update_downloadable_packages(update_package)
+
+    logger.info("Parsed downloadable packages installation details into keys.")
+    return augmented_update_package_docs
+
+
 def load_augmented_update_packages_to_db(augmented_update_package_docs):
+    '''
+    update the documents in the database with the new keys-values
+    The documents already exist, this step updates the keys and values
+    After load is complete, return a boolean memory dataset to control
+    loading of next pipeline in sequence.
+    inputs:
+        List[dict]
+    outputs:
+        boolean
+    '''
     update_packages_db_conn = MongoDBDocs(
         mongo_db="report_docstore",
         mongo_collection="microsoft_update_packages",
@@ -422,8 +474,8 @@ def load_augmented_update_packages_to_db(augmented_update_package_docs):
         update_values = {"$set": {"downloadable_packages": value}}
 
         result = collection.update_one(query, update_values)
-        # if result.matched_count > 0:
-        #     print(f"Update package with id {doc['id']} updated successfully.")
+        if result.matched_count > 0:
+            logger.debug(f"Update package with id {doc['id']} updated successfully.")
     update_packages_db_conn.client.close()
     logger.info(
         f"Updated {len(augmented_update_package_docs)} update packages "
@@ -432,15 +484,18 @@ def load_augmented_update_packages_to_db(augmented_update_package_docs):
     return True
 
 
-def parse_restructure_installation_details(augmented_update_package_docs):
-    for update_package in augmented_update_package_docs:
-        update_package = extract_html_and_update_downloadable_packages(update_package)
-
-    logger.info(f"Parsed downloadable packages installation details into keys.")
-    return augmented_update_package_docs
-
-
 def begin_feature_engineering_pipeline_connector(augment_load_status):
-
-    logger.info("\n=====================\nAugmenting product build data completed\n=====================\n")
+    '''
+    utility function that creates an edge to the first node function in the
+    next pipeline to ensure that augmenting product build data
+    occurs before the NLP feature engineering next.
+    
+    inputs:
+        boolean
+    outputs:
+        boolean
+    '''
+    logger.info(
+        "\n=====================\nAugmenting product build data "
+        "completed\n=====================\n")
     return True

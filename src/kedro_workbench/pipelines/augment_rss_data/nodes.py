@@ -8,23 +8,11 @@ from kedro_workbench.utils.feed_utils import (
     add_id_key,
     get_new_data,
 )
-from typing import Dict, Any, List, Tuple
-
-# import requests
-from bs4 import BeautifulSoup
-
-# import re
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+from typing import Dict, Any
 from selenium.webdriver.chrome.options import Options
-import time
-
-# import pprint
 import logging
 from kedro.config import ConfigLoader
 from kedro.framework.project import settings
-from pymongo import MongoClient
-from pymongo.errors import PyMongoError
 from icecream import ic
 
 ic.configureOutput(includeContext=True)
