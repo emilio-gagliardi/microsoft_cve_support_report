@@ -1,0 +1,25 @@
+# This is a boilerplate parameters config generated for pipeline 'ingest_edge_releases'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+
+stable_channel:
+  collection: "stable_channel_notes"
+  keys_to_hash: ['source', 'subject', 'published', 'collection']
+
+beta_channel:
+  collection: "beta_channel_notes"
+  keys_to_hash: ['source', 'subject', 'published', 'collection']
+
+archive_stable_channel:
+  collection: "archive_stable_channel_notes"
+  keys_to_hash: ['source', 'subject', 'published', 'collection']
+
+mobile_stable_channel:
+  collection: "mobile_stable_channel_notes"
+  keys_to_hash: ['source', 'subject', 'published', 'collection']
+
+security_update_channel:
+  collection: "security_update_notes"
+  keys_to_hash: ['source', 'subject', 'published', 'collection']

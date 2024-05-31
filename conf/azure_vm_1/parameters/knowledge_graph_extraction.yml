@@ -1,0 +1,35 @@
+# This is a boilerplate parameters config generated for pipeline 'knowledge_graph_extraction'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+
+collections_for_knowledge_graph_extraction:
+  - msrc_security_update
+  - patch_management
+
+mongo_projections_for_kg_extraction:
+  msrc_security_update: { _id: 0, metadata.id: 1, metadata.published: 1, metadata.collection: 1, metadata.post_id: 1, metadata.revision: 1, metadata.post_type: 1, metadata.title: 1, metadata.source: 1, text: 1}
+  windows_10: { _id: 0, metadata.id: 1, metadata.published: 1, metadata.collection: 1, metadata.post_id: 1, metadata.description: 1, metadata.post_type: 1, metadata.title: 1, metadata.source: 1, text: 1}
+  windows_11: { _id: 0, metadata.id: 1, metadata.published: 1, metadata.collection: 1, metadata.post_id: 1, metadata.description: 1, metadata.post_type: 1, metadata.title: 1, metadata.source: 1, text: 1}
+  windows_update: { _id: 0, metadata.id: 1, metadata.published: 1, metadata.collection: 1, metadata.post_id: 1, metadata.description: 1, metadata.post_type: 1, metadata.title: 1, metadata.source: 1, text: 1}
+  stable_channel_notes: { _id: 0, metadata.id: 1, metadata.published: 1, metadata.collection: 1, metadata.post_type: 1, metadata.subject: 1, metadata.source: 1, text: 1}
+  security_update_notes: { _id: 0, metadata.id: 1, metadata.published: 1, metadata.collection: 1, metadata.post_type: 1, metadata.subject: 1, metadata.source: 1, text: 1}
+  mobile_stable_channel_notes: { _id: 0, metadata.id: 1, metadata.published: 1, metadata.collection: 1, metadata.post_type: 1, metadata.subject: 1, metadata.source: 1, text: 1}
+  beta_channel_notes: { _id: 0, metadata.id: 1, metadata.published: 1, metadata.collection: 1, metadata.post_type: 1, metadata.subject: 1, metadata.source: 1, text: 1}
+  patch_management: { _id: 0, metadata.id: 1, metadata.published: 1, metadata.collection: 1, metadata.post_type: 1,  metadata.topic: 1, metadata.conversation_link: 1, metadata.receivedDateTime: 1, text: 1 }
+
+max_prompt_tokens_kg_extraction: 2950
+
+extraction_llm_kwargs:
+  temperature: 0.2
+  max_tokens: 2000
+post_extraction_models:
+  custom: None
+  default: gpt-4
+edge_notes_extraction_models:
+  custom: None
+  default: gpt-4
+patch_extraction_models:
+  custom: 'ft:gpt-3.5-turbo-1106:big-hat-group-inc::8VoggMIC'
+  default: gpt-4

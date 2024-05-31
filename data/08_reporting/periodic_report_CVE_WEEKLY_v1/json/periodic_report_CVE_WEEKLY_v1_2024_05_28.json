@@ -1,0 +1,428 @@
+{
+    "report_day_start": "21",
+    "report_month_start": "May",
+    "report_year_start": "2024",
+    "report_day_end": "28",
+    "report_month_end": "May",
+    "report_year_end": "2024",
+    "report_end_date": "2024_05_28",
+    "report_current_date": "28_05_2024",
+    "report_title": "PortalFuse Weekly Security Update Report",
+    "report_subtitle": "(Windows and Edge Edition)",
+    "report_description": "The PortalFuse Weekly Security Update Report is a resource for System Administrators and Security Professionals looking to keep their systems secure. With a comprehensive compilation of Microsoft Security Response Center posts and Microsoft Support documentation, users can easily access critical KB articles and update packages for their Windows devices without having to spend time searching across multiple sources. This report helps busy Microsoft professionals to stay up-to-date with security issues and new features.",
+    "plot_path": "../plots/",
+    "toc": {
+        "section_1": "MSRC Posts",
+        "section_2": "Products",
+        "section_3": "Tooling Support",
+        "section_4": "Appendix"
+    },
+    "sftp": [
+        "data/08_reporting/periodic_report_CVE_WEEKLY_v1/plots/posts_by_day_2024_05_28.png"
+    ],
+    "section_1_data": [
+        {
+            "id": "c18bd943-4552-fc13-fb0f-4cb44f648cb1",
+            "post_id": "CVE-2024-5274",
+            "published": "25-05-2024",
+            "revision": "1.0",
+            "post_type": "Information only",
+            "title": "Chromium: CVE-2024-5274 Type Confusion in V8",
+            "description": "This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see [Google Chrome Releases](https://chromereleases.googleblog.com/2024) for more information.\n\nGoogle is aware that an exploit for CVE-2024-5274 exists in the wild.",
+            "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-5274",
+            "related_posts": "[]",
+            "summary": "CVE-2024-5274 is a type confusion vulnerability in the V8 JavaScript engine used by Chromium, which is also consumed by Microsoft Edge (Chromium-based). This vulnerability has been actively exploited in the wild. The issue has been addressed in the latest version of Microsoft Edge (Chromium-based), version 125.0.2535.67, which incorporates the necessary fixes from the Chromium project. System administrators should ensure that their Microsoft Edge installations are updated to this latest version to mitigate the risk of exploitation. For further details, refer to the Google Chrome Releases page.",
+            "summarization_payload": "{'metadata': {'id': 'c18bd943-4552-fc13-fb0f-4cb44f648cb1', 'post_id': 'CVE-2024-5274', 'revision': '1.0', 'published': '25-05-2024'}, 'summary': 'CVE-2024-5274 is a type confusion vulnerability in the V8 JavaScript engine used by Chromium, which is also consumed by Microsoft Edge (Chromium-based). This vulnerability has been actively exploited in the wild. The issue has been addressed in the latest version of Microsoft Edge (Chromium-based), version 125.0.2535.67, which incorporates the necessary fixes from the Chromium project. System administrators should ensure that their Microsoft Edge installations are updated to this latest version to mitigate the risk of exploitation. For further details, refer to the Google Chrome Releases page.'}",
+            "build_numbers": "[[125, 0, 2535, 67]]",
+            "product_build_ids": "['818d8f56-4397-a15f-f7da-31b6088437e5']",
+            "products": "['microsoft edge (chromium-based)  ']",
+            "report_category": "microsoft_edge",
+            "text": "This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see [Google Chrome Releases](https://chromereleases.googleblog.com/2024) for more information.\n\nGoogle is aware that an exploit for CVE-2024-5274 exists in the wild. \nChromium: CVE-2024-5274 Type Confusion in V8  \nNew \nOn this page \n\ue70d \nCVE-2024-5274 \n\ue715 \nSubscribe \nRSS \nPowerShell \n\ue943 \nAPI \nSecurity Vulnerability \nReleased: 25 May 2024 \nAssigning CNA: \nChrome \nCVE-2024-5274  \n\uf35f \nThis CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  \nGoogle Chrome Releases \n for more information. \nGoogle is aware that an exploit for CVE-2024-5274 exists in the wild. \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n125.0.2535.67 \n5/23/2024 \n125.0.6422.112 \nMicrosoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  \nAcknowledgements \n for more information. \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n25 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n125.0.2535.67 \nAll results loaded \nLoaded all 1 rows \nThe information provided in the Microsoft Knowledge Base is provided \"as is\" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. \nversion \nrevisionDate \ndescription \n1.0 \n25 May 2024 \nInformation published. \nFAQ \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n125.0.2535.67 \n5/23/2024 \n125.0.6422.112 \nSecurity Updates \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n25 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n125.0.2535.67 \nAll results loaded \nLoaded all 1 rows",
+            "build_number_str": [
+                "125.0.2535.67"
+            ],
+            "core_products": [
+                "microsoft edge (chromium-based)  "
+            ],
+            "kb_article_pairs": [
+                {
+                    "kb_id": "Release Note (25-05-2024)",
+                    "kb_link": "https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-25-2024"
+                }
+            ],
+            "package_pairs": []
+        },
+        {
+            "id": "1a65c145-0564-0bd2-e358-4a8a605fb340",
+            "post_id": "CVE-2024-5160",
+            "published": "25-05-2024",
+            "revision": "1.0",
+            "post_type": "Information only",
+            "title": "Chromium: CVE-2024-5160 Heap buffer overflow in Dawn",
+            "description": "This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see [Google Chrome Releases](https://chromereleases.googleblog.com/2024) for more information.",
+            "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-5160",
+            "related_posts": "[]",
+            "summary": "Microsoft Edge (Chromium-based) is affected by a heap buffer overflow vulnerability in Dawn, identified as CVE-2024-5160. This vulnerability was assigned by Chrome and is addressed by ingesting Chromium. The latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. The vulnerability is caused by a flaw in the Chromium Open Source Software (OSS) consumed by Microsoft Edge. An attacker could exploit this vulnerability to execute arbitrary code in the context of the current user. Microsoft has provided a solution by releasing a security update for Microsoft Edge (Chromium-based) with the build number 125.0.2535.67. System administrators are advised to update their Microsoft Edge installations to the latest version to mitigate the risk of exploitation. For more information, refer to the [Google Chrome Releases](https://chromereleases.googleblog.com/2024) page.",
+            "summarization_payload": "{'metadata': {'id': '1a65c145-0564-0bd2-e358-4a8a605fb340', 'post_id': 'CVE-2024-5160', 'revision': '1.0', 'published': '25-05-2024'}, 'summary': 'Microsoft Edge (Chromium-based) is affected by a heap buffer overflow vulnerability in Dawn, identified as CVE-2024-5160. This vulnerability was assigned by Chrome and is addressed by ingesting Chromium. The latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. The vulnerability is caused by a flaw in the Chromium Open Source Software (OSS) consumed by Microsoft Edge. An attacker could exploit this vulnerability to execute arbitrary code in the context of the current user. Microsoft has provided a solution by releasing a security update for Microsoft Edge (Chromium-based) with the build number 125.0.2535.67. System administrators are advised to update their Microsoft Edge installations to the latest version to mitigate the risk of exploitation. For more information, refer to the [Google Chrome Releases](https://chromereleases.googleblog.com/2024) page.'}",
+            "build_numbers": "[[125, 0, 2535, 67]]",
+            "product_build_ids": "['818d8f56-4397-a15f-f7da-31b6088437e5']",
+            "products": "['microsoft edge (chromium-based)  ']",
+            "report_category": "microsoft_edge",
+            "text": "This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see [Google Chrome Releases](https://chromereleases.googleblog.com/2024) for more information. \nChromium: CVE-2024-5160 Heap buffer overflow in Dawn  \nNew \nOn this page \n\ue70d \nCVE-2024-5160 \n\ue715 \nSubscribe \nRSS \nPowerShell \n\ue943 \nAPI \nSecurity Vulnerability \nReleased: 25 May 2024 \nAssigning CNA: \nChrome \nCVE-2024-5160  \n\uf35f \nThis CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  \nGoogle Chrome Releases \n for more information. \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \nXXX.X.XXXX.XX \n5/24/2024 \n125.0.6422.76/.77 \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n125.0.2535.67 \n5/23/2024 \n125.0.6422.112 \nMicrosoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  \nAcknowledgements \n for more information. \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n25 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n125.0.2535.67 \nAll results loaded \nLoaded all 1 rows \nThe information provided in the Microsoft Knowledge Base is provided \"as is\" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. \nversion \nrevisionDate \ndescription \n1.0 \n25 May 2024 \nInformation published. \nFAQ \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \nXXX.X.XXXX.XX \n5/24/2024 \n125.0.6422.76/.77 \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n125.0.2535.67 \n5/23/2024 \n125.0.6422.112 \nSecurity Updates \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n25 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n125.0.2535.67 \nAll results loaded \nLoaded all 1 rows",
+            "build_number_str": [
+                "125.0.2535.67"
+            ],
+            "core_products": [
+                "microsoft edge (chromium-based)  "
+            ],
+            "kb_article_pairs": [
+                {
+                    "kb_id": "Release Note (25-05-2024)",
+                    "kb_link": "https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-25-2024"
+                }
+            ],
+            "package_pairs": []
+        },
+        {
+            "id": "7216cfb9-3739-9f89-c27a-a1f2a00bb2ab",
+            "post_id": "CVE-2024-5159",
+            "published": "25-05-2024",
+            "revision": "1.0",
+            "post_type": "Information only",
+            "title": "Chromium: CVE-2024-5159 Heap buffer overflow in ANGLE",
+            "description": "This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see [Google Chrome Releases](https://chromereleases.googleblog.com/2024) for more information.",
+            "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-5159",
+            "related_posts": "[]",
+            "summary": "Microsoft Edge (Chromium-based) is affected by a heap buffer overflow vulnerability in ANGLE, identified as CVE-2024-5159. This vulnerability was assigned by Chrome and is addressed by ingesting Chromium. The latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. The vulnerability is caused by a flaw in the Chromium Open Source Software (OSS) consumed by Microsoft Edge. An attacker could exploit this vulnerability to execute arbitrary code in the context of the current user. System administrators are advised to update their Microsoft Edge installations to the latest version to mitigate the risk of exploitation. For more information, refer to the Google Chrome Releases page.",
+            "summarization_payload": "{'metadata': {'id': '7216cfb9-3739-9f89-c27a-a1f2a00bb2ab', 'post_id': 'CVE-2024-5159', 'revision': '1.0', 'published': '25-05-2024'}, 'summary': 'Microsoft Edge (Chromium-based) is affected by a heap buffer overflow vulnerability in ANGLE, identified as CVE-2024-5159. This vulnerability was assigned by Chrome and is addressed by ingesting Chromium. The latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. The vulnerability is caused by a flaw in the Chromium Open Source Software (OSS) consumed by Microsoft Edge. An attacker could exploit this vulnerability to execute arbitrary code in the context of the current user. System administrators are advised to update their Microsoft Edge installations to the latest version to mitigate the risk of exploitation. For more information, refer to the Google Chrome Releases page.'}",
+            "build_numbers": "[[125, 0, 2535, 67]]",
+            "product_build_ids": "['818d8f56-4397-a15f-f7da-31b6088437e5']",
+            "products": "['microsoft edge (chromium-based)  ']",
+            "report_category": "microsoft_edge",
+            "text": "This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see [Google Chrome Releases](https://chromereleases.googleblog.com/2024) for more information. \nChromium: CVE-2024-5159 Heap buffer overflow in ANGLE  \nNew \nOn this page \n\ue70d \nCVE-2024-5159 \n\ue715 \nSubscribe \nRSS \nPowerShell \n\ue943 \nAPI \nSecurity Vulnerability \nReleased: 25 May 2024 \nAssigning CNA: \nChrome \nCVE-2024-5159  \n\uf35f \nThis CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  \nGoogle Chrome Releases \n for more information. \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \nXXX.X.XXXX.XX \n5/24/2024 \n125.0.6422.76/.77 \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n125.0.2535.67 \n5/23/2024 \n125.0.6422.112 \nMicrosoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  \nAcknowledgements \n for more information. \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n25 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n125.0.2535.67 \nAll results loaded \nLoaded all 1 rows \nThe information provided in the Microsoft Knowledge Base is provided \"as is\" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. \nversion \nrevisionDate \ndescription \n1.0 \n25 May 2024 \nInformation published. \nFAQ \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \nXXX.X.XXXX.XX \n5/24/2024 \n125.0.6422.76/.77 \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n125.0.2535.67 \n5/23/2024 \n125.0.6422.112 \nSecurity Updates \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n25 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n125.0.2535.67 \nAll results loaded \nLoaded all 1 rows",
+            "build_number_str": [
+                "125.0.2535.67"
+            ],
+            "core_products": [
+                "microsoft edge (chromium-based)  "
+            ],
+            "kb_article_pairs": [
+                {
+                    "kb_id": "Release Note (25-05-2024)",
+                    "kb_link": "https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-25-2024"
+                }
+            ],
+            "package_pairs": []
+        },
+        {
+            "id": "e9713b05-cd1b-4963-6bf1-8d3686a127fb",
+            "post_id": "CVE-2024-5158",
+            "published": "25-05-2024",
+            "revision": "1.0",
+            "post_type": "Information only",
+            "title": "Chromium: CVE-2024-5158 Type Confusion in V8",
+            "description": "This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see [Google Chrome Releases](https://chromereleases.googleblog.com/2024) for more information.",
+            "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-5158",
+            "related_posts": "[]",
+            "summary": "Microsoft Edge (Chromium-based) is affected by a type confusion vulnerability in the V8 JavaScript engine, identified as CVE-2024-5158. This vulnerability was assigned by Chrome and is addressed by ingesting the latest Chromium updates. The flaw in the Chromium Open Source Software (OSS) could potentially allow an attacker to execute arbitrary code in the context of the current user. The latest version of Microsoft Edge (Chromium-based) has incorporated the necessary Chromium updates and is no longer vulnerable. System administrators should ensure that their Microsoft Edge installations are updated to the latest version to mitigate the risk of exploitation. For more information, refer to the Google Chrome Releases page.",
+            "summarization_payload": "{'metadata': {'id': 'e9713b05-cd1b-4963-6bf1-8d3686a127fb', 'post_id': 'CVE-2024-5158', 'revision': '1.0', 'published': '25-05-2024'}, 'summary': 'Microsoft Edge (Chromium-based) is affected by a type confusion vulnerability in the V8 JavaScript engine, identified as CVE-2024-5158. This vulnerability was assigned by Chrome and is addressed by ingesting the latest Chromium updates. The flaw in the Chromium Open Source Software (OSS) could potentially allow an attacker to execute arbitrary code in the context of the current user. The latest version of Microsoft Edge (Chromium-based) has incorporated the necessary Chromium updates and is no longer vulnerable. System administrators should ensure that their Microsoft Edge installations are updated to the latest version to mitigate the risk of exploitation. For more information, refer to the Google Chrome Releases page.'}",
+            "build_numbers": "[[125, 0, 2535, 67]]",
+            "product_build_ids": "['818d8f56-4397-a15f-f7da-31b6088437e5']",
+            "products": "['microsoft edge (chromium-based)  ']",
+            "report_category": "microsoft_edge",
+            "text": "This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see [Google Chrome Releases](https://chromereleases.googleblog.com/2024) for more information. \nChromium: CVE-2024-5158 Type Confusion in V8  \nNew \nOn this page \n\ue70d \nCVE-2024-5158 \n\ue715 \nSubscribe \nRSS \nPowerShell \n\ue943 \nAPI \nSecurity Vulnerability \nReleased: 25 May 2024 \nAssigning CNA: \nChrome \nCVE-2024-5158  \n\uf35f \nThis CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  \nGoogle Chrome Releases \n for more information. \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \nXXX.X.XXXX.XX \n5/24/2024 \n125.0.6422.76/.77 \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n125.0.2535.67 \n5/23/2024 \n125.0.6422.112 \nMicrosoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  \nAcknowledgements \n for more information. \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n25 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n125.0.2535.67 \nAll results loaded \nLoaded all 1 rows \nThe information provided in the Microsoft Knowledge Base is provided \"as is\" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. \nversion \nrevisionDate \ndescription \n1.0 \n25 May 2024 \nInformation published. \nFAQ \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \nXXX.X.XXXX.XX \n5/24/2024 \n125.0.6422.76/.77 \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n125.0.2535.67 \n5/23/2024 \n125.0.6422.112 \nSecurity Updates \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n25 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n125.0.2535.67 \nAll results loaded \nLoaded all 1 rows",
+            "build_number_str": [
+                "125.0.2535.67"
+            ],
+            "core_products": [
+                "microsoft edge (chromium-based)  "
+            ],
+            "kb_article_pairs": [
+                {
+                    "kb_id": "Release Note (25-05-2024)",
+                    "kb_link": "https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-25-2024"
+                }
+            ],
+            "package_pairs": []
+        },
+        {
+            "id": "9a29500f-a369-4974-c87d-666010273251",
+            "post_id": "CVE-2024-5157",
+            "published": "25-05-2024",
+            "revision": "1.0",
+            "post_type": "Information only",
+            "title": "Chromium: CVE-2024-5157 Use after free in Scheduling",
+            "description": "This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see [Google Chrome Releases](https://chromereleases.googleblog.com/2024) for more information.",
+            "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2024-5157",
+            "related_posts": "[]",
+            "summary": "Microsoft Edge (Chromium-based) is affected by a use after free vulnerability in Scheduling, identified as CVE-2024-5157. This vulnerability was assigned by Chrome and is addressed by ingesting Chromium. The latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. The vulnerability is caused by a flaw in the Chromium Open Source Software (OSS) consumed by Microsoft Edge. An attacker could exploit this vulnerability to execute arbitrary code in the context of the current user. Microsoft has documented this in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. System administrators are advised to update their Microsoft Edge installations to the latest version to mitigate the risk of exploitation. For more information, refer to the [Google Chrome Releases](https://chromereleases.googleblog.com/2024) page.",
+            "summarization_payload": "{'metadata': {'id': '9a29500f-a369-4974-c87d-666010273251', 'post_id': 'CVE-2024-5157', 'revision': '1.0', 'published': '25-05-2024'}, 'summary': 'Microsoft Edge (Chromium-based) is affected by a use after free vulnerability in Scheduling, identified as CVE-2024-5157. This vulnerability was assigned by Chrome and is addressed by ingesting Chromium. The latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. The vulnerability is caused by a flaw in the Chromium Open Source Software (OSS) consumed by Microsoft Edge. An attacker could exploit this vulnerability to execute arbitrary code in the context of the current user. Microsoft has documented this in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. System administrators are advised to update their Microsoft Edge installations to the latest version to mitigate the risk of exploitation. For more information, refer to the [Google Chrome Releases](https://chromereleases.googleblog.com/2024) page.'}",
+            "build_numbers": "[[125, 0, 2535, 67]]",
+            "product_build_ids": "['818d8f56-4397-a15f-f7da-31b6088437e5']",
+            "products": "['microsoft edge (chromium-based)  ']",
+            "report_category": "microsoft_edge",
+            "text": "This CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see [Google Chrome Releases](https://chromereleases.googleblog.com/2024) for more information. \nChromium: CVE-2024-5157 Use after free in Scheduling  \nNew \nOn this page \n\ue70d \nCVE-2024-5157 \n\ue715 \nSubscribe \nRSS \nPowerShell \n\ue943 \nAPI \nSecurity Vulnerability \nReleased: 25 May 2024 \nAssigning CNA: \nChrome \nCVE-2024-5157  \n\uf35f \nThis CVE was assigned by Chrome.  Microsoft Edge (Chromium-based) ingests Chromium, which addresses this vulnerability. Please see  \nGoogle Chrome Releases \n for more information. \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \nXXX.X.XXXX.XX \n5/24/2024 \n125.0.6422.76/.77 \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n125.0.2535.67 \n5/23/2024 \n125.0.6422.112 \nMicrosoft recognizes the efforts of those in the security community who help us protect customers through coordinated vulnerability disclosure. See  \nAcknowledgements \n for more information. \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n25 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n125.0.2535.67 \nAll results loaded \nLoaded all 1 rows \nThe information provided in the Microsoft Knowledge Base is provided \"as is\" without warranty of any kind. Microsoft disclaims all warranties, either express or implied, including the warranties of merchantability and fitness for a particular purpose. In no event shall Microsoft Corporation or its suppliers be liable for any damages whatsoever including direct, indirect, incidental, consequential, loss of business profits or special damages, even if Microsoft Corporation or its suppliers have been advised of the possibility of such damages. Some states do not allow the exclusion or limitation of liability for consequential or incidental damages so the foregoing limitation may not apply. \nversion \nrevisionDate \ndescription \n1.0 \n25 May 2024 \nInformation published. \nFAQ \nWhy is this Chrome CVE included in the Security Update Guide? \nThe vulnerability assigned to this CVE is in Chromium Open Source Software (OSS) which is consumed by Microsoft Edge (Chromium-based). It is being documented in the Security Update Guide to announce that the latest version of Microsoft Edge (Chromium-based) is no longer vulnerable. \nHow can I see the version of the browser? \nIn your Microsoft Edge browser, click on the 3 dots (...) on the very right-hand side of the window \nClick on  \nHelp and Feedback \nClick on  \nAbout Microsoft Edge \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \nXXX.X.XXXX.XX \n5/24/2024 \n125.0.6422.76/.77 \nMicrosoft Edge Channel \nMicrosoft Edge Version \nDate Released \nBased on Chromium Version \nStable \n125.0.2535.67 \n5/23/2024 \n125.0.6422.112 \nSecurity Updates \nTo determine the support lifecycle for your software, see the  \nMicrosoft Support Lifecycle \n. \n Updates \n CVSS \n\ue712 \nRelease date Descending \n\ue70f \nEdit columns \n\ue896 \nDownload \n\ue71c \nFilters \nRelease date \n\uee69 \nProduct \nPlatform \nImpact \nMax Severity \nArticle \nDownload \nBuild Number \n25 May 2024 \nMicrosoft Edge (Chromium-based) \n- \n- \n- \nRelease Notes  \n\uf35f \nSecurity Update \n125.0.2535.67 \nAll results loaded \nLoaded all 1 rows",
+            "build_number_str": [
+                "125.0.2535.67"
+            ],
+            "core_products": [
+                "microsoft edge (chromium-based)  "
+            ],
+            "kb_article_pairs": [
+                {
+                    "kb_id": "Release Note (25-05-2024)",
+                    "kb_link": "https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security#may-25-2024"
+                }
+            ],
+            "package_pairs": []
+        }
+    ],
+    "section_1_metadata": {
+        "total_cves": 5,
+        "new_cves": 5,
+        "updated_cves": 0
+    },
+    "section_2_data": [],
+    "section_2_metadata": {
+        "total_products": 0
+    },
+    "section_3_data": [],
+    "section_3_metadata": {
+        "total_tools": 0
+    },
+    "section_4_data": {
+        "security_update_notes": [
+            {
+                "id": "dd738b2f-f5de-c9da-2f97-7489ed9b4efd",
+                "source": "https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnotes-security#may-24-2024",
+                "collection": "security_update_notes",
+                "published": "2024-05-24",
+                "title": "May 24, 2024"
+            }
+        ],
+        "stable_channel_notes": [
+            {
+                "id": "a943aed1-aac8-8903-b305-794229c3da0a",
+                "source": "https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel#version-1250253567-may-24-2024",
+                "collection": "stable_channel_notes",
+                "published": "2024-05-24",
+                "title": "Version 125.0.2535.67: May 24, 2024"
+            }
+        ],
+        "windows_10": [
+            {
+                "id": "0c4effec-bdff-ea36-761e-e4b36f670d60",
+                "source": "https://support.microsoft.com/en-us/windows/recovery-options-in-windows-31ce2444-7de3-818c-d626-e3b5a3024da5",
+                "collection": "windows_10",
+                "published": "2024-05-24",
+                "title": "Recovery options in Windows - Microsoft Support"
+            },
+            {
+                "id": "82c0254a-5e56-e117-697b-937f943ce2d2",
+                "source": "https://support.microsoft.com/en-us/windows/protect-your-pc-from-potentially-unwanted-applications-c7668a25-174e-3b78-0191-faf0607f7a6e",
+                "collection": "windows_10",
+                "published": "2024-05-22",
+                "title": "Protect your PC from potentially unwanted applications - Microsoft Support"
+            },
+            {
+                "id": "61228eea-a51c-f7bc-8f4c-668fbe5379da",
+                "source": "https://support.microsoft.com/en-us/windows/potentially-unwanted-apps-are-blocked-by-default-b9f53cb9-7f1e-40bb-8c6b-a17e0ab6289e",
+                "collection": "windows_10",
+                "published": "2024-05-22",
+                "title": "Potentially unwanted apps are blocked by default  - Microsoft Support"
+            },
+            {
+                "id": "1939c4d8-5249-c348-8902-4b86bbfed87e",
+                "source": "https://support.microsoft.com/en-us/office/set-up-your-device-to-work-with-accessibility-in-microsoft-365-a0ca81c1-fa3e-417e-9d3b-78b8816fce58",
+                "collection": "windows_10",
+                "published": "2024-05-23",
+                "title": "Set up your device to work with accessibility in Microsoft 365 - Microsoft Support"
+            },
+            {
+                "id": "162091b1-f45b-6888-8cb9-cc702156197f",
+                "source": "https://support.microsoft.com/en-us/topic/update-for-microsoft-defender-antimalware-platform-kb4052623-92e21611-8cf1-8e0e-56d6-561a07d144cc",
+                "collection": "windows_10",
+                "published": "2024-05-22",
+                "title": "Update for Microsoft Defender antimalware platform (KB4052623) - Microsoft Support"
+            },
+            {
+                "id": "bdc3a86e-e8d1-7f35-f91e-351c3c3355eb",
+                "source": "https://support.microsoft.com/en-us/windows/protect-your-pc-from-ransomware-08ed68a7-939f-726c-7e84-a72ba92c01c3",
+                "collection": "windows_10",
+                "published": "2024-05-22",
+                "title": "Protect your PC from ransomware - Microsoft Support"
+            },
+            {
+                "id": "e68c4984-2289-55fd-469d-06bf557cb952",
+                "source": "https://support.microsoft.com/en-us/topic/may-23-2024-kb5039705-os-build-17763-5830-out-of-band-2285667a-13a3-4fd9-98a0-e980eb996aac",
+                "collection": "windows_10",
+                "published": "2024-05-23",
+                "title": "May 23, 2024 KB5039705 (OS Build 17763.5830) Out-of-band - Microsoft Support"
+            },
+            {
+                "id": "79494bd0-2365-7f1c-ce41-a7a0b66a565d",
+                "source": "https://support.microsoft.com/en-us/windows/help-protect-my-pc-with-microsoft-defender-offline-9306d528-64bf-4668-5b80-ff533f183d6c",
+                "collection": "windows_10",
+                "published": "2024-05-22",
+                "title": "Help protect my PC with Microsoft Defender Offline - Microsoft Support"
+            },
+            {
+                "id": "55c46658-682b-c93a-ee52-815015bf8c67",
+                "source": "https://support.microsoft.com/en-us/windows/personalize-your-lock-screen-81dab9b0-35cf-887c-84a0-6de8ef72bea0",
+                "collection": "windows_10",
+                "published": "2024-05-21",
+                "title": "Personalize your lock screen - Microsoft Support"
+            },
+            {
+                "id": "ed0b8844-4e7f-263c-1847-fdf3571b824a",
+                "source": "https://support.microsoft.com/en-us/windows/keyboard-shortcuts-in-windows-dcc61a57-8ff0-cffe-9796-cb9706c75eec",
+                "collection": "windows_10",
+                "published": "2024-05-24",
+                "title": "Keyboard shortcuts in Windows - Microsoft Support"
+            },
+            {
+                "id": "8bc980ad-0363-de6f-f074-45ffa35a5c6c",
+                "source": "https://support.microsoft.com/en-us/windows/manage-cookies-in-microsoft-edge-view-allow-block-delete-and-use-168dab11-0753-043d-7c16-ede5947fc64d",
+                "collection": "windows_10",
+                "published": "2024-05-21",
+                "title": "Manage cookies in Microsoft Edge: View, allow, block, delete and use - Microsoft Support"
+            },
+            {
+                "id": "6a4f3b31-c540-4e7e-830b-fdede79db938",
+                "source": "https://support.microsoft.com/en-us/windows/codecs-in-media-player-d5c2cdcd-83a2-4805-abb0-c6888138e456",
+                "collection": "windows_10",
+                "published": "2024-05-28",
+                "title": "Codecs in Media Player - Microsoft Support"
+            },
+            {
+                "id": "c6c39dcf-cbe2-e5a4-0c52-5d3a9a437e04",
+                "source": "https://support.microsoft.com/en-us/windows/get-connected-when-setting-up-your-windows-11-pc-50dca26f-40d5-4c3b-853c-e972dafb7e08",
+                "collection": "windows_10",
+                "published": "2024-05-24",
+                "title": "Get connected when setting up your Windows 11 PC - Microsoft Support"
+            },
+            {
+                "id": "a6f3a2eb-fed2-5aa0-91da-97c4c5406671",
+                "source": "https://support.microsoft.com/en-us/topic/microsoft-defender-update-for-windows-operating-system-installation-images-1c89630b-61ff-00a1-04e2-2d1f3865450d",
+                "collection": "windows_10",
+                "published": "2024-05-22",
+                "title": "Microsoft Defender update for Windows operating system installation images - Microsoft Support"
+            },
+            {
+                "id": "082ca55c-102d-3f20-6deb-b95064f404ce",
+                "source": "https://support.microsoft.com/en-us/windows/using-microsoft-defender-offline-f9c340cb-f367-bd8d-0500-e07afedd5309",
+                "collection": "windows_10",
+                "published": "2024-05-22",
+                "title": "Using Microsoft Defender Offline - Microsoft Support"
+            },
+            {
+                "id": "0becda4c-97f4-6990-f5cf-08fa2235eca0",
+                "source": "https://support.microsoft.com/en-us/windows/protect-your-privacy-on-the-internet-ffe36513-e208-7532-6f95-a3b1c8760dfa",
+                "collection": "windows_10",
+                "published": "2024-05-22",
+                "title": "Protect your privacy on the internet - Microsoft Support"
+            }
+        ],
+        "windows_11": [
+            {
+                "id": "849cbefb-fb1c-a480-6fe3-8633212fcd23",
+                "source": "https://support.microsoft.com/en-us/topic/microsoft-defender-update-for-windows-operating-system-installation-images-1c89630b-61ff-00a1-04e2-2d1f3865450d",
+                "collection": "windows_11",
+                "published": "2024-05-22",
+                "title": "Microsoft Defender update for Windows operating system installation images - Microsoft Support"
+            },
+            {
+                "id": "e837f877-3798-2c4f-2124-b7dba2d2ff28",
+                "source": "https://support.microsoft.com/en-us/windows/personalize-your-lock-screen-81dab9b0-35cf-887c-84a0-6de8ef72bea0",
+                "collection": "windows_11",
+                "published": "2024-05-21",
+                "title": "Personalize your lock screen - Microsoft Support"
+            },
+            {
+                "id": "191cab41-0cf4-43a2-0586-3c8c3739f9c2",
+                "source": "https://support.microsoft.com/en-us/windows/recovery-options-in-windows-31ce2444-7de3-818c-d626-e3b5a3024da5",
+                "collection": "windows_11",
+                "published": "2024-05-24",
+                "title": "Recovery options in Windows - Microsoft Support"
+            },
+            {
+                "id": "3a9b76e7-09e1-a905-ba1a-e88d3d3dcccc",
+                "source": "https://support.microsoft.com/en-us/windows/help-protect-my-pc-with-microsoft-defender-offline-9306d528-64bf-4668-5b80-ff533f183d6c",
+                "collection": "windows_11",
+                "published": "2024-05-22",
+                "title": "Help protect my PC with Microsoft Defender Offline - Microsoft Support"
+            },
+            {
+                "id": "924d98c3-bd58-70bd-7d5c-ee9a5e2bbce4",
+                "source": "https://support.microsoft.com/en-us/windows/use-a-screen-reader-to-set-up-and-troubleshoot-multifactor-authentication-05f0c684-01a1-4db0-8027-4fcf1e529835",
+                "collection": "windows_11",
+                "published": "2024-05-22",
+                "title": "Use a screen reader to set up and troubleshoot multifactor authentication - Microsoft Support"
+            },
+            {
+                "id": "e7b51f26-4e16-204b-2770-ff81a9651de8",
+                "source": "https://support.microsoft.com/en-us/windows/get-connected-when-setting-up-your-windows-11-pc-50dca26f-40d5-4c3b-853c-e972dafb7e08",
+                "collection": "windows_11",
+                "published": "2024-05-24",
+                "title": "Get connected when setting up your Windows 11 PC - Microsoft Support"
+            },
+            {
+                "id": "e7f084f3-49d5-ef60-1964-0894564d872c",
+                "source": "https://support.microsoft.com/en-us/windows/automatic-super-resolution-5d6d95fa-cc02-4673-b62c-2c50f06385aa",
+                "collection": "windows_11",
+                "published": "2024-05-24",
+                "title": "Automatic Super Resolution - Microsoft Support"
+            },
+            {
+                "id": "bc15c25a-a0f2-9810-6914-0f93f2aced3a",
+                "source": "https://support.microsoft.com/en-us/office/set-up-your-device-to-work-with-accessibility-in-microsoft-365-a0ca81c1-fa3e-417e-9d3b-78b8816fce58",
+                "collection": "windows_11",
+                "published": "2024-05-23",
+                "title": "Set up your device to work with accessibility in Microsoft 365 - Microsoft Support"
+            },
+            {
+                "id": "a8b784c7-b26e-939b-706f-72b64e558864",
+                "source": "https://support.microsoft.com/en-us/windows/privacy-and-control-over-your-recall-experience-d404f672-7647-41e5-886c-a3c59680af15",
+                "collection": "windows_11",
+                "published": "2024-05-23",
+                "title": "Privacy and control over your Recall experience - Microsoft Support"
+            },
+            {
+                "id": "802942a8-cdc5-f95e-5e1b-3a43aaf38b4b",
+                "source": "https://support.microsoft.com/en-us/topic/update-for-microsoft-defender-antimalware-platform-kb4052623-92e21611-8cf1-8e0e-56d6-561a07d144cc",
+                "collection": "windows_11",
+                "published": "2024-05-22",
+                "title": "Update for Microsoft Defender antimalware platform (KB4052623) - Microsoft Support"
+            },
+            {
+                "id": "e548743a-e4a4-0f26-0f66-c499233995df",
+                "source": "https://support.microsoft.com/en-us/windows/keyboard-shortcuts-in-windows-dcc61a57-8ff0-cffe-9796-cb9706c75eec",
+                "collection": "windows_11",
+                "published": "2024-05-24",
+                "title": "Keyboard shortcuts in Windows - Microsoft Support"
+            },
+            {
+                "id": "d16c21b9-8a2b-239b-19f0-f573b2e373a7",
+                "source": "https://support.microsoft.com/en-us/windows/codecs-in-media-player-d5c2cdcd-83a2-4805-abb0-c6888138e456",
+                "collection": "windows_11",
+                "published": "2024-05-28",
+                "title": "Codecs in Media Player - Microsoft Support"
+            },
+            {
+                "id": "4ad96050-577d-953c-79ad-62a38899ee75",
+                "source": "https://support.microsoft.com/en-us/windows/retrace-your-steps-with-recall-aa03f8a0-a78b-4b3e-b0a1-2eb8ac48701c",
+                "collection": "windows_11",
+                "published": "2024-05-23",
+                "title": "Retrace your steps with Recall - Microsoft Support"
+            },
+            {
+                "id": "6bcff56f-dc99-922a-385c-730196dbd9db",
+                "source": "https://support.microsoft.com/en-us/windows/manage-cookies-in-microsoft-edge-view-allow-block-delete-and-use-168dab11-0753-043d-7c16-ede5947fc64d",
+                "collection": "windows_11",
+                "published": "2024-05-21",
+                "title": "Manage cookies in Microsoft Edge: View, allow, block, delete and use - Microsoft Support"
+            }
+        ]
+    },
+    "section_4_metadata": {}
+}

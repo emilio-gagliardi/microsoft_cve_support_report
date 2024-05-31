@@ -1,13 +1,18 @@
 import os
 import feedparser
 import pprint
-import yaml
+import logging
+# import yaml
 from datetime import datetime
 import re
+import math
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import (TimeoutException, StaleElementReferenceException)
+from selenium.common.exceptions import (
+    TimeoutException,
+    StaleElementReferenceException
+    )
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -16,20 +21,22 @@ import time
 import inspect
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError
-from kedro_workbench.utils.feature_engineering import get_day_of_week
+# from kedro_workbench.utils.feature_engineering import get_day_of_week
 import uuid
 import hashlib
-from datetime import datetime
+
 from dateutil import parser
 from icecream import ic
 import pandas as pd
+
+# from selenium.common.exceptions import WebDriverException
+
 ic.configureOutput(includeContext=True)
-from selenium.common.exceptions import WebDriverException
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 
-import logging
 logger = logging.getLogger(__name__)
+
 
 def generate_feed_structure_text(feed_url, feed_name, output_dir=None):
     parsed_feed = feedparser.parse(feed_url)
@@ -83,7 +90,8 @@ def generate_feed_structure_yaml(feed_url, feed_name, output_dir=None):
 
 
 def replace_multiple_newlines(text):
-    pattern = r"(\s*\n\s*){2,}"  # Matches 2 or more consecutive newline characters with optional spaces around
+    pattern = r"(\s*\n\s*){2,}"  # Matches 2 or more consecutive newline
+    # characters with optional spaces around
     replacement = " \n"  # Replace with a single newline character
 
     cleaned_text = re.sub(pattern, replacement, text)
@@ -113,6 +121,8 @@ def extract_id_from_url(url):
 
 def is_valid_date_format(date_string):
     # Define a regex pattern for "dd-mm-YYYY" format
+    if not isinstance(date_string, (str, bytes)):
+        return False
     date_pattern = r"\d{2}-\d{2}-\d{4}"
 
     # Use re.match to check if the date string matches the pattern
@@ -123,11 +133,16 @@ def is_valid_date_format(date_string):
 
 
 def is_partial_date(input_date):
+    # Ensure the input is a string
+    if not isinstance(input_date, (str, bytes)):
+        return False
+
     # Define a regular expression pattern for a partial date
     pattern = r"^(?:january|february|march|april|may|june|july|august|september|october|november|december)-\d{1,2}$"
 
     # Check if the input_date matches the pattern (case-insensitive)
     return bool(re.match(pattern, input_date, re.IGNORECASE))
+
 
 def complete_partial_date(partial_date, year):
     if not is_partial_date(partial_date):
@@ -150,9 +165,13 @@ def complete_partial_date(partial_date, year):
     # Create and return the complete date string
     return f"{day:02d}-{month:02d}-{current_year}"
 
+
 def remove_day_suffix(date_input):
     # Define a regular expression pattern to match dates with optional suffix
     # print(f"remove_day_suffix: {date_input}")
+    if not isinstance(date_input, (str, bytes)):
+        return date_input
+
     pattern = r"(\w+)-(\d{1,2})(?:st|nd|rd|th)?-(\d{4})"
 
     # Check if the pattern is matched
@@ -164,7 +183,11 @@ def remove_day_suffix(date_input):
 
 
 def convert_date_string(input_date, year):
+    if input_date == 'nan' or (isinstance(input_date, float) and math.isnan(input_date)):
+        print("Input date is NaN")
+        return ''  # Just return an empty string
     if is_partial_date(input_date):
+        print(f"partial date -> {input_date}")
         fixed_date = complete_partial_date(input_date, year)
         # print(f"partial date found is fixed -> {fixed_date}")
         return fixed_date
@@ -173,9 +196,10 @@ def convert_date_string(input_date, year):
         return input_date
 
     input_date = remove_day_suffix(input_date)
-    # print(f"attempted to remove suffix: {input_date}")
+    
+    formatted_date = ""
     try:
-        # ic(datetime.strptime(input_date, "%B-%d-%Y"))
+        print(f"attempt date convert with -> {input_date}")
         date_string = input_date.capitalize()
         parsed_date = datetime.strptime(date_string, "%B-%d-%Y")
         formatted_date = parsed_date.strftime("%d-%m-%Y")
@@ -189,7 +213,8 @@ def convert_date_string(input_date, year):
             # Use the current date as a fallback
             # ic("couldnt parse date. sending back original")
             formatted_date = input_date
-
+    except AttributeError as ae:
+        print(f"Convert date Attribute error: {ae}")
     return formatted_date
 
 
@@ -218,6 +243,7 @@ def add_id_key(data):
             revision = entry["revision"]
         else:
             revision = None
+        print(f"add_id_key() got a date string: {entry['published']}")
         published = convert_date_string(entry["published"], year)
         if not is_valid_date_format(published):
             print(f"invalid date format: {published}")
@@ -228,7 +254,7 @@ def add_id_key(data):
 
 
 def extract_link_content(data, params, chrome_options, collection_name=None):
-    
+
     for i, entry in enumerate(data):
         try:
             link = entry["source"]
@@ -238,7 +264,7 @@ def extract_link_content(data, params, chrome_options, collection_name=None):
         if entry.get("post_id") is None:
             entry["post_id"] = extract_id_from_url(link)
         driver = webdriver.Chrome(options=chrome_options)
-        
+
         try:
             driver.get(link)
             time.sleep(2.1)
@@ -390,27 +416,6 @@ def get_new_data(mongo_url, mongo_db, mongo_collection, data, nested_id=False):
                 existing_ids = [doc["id"] for doc in cursor]
                 ic(f"found {len(existing_ids)} ids")
                 new_data = [item for item in data if item["id"] not in existing_ids]
-                """ if all("revision" in item for item in data):
-                    print("revision detected")
-                    cursor = collection.find({}, {"_id": 0, "id": 1, "revision": 1})
-                    existing_docs = [(doc["id"], doc["revision"]) for doc in cursor]      
-                    print(f"found {len(existing_docs)} ids")
-                    data_to_update = []
-                    for idx, item in enumerate(data):
-                        document_id = item["id"]
-                        document_revision = item["revision"]
-                        search_tuple = (document_id, document_revision)
-                        
-                        if search_tuple not in existing_docs:
-                            #print(f"new doc: {search_tuple}")
-                            data_to_update.append(idx)
-                    new_data = [data[i] for i in data_to_update]
-                else:
-                    print("no revision")
-                    cursor = collection.find({}, {"_id": 0, "id": 1})
-                    existing_ids = [doc["id"] for doc in cursor]
-                    print(f"found {len(existing_ids)} ids")
-                    new_data = [item for item in data if item["id"] not in existing_ids] """
             else:
                 print("nested")
                 cursor = collection.find({}, {"_id": 0, "metadata.id": 1})
@@ -427,7 +432,7 @@ def get_new_data(mongo_url, mongo_db, mongo_collection, data, nested_id=False):
                         document_id = item["id"]
                         document_revision = item["revision"]
                         search_tuple = (document_id, document_revision)
-                        
+
                         if search_tuple not in existing_docs:
                             #print(f"new doc: {search_tuple}")
                             data_to_update.append(idx)
@@ -443,6 +448,7 @@ def get_new_data(mongo_url, mongo_db, mongo_collection, data, nested_id=False):
         print(str(error))
 
     return new_data
+
 
 def wait_for_specific_file(download_path, expected_extension=".xlsx", timeout=120):
     """
@@ -465,27 +471,28 @@ def wait_for_specific_file(download_path, expected_extension=".xlsx", timeout=12
             return False  # Timeout reached, download may not have completed
 
         time.sleep(sleep_interval)
-        
+
+
 def setup_selenium_browser(download_path, headless=True):
     """
     Initializes and returns a Selenium WebDriver instance with specified options.
-    
+
     Parameters:
     - download_path: The path where downloaded files should be saved.
     - headless: Boolean indicating whether the browser should run in headless mode.
-    
+
     Returns:
     - driver: A configured Selenium WebDriver instance.
     """
     chrome_options = Options()
-    
+
     if headless:
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument("--disable-gpu")  # Recommended as per Selenium documentation
     chrome_options.add_argument("--no-sandbox")  # Recommended for running as root/admin
     chrome_options.add_argument("--log-level=1")
-    
+
     if download_path and download_path != "":
         # Set the download directory
         prefs = {
@@ -494,17 +501,18 @@ def setup_selenium_browser(download_path, headless=True):
             "download.directory_upgrade": True,
             "safebrowsing.enabled": True
         }
-        
+
         chrome_options.add_experimental_option("prefs", prefs)
-        
+
         # Ensure the download directory exists
         os.makedirs(download_path, exist_ok=True)
-    
+
     # Create the Chrome WebDriver instance
     driver = webdriver.Chrome(options=chrome_options)
-    
+
     return driver
-    
+
+
 def wait_for_selenium_element(driver, css_selector, timeout=10, retries=3, parent=None):
     """Wait for an element to be present and return it, with error handling and retry for stale elements."""
     for attempt in range(retries):
@@ -534,6 +542,7 @@ def wait_for_selenium_element(driver, css_selector, timeout=10, retries=3, paren
             return None
     return None
 
+
 def execute_js_on_element(driver, element, js_script):
     """Execute JavaScript on the specified element and return the result."""
     try:
@@ -552,11 +561,12 @@ def dataframe_to_string(df):
 def hash_dataframe(df):
     # Convert the DataFrame to a consistent string representation
     csv_string = dataframe_to_string(df)
-    
+
     # Create a hash object, update it with the string bytes, and get the hexadecimal digest
     hash_obj = hashlib.sha256()
     hash_obj.update(csv_string.encode('utf-8'))  # Encode the string to bytes
     return hash_obj.hexdigest()
+
 
 def split_product_name(row):
     original_product = row['product']
@@ -597,7 +607,7 @@ def split_product_name(row):
     row['product_name'] = product_part
     row['product_version'] = version_part
     row['product_architecture'] = architecture_part
-    
+
     return row
 
 
@@ -606,7 +616,8 @@ def generate_hash(*args):
     hash_object = hashlib.sha256(combined_string.encode())
     hash_hex = hash_object.hexdigest()
     return hash_hex
-    
+
+
 def add_row_guid(df, columns_to_process, col_name='id'):
     if df.empty:
         print("DataFrame is empty. Skipping GUID addition.")
@@ -621,7 +632,7 @@ def add_row_guid(df, columns_to_process, col_name='id'):
         # Convert the hash to a GUID-like format
         guid = str(uuid.UUID(hash_hex[:32]))
         return guid
-    
+
     # Apply the process_row function to each row and assign the result to the 'id' column
     try:
         df[col_name] = df.apply(process_row, axis=1)
@@ -633,6 +644,7 @@ def add_row_guid(df, columns_to_process, col_name='id'):
 
 def convert_to_tuple(build_number):
     return tuple(map(int, build_number))
+
 
 def preprocess_update_guide_product_build_data(data: pd.DataFrame, columns_to_keep: list) -> pd.DataFrame:
     """
@@ -667,11 +679,11 @@ def preprocess_update_guide_product_build_data(data: pd.DataFrame, columns_to_ke
         'impact': 'impact_type',
         'max_severity': 'severity_type'
     }
-    
+
     # Additional renaming if 'download_url' is present
     if 'download_url' in prepped_df.columns:
         rename_dict.update({'download_url': 'package_url'})
-    
+
     prepped_df = prepped_df.rename(columns=rename_dict)
 
     # Convert 'published' column to datetime format
@@ -692,9 +704,13 @@ def preprocess_update_guide_product_build_data(data: pd.DataFrame, columns_to_ke
 
     # Sort by 'published' date in descending order
     prepped_df = prepped_df.sort_values(by='published', ascending=False)
-    # print(f"preprocessed build data:\n{prepped_df.sample(n=10)}")
+    # print(f"preprocessed build data from utility:\n{prepped_df.sample(n=10)}")
     # for i, row in prepped_df.iterrows():
-    #     print(f"row: {row}")
+    #     if i < 5:
+    #         print(f"row: {row}")
+    #     else:
+    #         break
+    # print(f"preprocessed build data from utility:\n{prepped_df.sample(n=10)}")
     return prepped_df
 
 
@@ -714,10 +730,10 @@ def compile_update_guide_products_from_build_data(columns_to_keep: list, data: p
     Returns:
     - pd.DataFrame: An aggregated DataFrame with unique build numbers, CVE IDs, and KB IDs for each product variant.
     """
-    
+
     # Convert 'build_number' to a tuple for unique aggregation
     data['build_number'] = data['build_number'].apply(convert_to_tuple)
-    
+
     # Aggregate data with unique values in 'build_number', 'cve_id', and 'kb_id'
     aggregated_data = data.groupby(['product_name', 'product_version', 'product_architecture']).agg({
         'build_number': lambda x: [list(item) for item in set(x)],  # Ensure unique build numbers as lists
@@ -727,8 +743,9 @@ def compile_update_guide_products_from_build_data(columns_to_keep: list, data: p
     print(f"compile function put together the build data:\n{aggregated_data.head(3)}")
     return aggregated_data
 
+
 def extract_filter_product_build_data(data, products_to_keep):
-    
+
     escaped_products_to_keep = [re.escape(product) for product in products_to_keep]
     # print(f"products to keep: {products_to_keep}")
     regex_pattern = '|'.join(escaped_products_to_keep)
@@ -738,5 +755,5 @@ def extract_filter_product_build_data(data, products_to_keep):
     # For some reason, Selenium code is not correctly selecting the correct products on each run
     # print(f"rows before filter: {data.shape[0]}")
     filtered_df = data[data['Product'].str.contains(regex_pattern, regex=True, na=False)].copy(deep=True)
-    
+
     return filtered_df

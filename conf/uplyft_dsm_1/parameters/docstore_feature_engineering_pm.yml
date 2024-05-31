@@ -1,0 +1,36 @@
+# This is a boilerplate parameters config generated for pipeline 'docstore_feature_engineering_pm'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+mongo_metadata_keys_patch:
+  - id
+  - topic
+  - receivedDateTime
+
+user_prompt_metadata_keys_patch:
+  - id
+  - topic
+  - receivedDateTime
+  - evaluated_noun_chunks
+  - evaluated_keywords
+  - unique_tokens
+
+
+max_prompt_tokens_classification_patch: 1850
+max_llm_output_tokens_classification_patch: 500
+
+patch_classifications:
+  - Conversational
+  - Helpful tool
+  - Problem statement
+  - Solution provided
+
+patch_classification_models:
+  custom: 'ft:gpt-3.5-turbo-1106:big-hat-group-inc:classifierpmv2:8dk94ZVn'
+  default: 'gpt-4o'
+
+patch_evaluation_models:
+  keywords: gpt-4o
+  noun_chunks: gpt-4o
+  summarization: gpt-4o

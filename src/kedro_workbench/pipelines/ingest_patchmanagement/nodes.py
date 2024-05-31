@@ -2,33 +2,36 @@
 This is a boilerplate pipeline 'ingest_patchmanagement'
 generated using Kedro 0.18.11
 """
-from typing import Dict, Any, List, Tuple
-from kedro_workbench.utils.email_utils import (
-    clean_email,
-    move_files_between_containers,
-    convert_date_string,
-    write_empty_json_to_blob_container,
-)
-from kedro_workbench.utils.feed_utils import (
-    replace_multiple_newlines,
-    generate_custom_uuid,
-)
-from kedro_workbench.utils.decorators import timing_decorator
+from typing import Any, Dict, List
+
+import hashlib
+import logging
+from datetime import datetime
+from tqdm import tqdm
+# import fsspec
+# from icecream import ic
 from kedro.config import ConfigLoader
 from kedro.framework.project import settings
 
-from icecream import ic
+# from kedro_workbench.utils.decorators import timing_decorator
+from kedro_workbench.utils.email_utils import (
+    clean_email,
+    convert_date_string,
+    move_files_between_containers,
+    write_empty_json_to_blob_container,
+)
+from kedro_workbench.utils.feed_utils import (
+    generate_custom_uuid,
+    replace_multiple_newlines,
+)
 
-ic.configureOutput(includeContext=True)
-from datetime import datetime
-import fsspec
-import logging
-import hashlib
+logger = logging.getLogger(__name__)
+# ic.configureOutput(includeContext=True)
 
 
 def extract_partitioned_json(partitioned_jsons) -> Dict[str, Any]:
     # no processing required
-
+    logger.info("Extracting patch management emails from blob storage.")
     return partitioned_jsons
 
 
@@ -41,7 +44,7 @@ def combine_partitioned_json(partitioned_jsons) -> List[Dict[str, Any]]:
         try:
             list_of_json = partition_load_func()
         except Exception as e:
-            ic(f"Error loading {partition_key}: {e}")
+            logger.error(f"Error loading patch management json {partition_key}: {e}")
 
         if not list_of_json:
             continue
@@ -52,7 +55,7 @@ def combine_partitioned_json(partitioned_jsons) -> List[Dict[str, Any]]:
             "from",
             "receivedDateTime",
         ]
-        for json in list_of_json:
+        for json in tqdm(list_of_json):
             json["source"] = partition_key
             published_str = convert_date_string(json["receivedDateTime"])
             json["published"] = datetime.strptime(published_str, "%d-%m-%Y")
@@ -70,22 +73,26 @@ def combine_partitioned_json(partitioned_jsons) -> List[Dict[str, Any]]:
             ).hexdigest()
             json["hash"] = dict_hash
             merged_list.append(json)
-    ic(f"num emails pulled from blob storage {len(merged_list)}")
+    logger.info(
+        f"Total patch managment emails pulled from blob storage"
+        f"{len(merged_list)}"
+        )
     return merged_list
 
 
 def clean_jsons(combined_jsons):
-    ic(f"cleaning and sorting ({len(combined_jsons)}) patch management jsons...")
     combined_cleaned_sorted = []
-    for i, item in enumerate(combined_jsons):
+    logger.info("Start basic string and pattern-based cleaning")
+
+    for i, item in enumerate(tqdm(combined_jsons, desc="Processing email body text")):
         item["body"] = clean_email(item["body"])
         item["body"] = replace_multiple_newlines(item["body"])
+
     combined_cleaned_sorted = sorted(
         combined_jsons,
         key=lambda x: (x["subject"], datetime.fromisoformat(x["receivedDateTime"])),
     )
 
-    # ic(f"num emails {len(combined_cleaned_sorted)}")
     return combined_cleaned_sorted
 
 
@@ -109,6 +116,9 @@ def move_jsons_azure(data, params):
 
 
 def add_placeholder(params):
+    # description: built-in kedro partitioned dataset expects
+    # at least 1 item in the directory. This is a workaround to prevent
+    # the next run from crashing
     conf_loader = ConfigLoader(settings.CONF_SOURCE)
     credentials = conf_loader["credentials"]
     azure_blob_credentials = credentials["azure_blob_credentials"]

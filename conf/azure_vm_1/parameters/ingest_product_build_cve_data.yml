@@ -1,0 +1,248 @@
+# This is a boilerplate parameters config generated for pipeline 'ingest_product_build_cve_data'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+
+skip_download: False
+overwrite: False
+scrape_build_data_headless: True
+product_build_ingestion_params:
+  windows10:
+    download_path: 'foobar\~/1'
+    source_url: 'https://msrc.microsoft.com/update-guide'
+  windows11:
+    download_path: 'foobar\~/1'
+    source_url: 'https://msrc.microsoft.com/update-guide'
+  edge:
+    download_path: 'foobar\~/1'
+    source_url: 'https://msrc.microsoft.com/update-guide'
+
+product_build_product_patterns:
+  windows_10:
+    - "Windows 10 for x64-based Systems"
+    - "Windows 10 for 32-bit Systems"
+    - "Windows 10 Version 22H2 for 32-bit Systems"
+    - "Windows 10 Version 22H2 for x64-based Systems"
+    - "Windows 10 Version 21H2 for x64-based Systems"
+    - "Windows 10 Version 21H2 for 32-bit Systems"
+    - "Windows 10 Version 21H1 for x64-based Systems"
+    - "Windows 10 Version 21H1 for 32-bit Systems"
+    - "Windows 10 Version 20H2 for x64-based Systems"
+    - "Windows 10 Version 20H2 for 32-bit Systems"
+  windows_11:
+    - "Windows 11 for x64-based Systems"
+    - "Windows 11 Version 23H2 for x64-based Systems"
+    - "Windows 11 Version 22H2 for x64-based Systems"
+    - "Windows 11 version 21H2 for x64-based Systems"
+  edge:
+    - "Microsoft Edge (Chromium-based)"
+
+product_build_preprocess_params:
+  windows10:
+    columns_to_keep:
+    - 'Release date'
+    - 'Product'
+    - 'Impact'
+    - 'Max Severity'
+    - 'Article'
+    - 'Download'
+    - 'Build Number'
+    - 'Details'
+    - 'Article_URL'
+    - 'Download_URL'
+    - 'Details_URL'
+    - 'hash'
+  windows11:
+    columns_to_keep:
+    - 'Release date'
+    - 'Product'
+    - 'Impact'
+    - 'Max Severity'
+    - 'Article'
+    - 'Download'
+    - 'Build Number'
+    - 'Details'
+    - 'Article_URL'
+    - 'Download_URL'
+    - 'Details_URL'
+    - 'hash'
+  edge:
+    columns_to_keep:
+    - 'Release date'
+    - 'Product'
+    - 'Impact'
+    - 'Max Severity'
+    - 'Article'
+    - 'Download'
+    - 'Build Number'
+    - 'Details'
+    - 'Article_URL'
+    - 'Details_URL'
+    - 'hash'
+
+compile_products_params:
+  windows10:
+    columns_to_keep:
+    - 'product_name'
+    - 'product_version'
+    - 'product_architecture'
+    - 'product_build_id'
+    - 'impact_type'
+    - 'severity_type'
+  windows11:
+    columns_to_keep:
+    - 'product_name'
+    - 'product_version'
+    - 'product_architecture'
+    - 'product_build_id'
+    - 'impact_type'
+    - 'severity_type'
+  edge:
+    columns_to_keep:
+    - 'product_name'
+    - 'product_version'
+    - 'product_architecture'
+    - 'product_build_id'
+    - 'impact_type'
+    - 'severity_type'
+
+compile_kb_articles_params:
+  windows10:
+    columns_to_keep:
+    - 'build_number'
+    - 'kb_id'
+    - 'published'
+    - 'product_build_id'
+    - 'article_url'
+  windows11:
+    columns_to_keep:
+    - 'build_number'
+    - 'kb_id'
+    - 'published'
+    - 'product_build_id'
+    - 'article_url'
+  edge:
+    columns_to_keep:
+    - 'build_number'
+    - 'kb_id'
+    - 'published'
+    - 'product_build_id'
+    - 'article_url'
+
+compile_product_build_params:
+  windows10:
+    columns_to_keep:
+    - 'product'
+    - 'product_name'
+    - 'product_version'
+    - 'product_architecture'
+    - 'impact_type'
+    - 'severity_type'
+    - 'build_number'
+    - 'cve_id'
+    - 'kb_id'
+    - 'published'
+    - 'product_build_id'
+    - 'article_url'
+    - 'cve_url'
+    - 'hash'
+  windows11:
+    columns_to_keep:
+    - 'product'
+    - 'product_name'
+    - 'product_version'
+    - 'product_architecture'
+    - 'impact_type'
+    - 'severity_type'
+    - 'build_number'
+    - 'cve_id'
+    - 'kb_id'
+    - 'published'
+    - 'product_build_id'
+    - 'article_url'
+    - 'cve_url'
+    - 'hash'
+  edge:
+    columns_to_keep:
+    - 'product'
+    - 'product_name'
+    - 'product_version'
+    - 'product_architecture'
+    - 'impact_type'
+    - 'severity_type'
+    - 'build_number'
+    - 'cve_id'
+    - 'kb_id'
+    - 'published'
+    - 'product_build_id'
+    - 'article_url'
+    - 'cve_url'
+    - 'hash'
+
+compile_update_package_params:
+  windows10:
+    columns_to_keep:
+    - 'build_number'
+    - 'published'
+    - 'product_build_id'
+    - 'package_type'
+    - 'package_url'
+  windows11:
+    columns_to_keep:
+    - 'build_number'
+    - 'published'
+    - 'product_build_id'
+    - 'package_type'
+    - 'package_url'
+  edge:
+    columns_to_keep:
+    - 'build_number'
+    - 'published'
+    - 'product_build_id'
+    - 'package_type'
+
+concatenate_products_params:
+  columns_to_keep:
+    - 'product_name'
+    - 'product_version'
+    - 'product_architecture'
+    - 'build_number'
+    - 'cve_id'
+    - 'kb_id'
+
+concatenate_kb_article_params:
+  columns_to_keep:
+    - 'id'
+    - 'build_number'
+    - 'kb_id'
+    - 'published'
+    - 'product_build_id'
+    - 'article_url'
+  
+concatenate_product_build_params:
+  columns_to_keep:
+    - 'product'
+    - 'product_name'
+    - 'product_version'
+    - 'product_architecture'
+    - 'impact_type'
+    - 'severity_type'
+    - 'build_number'
+    - 'cve_id'
+    - 'kb_id'
+    - 'published'
+    - 'product_build_id'
+    - 'summary'
+    - 'article_url'
+    - 'cve_url'
+    - 'hash'
+
+concatenate_update_package_params:
+  columns_to_keep:
+    - 'build_number'
+    - 'published'
+    - 'product_build_id'
+    - 'package_type'
+    - 'package_url'
+    - 'id'

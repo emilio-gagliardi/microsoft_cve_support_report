@@ -2,7 +2,6 @@
 This is a boilerplate pipeline 'ingest_edge_releases'
 generated using Kedro 0.18.11
 """
-import random
 
 
 def extract_edge_release_1(data):

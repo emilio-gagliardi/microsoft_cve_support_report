@@ -418,7 +418,16 @@ def summarize_section_1_periodic_report_CVE_WEEKLY_v1(model, data, max_tokens, t
         if not rows_without_summary.empty:
             # If not empty, apply summarization to rows_without_summary
             summarized_rows = rows_without_summary.apply(
-                lambda row: apply_summarization(row, model, system_prompt, max_tokens, temperature, source_column_name, key_to_extract), axis=1)
+                lambda row: apply_summarization(
+                    row,
+                    model,
+                    system_prompt,
+                    max_tokens,
+                    temperature,
+                    source_column_name,
+                    key_to_extract),
+                axis=1
+                )
             # Concatenate the DataFrames back together
             updated_data = pd.concat([rows_with_summary, summarized_rows]).sort_index()
         else:
@@ -445,24 +454,27 @@ def calculate_section_1_periodic_report_CVE_WEEKLY_v1(report_end_date, day_inter
     if source_documents.empty:
         logger.info("No MSRC posts to plot by day.")
         return {"data": source_documents, "metadata": {'total_cves': 0}}
-    
+    # print("before filter")
+    # print(source_documents.head())
     source_documents = filter_source_documents(source_documents, report_end_date, day_interval)
-    
+    # print("after filter")
+    # print(source_documents.head())
+
     final_df = prepare_plot_data(source_documents, weekdays_order)
-    
+    # print(final_df.head())
     report_end_date_dt = datetime.strptime(report_end_date, "%d-%m-%Y")
     timestamp = report_end_date_dt.strftime("%Y_%m_%d")
     filename = f"posts_by_day_{timestamp}.png"
     output_file_path = f"data/08_reporting/periodic_report_CVE_WEEKLY_v1/plots/{filename}"
-    
+
     generate_and_save_plot(final_df, output_file_path, report_end_date, day_interval)
-    
+
     logger.info(f"Generated daily post frequency plot: {output_file_path}")
-    
+
     metadata = collect_metadata(source_documents)
-    
-    logger.info(f"Collected metadata data descriptives from source documents.")
-    
+
+    logger.info("Collected metadata data descriptives from source documents.")
+
     return_dict = {
         "data": source_documents,
         "metadata": metadata,
@@ -788,11 +800,13 @@ def compile_periodic_report_CVE_WEEKLY_v1(section_1_data, section_2_data, sympto
     )
     section_1_df['report_category'] = section_1_df['report_category'].astype(cat_type)
     section_1_df = section_1_df.sort_values(['report_category', 'post_id'], ascending=[True, False])
+    section_1_df['summarization_payload'] = section_1_df['summarization_payload'].apply(lambda x: '' if isinstance(x, float) else x)
+    # print('section_1_data')
     # for id, row in section_1_df.iterrows():
     #     id = row['post_id']
     #     category = row['report_category']
     #     package_pairs = row['package_pairs']
-    #     print(f"{id} - {category}\n{package_pairs}")  
+    #     print(f"{id} - {category}\n{type(row['summarization_payload'])} - {row['summarization_payload']}")  
     section_1_df['revision'] = section_1_df['revision'].apply(lambda x: '{:.1f}'.format(x) if pd.notna(x) else "1.0")
     section_1_df['published'] = section_1_df['published'].dt.strftime('%d-%m-%Y')
     section_1_df['published'] = section_1_df['published'].astype(str)
@@ -935,6 +949,18 @@ def compile_periodic_report_CVE_WEEKLY_v1(section_1_data, section_2_data, sympto
         },
         {
             "$group": {
+                "_id": {
+                    "collection": "$metadata.collection",
+                    "post_id": "$metadata.post_id"
+                },
+                "document": { "$first": "$$ROOT" }
+            }
+        },
+        {
+            "$replaceRoot": { "newRoot": "$document" }
+        },
+        {
+            "$group": {
                 "_id": "$metadata.collection",
                 "documents": { "$push": "$$ROOT" }
             }
@@ -947,7 +973,16 @@ def compile_periodic_report_CVE_WEEKLY_v1(section_1_data, section_2_data, sympto
     ]
 
     results = mongo.collection.aggregate(pipeline)
-
+    base_urls = {
+        'stable_channel_notes': 'https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel',
+        'security_update_notes': 'https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnotes-security'
+    }
+    def add_base_url_to_source(source, collection):
+        if source.startswith('#'):
+            base_url = base_urls.get(collection, '')
+            return f"{base_url}{source}"
+        return source
+    
     reshaped_documents = {}
 
     for group in results:
@@ -961,10 +996,10 @@ def compile_periodic_report_CVE_WEEKLY_v1(section_1_data, section_2_data, sympto
             title_or_subject = metadata.get('title', metadata.get('subject', 'No Title or Subject'))
             
             cleaned_title_or_subject = clean_appendix_title(title_or_subject)
-            
+            source_with_base_url = add_base_url_to_source(metadata.get('source', 'No Source'), group['_id'])
             reshaped_document = {
                 'id': metadata.get('id', 'No ID'),  # Using .get() for safe access
-                'source': metadata.get('source', 'No Source'),
+                'source': source_with_base_url,
                 'collection': group['_id'],  # The collection name is now the group ID
                 'published': metadata.get('published', 'No Published Date'),
                 'title': cleaned_title_or_subject  # Use the determined 'title' or 'subject'
@@ -1204,7 +1239,7 @@ def create_draft_campaign_cve_weekly(report_data_container, params):
             "suppression_group_id": 28454}
         }
 
-    print(data)
+    # print(data)
 
     sg = SendGridAPIClient(sendgrid_api_key)
     try:

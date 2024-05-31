@@ -1,0 +1,30 @@
+# This is a boilerplate parameters config generated for pipeline 'docstore_feature_engineering_posts'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+# This is a boilerplate parameters config generated for pipeline 'docstore_feature_engineering_pm'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+user_prompt_metadata_keys_msrc:
+  - id
+  - post_id
+  - revision
+  - published
+
+msrc_classifications:
+  - Critical
+  - New feature
+  - Solution provided
+  - Information only
+
+max_prompt_tokens_classification_msrc: 1850
+max_llm_output_tokens_classification_msrc: 500
+llm_temperature: 0.0
+
+msrc_classification_models:
+  custom: 'ft:gpt-3.5-turbo-1106:big-hat-group-inc:classifiermsrcv2:8djdhoze'
+  gpt4: 'gpt-4o'
+  default: 'gpt-4o'
