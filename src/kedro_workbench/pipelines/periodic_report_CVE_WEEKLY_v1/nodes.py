@@ -392,7 +392,10 @@ def fit_prompt_data_periodic_report_CVE_WEEKLY_v1(data, max_prompt_tokens):
     separator = "\n------------------------\n"
     
     data['user_prompt'] = data.apply(lambda row: fit_prompt_to_window(user_prompt_instructions + separator + row['metadata_context'] + row['text'] + separator, max_prompt_tokens), axis=1)
-    
+    data['summarization_context'] = data.apply(lambda row: (
+        f"Post metadata:\n---\n{row['metadata_context']}\n---\n"
+        f"Post text:\n---\n{row['text']}"
+    ), axis=1)
     logger.info(f"User prompt fit to model token limit.")
 
     return data

@@ -26,10 +26,8 @@ from athina_logger.api_key import AthinaApiKey
 # from athina_logger.openai_wrapper import openai
 from athina_logger.inference_logger import InferenceLogger
 from athina_logger.exception.custom_exception import CustomException
-from athina_logger.athina_meta import AthinaMeta
-# from athina_logger.log_stream_inference.openai_completion_stream import LogOpenAiCompletionStreamInference
+# from athina_logger.athina_meta import AthinaMeta
 from dataclasses import dataclass
-from typing import List, Dict, Optional, Any
 
 
 logger = logging.getLogger(__name__)
@@ -99,7 +97,6 @@ def compute_tfidf(text):
 
     stopwords = nlp.Defaults.stop_words
     stopwords_list = list(stopwords) if isinstance(stopwords, set) else stopwords
-    # stopwords_list = stopwords_list.split() if isinstance(stopwords_list, str) else stopwords_list
 
     return_words = []
     all_tokens = list(
@@ -116,7 +113,11 @@ def compute_tfidf(text):
     multi_adjectives = find_multi_word_strings(adjectives)
     return_words.extend(multi_adjectives) """
 
-    # pos_labels = [token.pos_ for token in doc if token.text.lower() not in stopwords_list]
+    # pos_labels = [
+    #     token.pos_
+    #     for token in doc
+    #     if token.text.lower() not in stopwords_list
+    # ]
     vectorizer = TfidfVectorizer(stop_words=stopwords_list)
     tfidf_matrix = vectorizer.fit_transform([text])
     feature_names = (
@@ -134,7 +135,8 @@ def compute_tfidf(text):
 def extract_nouns(text: str) -> List[str]:
     """
     Extracts nouns from the given text using Spacy NLP library.
-    Searches for multiword strings that refer to settings and parameters discussed in security updates and other Microsoft update announcements.
+    Searches for multiword strings that refer to settings and parameters
+    discussed in security updates and other Microsoft update announcements.
 
     Args:
         text (str): The text from which to extract nouns.
@@ -183,9 +185,11 @@ def extract_entities(text: str) -> List[str]:
         threshold (float): The threshold for entity recognition. Default is 0.1.
 
     Returns:
-        Tuple[List[str], List[str]]: A tuple containing two lists - sorted_nouns and entities.
+        Tuple[List[str], List[str]]: A tuple containing two lists 
+        - sorted_nouns and entities.
         sorted_nouns (List[str]): A list of unique nouns extracted from the given text.
-        entities (List[str]): A list of unique entity texts extracted from the given text.
+        entities (List[str]): A list of unique entity texts extracted
+            from the given text.
     """
     entities = []
 
@@ -205,9 +209,10 @@ def find_cve_patterns(text: str) -> Tuple[List[str], List[str]]:
         text: The text in which to search for CVE patterns.
 
     Returns:
-        A tuple containing two lists. The first list contains cleaned fix matches, which are fix patterns
-        for CVEs found in the text. The second list contains any CVE matches found in the text that were not
-        matched by the fix patterns.
+        A tuple containing two lists. The first list contains cleaned
+        fix matches, which are fix patterns for CVEs found in the text.
+        The second list contains any CVE matches found in the text
+        that were not matched by the fix patterns.
     """
     cve_prefix = "CVE-"
     fix_pattern = r"fix for\s*(CVE-\d{4}-\d+)"
@@ -224,7 +229,8 @@ def find_cve_patterns(text: str) -> Tuple[List[str], List[str]]:
 
 def clean_named_entities(named_entities: List[str]) -> List[str]:
     """
-    Clean the list of named entities by removing any entities that match the numeric pattern.
+    Clean the list of named entities by removing any entities that
+    match the numeric pattern.
 
     Args:
         named_entities (List[str]): A list of named entities.
@@ -337,7 +343,8 @@ def convert_date_string(date_string: str, date_format: str = "%d-%m-%Y") -> str:
 
     Args:
         date_string: The date string to be converted.
-        date_format: The format to which the date string will be converted. Defaults to "%d-%m-%Y".
+        date_format: The format to which the date string will be converted.
+        Defaults to "%d-%m-%Y".
 
     Returns:
         The formatted date string if it can be parsed otherwise it returns "NaT".
@@ -413,8 +420,10 @@ def prepare_for_sentence_parser_llama_sentence(
     return final_string
 
 
-# We start with a list of Document objects which are arbitrarily ordered and difficult to process for each collection
-# build a dictionary based on collection name and create separate lists for each collection
+# We start with a list of Document objects which are arbitrarily ordered
+# and difficult to process for each collection
+# build a dictionary based on collection name and create separate lists
+# for each collection
 # allows for simple access to grouped documents using "collection_names" list
 def restructure_documents_by_collection(documents):
     collection_dict = {}
@@ -447,17 +456,19 @@ def yield_n_documents(dictionary, n):
                 result_dict[key] = doc_list[:num_documents]
                 doc_list[:num_documents] = []
                 remaining_documents -= num_documents
-            # Stop yielding documents if we have reached the maximum number of documents for this iteration
+            # Stop yielding documents if we have reached the maximum
+            # number of documents for this iteration
             if remaining_documents == 0:
                 break
 
         # Yield the result dictionary for this iteration
         yield result_dict
 
+
 def fit_prompt_to_window(text, max_tokens):
     tokens = encoding.encode(text)
     num_tokens = len(tokens)
-    
+
     if num_tokens > max_tokens:
         # Keep only the first max_tokens
         limited_tokens = tokens[:max_tokens]
@@ -467,7 +478,9 @@ def fit_prompt_to_window(text, max_tokens):
 
         # Use the length of the limited_text to truncate the original text
         truncated_text = text[:len(limited_text)]
-        logger.debug(f"Prompt was truncated to fit within the max_tokens limit of {max_tokens}")
+        logger.debug(
+            f"Prompt was truncated to fit within the max_tokens limit of {max_tokens}"
+            )
         return truncated_text
     else:
         # If the original number of tokens is within the limit, return the original text
@@ -504,7 +517,10 @@ def call_llm_completion(model, system_prompt, input_prompt, max_tokens, temperat
     except HTTPError as e:
         # If an HTTPError is caught, print out the error and the data sent
         print(f"HTTPError occurred: {e}")
-        print(f"Max tokens: {max_tokens}\nData sent: system_prompt: {system_prompt}, \ninput_prompt: {input_prompt}")
+        print(
+            f"Max tokens: {max_tokens}\n"
+            f"Data sent: system_prompt: {system_prompt}\n"
+            f"input_prompt: {input_prompt}\n")
     except Exception as e:
         # Catch other exceptions
         print(f"An exception occurred: {e}")
@@ -673,8 +689,7 @@ def evaluate_rake_keywords(
         environment="uplyft_dsm_1",
         customer_id="PortalFuse",
         customer_user_id="emilio.gagliardi",
-        # session_id=f"report_etl_{current_datetime.strftime('%d_%m_%Y')}",
-        session_id="issue 2 testing",
+        session_id=f"report_etl_{current_datetime.strftime('%d_%m_%Y')}",
         custom_attributes=custom_logging_attributes,
     )
     # Generate a response using the GPT chat client
@@ -682,7 +697,7 @@ def evaluate_rake_keywords(
         llm_params=llm_params,
         athina_params=athina_params
         )
-    
+
     sanitized_response_content = sanitize_output(response_content, 'list')
     # print(f"response_content: {sanitized_response_content}")
     time.sleep(2)
@@ -763,8 +778,7 @@ def evaluate_noun_chunks(
         environment="uplyft_dsm_1",
         customer_id="PortalFuse",
         customer_user_id="emilio.gagliardi",
-        # session_id=f"report_etl_{current_datetime.strftime('%d_%m_%Y')}",
-        session_id=f"issue 2 testing",
+        session_id=f"report_etl_{current_datetime.strftime('%d_%m_%Y')}",
         custom_attributes=custom_logging_attributes,
     )
     response_content = call_llm_completion_with_logging(
@@ -793,26 +807,7 @@ def classify_email(
     # classifications_str = ", ".join(classifications)
     # if len(tokens) > 2000:
     #     text = ' '.join(tokens[:2000])
-        
-    #     input_prompt = f"the email text to evaluate: {text},\n the available selections: {classifications_str},\nClassify a post as 'Helpful tool' if it discusses a useful product, tool, or technology that is terrtiary/not directly related to the core purpose of the email but may be useful for other administrators to try.\n"
-    #     "Classify a post as 'conversational' if it is has less than 50 unique tokens (available in the metadata) and is dialog between users without a description of a tool or website or a problem or a solution. Do not generate your own answer for conversational messages, simply output the email message as-is. without any further analysis.\n"
-    #     "Classify a post as 'Problem statement' if it includes a description of a problem without a solution.\n"
-    #     "Classify a post as 'Solution provided' if it includes a detailed description of a solution to a particular patching issue.\n"
-    #     "Use the metadata fields 'evaluated_keywords' and 'evaluated_noun_chunks' to help your analysis.\n"
-    #     "Given the above information, classify the email message and with one of the selections. If there is too little text to evaluate, the email was very short and can be classified as, 'conversational'"
-    # elif len(tokens) == 0:
-    #     input_prompt = "There is no text for this email after cleaning, which means it was purely conversational. Format your answer as a single string 'conversational'. Do not include any other dialog in your answer."
-    # else:
-    #     input_prompt = f"the email text to evaluate: {text},\n the available selections: {classifications_str},\nClassify a post as 'Helpful tool' if it discusses a useful product, tool, or technology that is terrtiary/not directly related to the core purpose of the email but may be useful for other administrators to try.\n"
-    #     "Classify a post as 'conversational' if it is has less than 50 unique tokens (available in the metadata) and is dialog between users without a description of a tool or website or a problem or a solution. Do not generate your own answer for conversational messages, simply output the email message as-is. without any further analysis.\n"
-    #     "Classify a post as 'Problem statement' if it includes a description of a problem without a solution.\n"
-    #     "Classify a post as 'Solution provided' if it includes a detailed description of a solution to a particular patching issue.\n"
-    #     "Use the metadata fields 'evaluated_keywords' and 'evaluated_noun_chunks' to help your analysis.\n"
-    #     "Given the above information, classify the email message and with one of the selections. If there is too little text to evaluate, the email was very short and can be classified as, 'conversational'"
-    
-    # requires updating the function signature and calling instances
-    # context = context
-    
+
     current_datetime = datetime.now()
     llm_params = LLMParams(
         model=model,
@@ -839,8 +834,7 @@ def classify_email(
         environment="uplyft_dsm_1",
         customer_id="PortalFuse",
         customer_user_id="emilio.gagliardi",
-        # session_id=f"report_etl_{current_datetime.strftime('%d_%m_%Y')}",
-        session_id=f"issue 2 testing",
+        session_id=f"report_etl_{current_datetime.strftime('%d_%m_%Y')}",
         custom_attributes=custom_logging_attributes,
     )
     response_content = call_llm_completion_with_logging(
@@ -901,9 +895,6 @@ def classify_post(
     context=None,
     expected_value=None,
 ):
-    # requires updating the function signature and calling instances
-    # context = context
-    
     current_datetime = datetime.now()
     llm_params = LLMParams(
         model=model,
@@ -931,11 +922,16 @@ def classify_post(
         environment="uplyft_dsm_1",
         customer_id="PortalFuse",
         customer_user_id="emilio.gagliardi",
-        # session_id=f"report_etl_{current_datetime.strftime('%d_%m_%Y')}",
-        session_id=f"issue 2 testing",
+        session_id=f"report_etl_{current_datetime.strftime('%d_%m_%Y')}",
         custom_attributes=custom_logging_attributes,
     )
-    # llm_response = call_llm_completion(model, system_prompt, user_prompt, max_tokens, temperature)
+    # llm_response = call_llm_completion(
+    #     model,
+    #     system_prompt,
+    #     user_prompt,
+    #     max_tokens,
+    #     temperature
+    #     )
     llm_response = call_llm_completion_with_logging(
         llm_params=llm_params,
         athina_params=athina_params
@@ -958,11 +954,11 @@ def summarize_post(
     system_prompt,
     user_prompt,
     max_tokens,
-    temperature
+    temperature,
+    context=None,
+    expected_value=None,
 ):
-    # requires updating the function signature and calling instances
-    # context = context
-    
+
     current_datetime = datetime.now()
     llm_params = LLMParams(
         model=model,
@@ -984,7 +980,8 @@ def summarize_post(
             {"role": "user", "content": user_prompt}
             ],
         user_query=None,
-        context=None,
+        context=context,
+        expected_response=expected_value,
         prompt_slug="summarize_cve",
         environment="uplyft_dsm_1",
         customer_id="PortalFuse",
@@ -997,7 +994,6 @@ def summarize_post(
             llm_params=llm_params,
             athina_params=athina_params
         )
-        # Assuming extract_json_from_text is a function that extracts JSON string from the response
         extracted_json = extract_json_from_text(llm_response)
         if extracted_json:
             try:
@@ -1009,22 +1005,21 @@ def summarize_post(
                     json_result = json.loads(corrected_json)
                 except Exception as e:
                     logger.error(f"Error correcting JSON string: {e}\n{extracted_json}")
-                    # Assuming clean_json_string is a function designed to clean or fix the JSON string
                     try:
                         cleaned_json_string = clean_json_string(extracted_json)
                         json_result = json.loads(cleaned_json_string)
                     except Exception as e:
                         logger.error(f"Final attempt failed; proceeding without this record. Error: {e}")
-                        return {}  # Return an empty dict or a specific error indicator
+                        return {}
             except Exception as e:
                 logger.error(f"Unexpected error parsing JSON: {e}")
-                return {}  # Return an empty dict or a specific error indicator
+                return {}
         else:
             logger.debug("No JSON extracted from LLM response.")
-            return {}  # Considered a safe return value when no JSON is extracted
+            return {}
     except Exception as e:
         logger.error(f"Error calling LLM or processing response: {e}")
-        return {}  # Ensures that any error before JSON processing results in a safe return
+        return {}
 
     return json_result
 
@@ -1044,7 +1039,8 @@ def apply_summarization(
         system_prompt,
         row['user_prompt'],
         max_tokens,
-        temperature
+        temperature,
+        row['summarization_context']
         )
 
     # Directly assign the llm_response (summarization payload) to the DataFrame

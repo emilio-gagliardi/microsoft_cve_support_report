@@ -22,16 +22,17 @@ from .nodes import (
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline([
-        # node(
-        #     func=check_for_product_build_augment_complete,
-        #     inputs="begin_docstore_feature_engineering",
-        #     outputs="proceed_with_docstore_feature_engineering",
-        #     name="check_for_product_build_augment_complete",
-        #     ),
+        node(
+            func=check_for_product_build_augment_complete,
+            inputs="begin_docstore_feature_engineering",
+            outputs="proceed_with_docstore_feature_engineering",
+            name="check_for_product_build_augment_complete",
+            ),
         node(
             func=extract_posts_to_classify,
             inputs=[
-                "params:document_limit"
+                "params:document_limit",
+                "proceed_with_docstore_feature_engineering"
                 ],
             outputs="docstore_to_classify_msrc",
             name="extract_posts_to_classify",
@@ -74,22 +75,22 @@ def create_pipeline(**kwargs) -> Pipeline:
             outputs="classification_data_msrc",
             name="classify_post_msrc_node",
         ),
-        # node(
-        #     func=batch_update_post_types_msrc,
-        #     inputs=["classification_data_msrc"],
-        #     outputs="batch_classification_update_flag_msrc",
-        #     name="batch_update_post_types_msrc",
-        # ),
-        # node(
-        #     func=remove_mongo_duplicates_msrc,
-        #     inputs=["batch_classification_update_flag_msrc"],
-        #     outputs="classification_msrc_status",
-        #     name="remove_mongo_duplicates_msrc",
-        # ),
-        # node(
-        #     func=begin_classification_patch_pipeline_connector,
-        #     inputs="classification_msrc_status",
-        #     outputs="proceed_with_classification_patch",
-        #     name="begin_classification_patch_pipeline_connector",
-        # ),
+        node(
+            func=batch_update_post_types_msrc,
+            inputs=["classification_data_msrc"],
+            outputs="batch_classification_update_flag_msrc",
+            name="batch_update_post_types_msrc",
+        ),
+        node(
+            func=remove_mongo_duplicates_msrc,
+            inputs=["batch_classification_update_flag_msrc"],
+            outputs="classification_msrc_status",
+            name="remove_mongo_duplicates_msrc",
+        ),
+        node(
+            func=begin_classification_patch_pipeline_connector,
+            inputs="classification_msrc_status",
+            outputs="proceed_with_classification_patch",
+            name="begin_classification_patch_pipeline_connector",
+        ),
     ])

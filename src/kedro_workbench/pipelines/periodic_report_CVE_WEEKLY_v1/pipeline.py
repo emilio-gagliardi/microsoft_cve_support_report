@@ -33,6 +33,7 @@ from .nodes import (fetch_section_1_periodic_report_CVE_WEEKLY_v1_data,
                     create_draft_campaign_cve_weekly_workaround
                     )
 
+
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline([
         node(
