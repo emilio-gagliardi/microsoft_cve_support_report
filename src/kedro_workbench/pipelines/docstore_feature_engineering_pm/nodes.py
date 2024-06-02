@@ -171,11 +171,20 @@ def filter_keywords(data):
     return data
 
 
-def evaluate_keywords_node(model, data, max_tokens, temperature):
+def evaluate_keywords_node(
+    model,
+    data,
+    max_tokens,
+    temperature
+):
+    # pass keywords and email tokens to llm to evaluate keywords
+    # create context column in 'evaluate_rake_keywords'
+
     if data.empty:
         return data
     # print(data['all_keywords'])
     system_prompt = completion_keyword_evaluation_system_prompt["patch_management"]
+
     tqdm.pandas(desc="Evaluating Keywords")
     data["evaluated_keywords"] = data.progress_apply(
         lambda x: evaluate_rake_keywords(
@@ -188,14 +197,22 @@ def evaluate_keywords_node(model, data, max_tokens, temperature):
         )
     logger.info("Completed evaluating keywords.")
     # print(f"evaluate_keywords all cols -> {data.columns}")
-    # pprint(data[['filtered_keywords', 'evaluated_keywords']])
+    # print(data[['filtered_keywords', 'evaluated_keywords']])
     return data
 
 
-def evaluate_noun_chunks_node(model, data, max_tokens, temperature):
+def evaluate_noun_chunks_node(
+    model,
+    data,
+    max_tokens,
+    temperature
+):
+    # pass noun chunks and email tokens to llm to evaluate noun chunks
+    # create context column in 'evaluate_noun_chunks'
     if data.empty:
         return data
     system_prompt = completion_noun_chunk_evaluation_system_prompt["patch_management"]
+    
     tqdm.pandas(desc="Evaluating Noun chunks")
     data["evaluated_noun_chunks"] = data.progress_apply(
         lambda x: evaluate_noun_chunks(
@@ -229,6 +246,9 @@ def build_user_prompt_data_patch(data, metadata_keys=None):
 
 
 def fit_classification_prompt_patch(data, max_prompt_tokens):
+    # combine context and email tokens and user_prompt template
+    # trim tokens outside of LLM token threshold
+    # create classification_context variable 
     if data.empty:
         return data
     collection_label = "patch_management"
@@ -243,10 +263,13 @@ def fit_classification_prompt_patch(data, max_prompt_tokens):
         max_prompt_tokens
         ),
                                      axis=1)
+    data['classification_context'] = data.apply(lambda row: (
+    f"Email metadata:\n---\n{row['metadata_context']}\n---\nEmail text:\n---\n{row['email_text_clean']}"
+    ), axis=1)
     logger.info("User prompt fit to model token limit.")
-    # print(f"new column added by fit_classification_prompt\n")
+    # print(f"new column added by fit_classification_prompt: classification_context\n")
     # for index, row in data.iterrows():
-    #     print(f"{row['user_prompt']}\n")
+    #     print(f"{row['classification_context']}\n")
     return data
 
 
@@ -260,6 +283,7 @@ def classify_emails_node(model, data, max_tokens, temperature):
     key_to_extract = 'classification'
     system_prompt = completion_post_type_classify_system_prompt.get(collection_label)
 
+    # update the following, pass context
     tqdm.pandas(desc="Classifying emails")
     data[source_column_name] = data.progress_apply(
         lambda row: classify_email(
@@ -267,7 +291,8 @@ def classify_emails_node(model, data, max_tokens, temperature):
             system_prompt,
             row['user_prompt'],
             max_tokens,
-            temperature),
+            temperature,
+            row['classification_context']),
         axis=1)
     data['post_type'] = data.apply(
         feat_eng.extract_post_type,

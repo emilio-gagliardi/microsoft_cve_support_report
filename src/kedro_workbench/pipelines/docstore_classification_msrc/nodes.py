@@ -134,10 +134,14 @@ def fit_classification_prompt_msrc(data, max_prompt_tokens):
             max_prompt_tokens
             ),
         axis=1)
+    data['classification_context'] = data.apply(lambda row: (
+        f"Post metadata:\n---\n{row['metadata_context']}\n---\n"
+        f"Post text:\n---\n{row['text']}"
+    ), axis=1)
     logger.info("User prompt fit to model token limit.")
     # print(f"new column added by fit_classification_prompt\n")
     # for index, row in data.iterrows():
-    #     print(f"{row}\n")
+    #     print(f"{row['classification_context']}\n")
     # mongo.client.close()
     return data
 
@@ -163,7 +167,8 @@ def classify_post_msrc_node(model, data, max_tokens, temperature):
                 system_prompt,
                 row['user_prompt'],
                 max_tokens,
-                temperature),
+                temperature,
+                row['classification_context']),
             axis=1
             )
         data['post_type'] = data.apply(
