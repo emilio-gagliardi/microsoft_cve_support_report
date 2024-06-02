@@ -362,7 +362,7 @@ def convert_date_string(date_string: str, date_format: str = "%d-%m-%Y") -> str:
             date_object = parse(date_string)
             formatted_date = date_object.strftime(date_format)
         except Exception as e:
-            print(f"attempted to process date srtring {date_string}\n{str(e)}")
+            raise ValueError(f"Failed to process date string {date_string}: {str(e)}")
 
     return formatted_date
 
@@ -516,16 +516,16 @@ def call_llm_completion(model, system_prompt, input_prompt, max_tokens, temperat
         response_msg = choice.message.content
     except HTTPError as e:
         # If an HTTPError is caught, print out the error and the data sent
-        print(f"HTTPError occurred: {e}")
-        print(
+        logger.error(f"HTTPError occurred: {e}")
+        logger.info(
             f"Max tokens: {max_tokens}\n"
             f"Data sent: system_prompt: {system_prompt}\n"
             f"input_prompt: {input_prompt}\n")
     except Exception as e:
         # Catch other exceptions
-        print(f"An exception occurred: {e}")
+        logger.error(f"An exception occurred: {e}")
 
-    sleep(3.5)
+    sleep(2.5)
     return response_msg
 
 
@@ -607,13 +607,19 @@ def get_sample_llm_response():
 
 
 def sanitize_output(output, expected_format):
-    # Remove Python code markers
-    if expected_format == 'list':
-        sanitized_output = re.sub(r'^```python\n|\n```$', '', output)
-    elif expected_format == 'json':
-        sanitized_output = re.sub(r'^```json\n|\n```$', '', output)
-    else:
-        sanitized_output = output
+    # Define patterns based on the expected format
+    # Something is adding comments around LLM response.
+    # This is a workaround to attempt to trim that if it is encountered.
+
+    patterns = {
+        'list': (r'^```python\n', r'\n```$'),
+        'json': (r'^```json\n', r'\n```$')
+    }
+    start_pattern, end_pattern = patterns.get(expected_format, ('', ''))
+
+    # Use a single regex substitution to remove the markers
+    sanitized_output = re.sub(f'{start_pattern}|{end_pattern}', '', output)
+    print(f"Sanitzing llm output for {expected_format}\n{sanitized_output}")
     return sanitized_output
 
 

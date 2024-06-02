@@ -29,8 +29,7 @@ from .nodes import (fetch_section_1_periodic_report_CVE_WEEKLY_v1_data,
                     move_cve_weekly_report_assets_to_blob,
                     load_report_assets_to_webserver,
                     send_notification_to_sendgrid_qa_list,
-                    create_draft_campaign_cve_weekly,
-                    create_draft_campaign_cve_weekly_workaround
+                    create_draft_campaign_cve_weekly
                     )
 
 
