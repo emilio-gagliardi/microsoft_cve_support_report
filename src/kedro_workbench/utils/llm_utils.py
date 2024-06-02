@@ -1,4 +1,5 @@
 import time
+import math
 from datetime import datetime
 from time import sleep
 from kedro.config import ConfigLoader
@@ -25,10 +26,8 @@ from athina_logger.api_key import AthinaApiKey
 # from athina_logger.openai_wrapper import openai
 from athina_logger.inference_logger import InferenceLogger
 from athina_logger.exception.custom_exception import CustomException
-from athina_logger.athina_meta import AthinaMeta
-# from athina_logger.log_stream_inference.openai_completion_stream import LogOpenAiCompletionStreamInference
+# from athina_logger.athina_meta import AthinaMeta
 from dataclasses import dataclass
-from typing import List, Dict, Optional, Any
 
 
 logger = logging.getLogger(__name__)
@@ -98,7 +97,6 @@ def compute_tfidf(text):
 
     stopwords = nlp.Defaults.stop_words
     stopwords_list = list(stopwords) if isinstance(stopwords, set) else stopwords
-    # stopwords_list = stopwords_list.split() if isinstance(stopwords_list, str) else stopwords_list
 
     return_words = []
     all_tokens = list(
@@ -115,7 +113,11 @@ def compute_tfidf(text):
     multi_adjectives = find_multi_word_strings(adjectives)
     return_words.extend(multi_adjectives) """
 
-    # pos_labels = [token.pos_ for token in doc if token.text.lower() not in stopwords_list]
+    # pos_labels = [
+    #     token.pos_
+    #     for token in doc
+    #     if token.text.lower() not in stopwords_list
+    # ]
     vectorizer = TfidfVectorizer(stop_words=stopwords_list)
     tfidf_matrix = vectorizer.fit_transform([text])
     feature_names = (
@@ -133,7 +135,8 @@ def compute_tfidf(text):
 def extract_nouns(text: str) -> List[str]:
     """
     Extracts nouns from the given text using Spacy NLP library.
-    Searches for multiword strings that refer to settings and parameters discussed in security updates and other Microsoft update announcements.
+    Searches for multiword strings that refer to settings and parameters
+    discussed in security updates and other Microsoft update announcements.
 
     Args:
         text (str): The text from which to extract nouns.
@@ -182,9 +185,11 @@ def extract_entities(text: str) -> List[str]:
         threshold (float): The threshold for entity recognition. Default is 0.1.
 
     Returns:
-        Tuple[List[str], List[str]]: A tuple containing two lists - sorted_nouns and entities.
+        Tuple[List[str], List[str]]: A tuple containing two lists 
+        - sorted_nouns and entities.
         sorted_nouns (List[str]): A list of unique nouns extracted from the given text.
-        entities (List[str]): A list of unique entity texts extracted from the given text.
+        entities (List[str]): A list of unique entity texts extracted
+            from the given text.
     """
     entities = []
 
@@ -204,9 +209,10 @@ def find_cve_patterns(text: str) -> Tuple[List[str], List[str]]:
         text: The text in which to search for CVE patterns.
 
     Returns:
-        A tuple containing two lists. The first list contains cleaned fix matches, which are fix patterns
-        for CVEs found in the text. The second list contains any CVE matches found in the text that were not
-        matched by the fix patterns.
+        A tuple containing two lists. The first list contains cleaned
+        fix matches, which are fix patterns for CVEs found in the text.
+        The second list contains any CVE matches found in the text
+        that were not matched by the fix patterns.
     """
     cve_prefix = "CVE-"
     fix_pattern = r"fix for\s*(CVE-\d{4}-\d+)"
@@ -223,7 +229,8 @@ def find_cve_patterns(text: str) -> Tuple[List[str], List[str]]:
 
 def clean_named_entities(named_entities: List[str]) -> List[str]:
     """
-    Clean the list of named entities by removing any entities that match the numeric pattern.
+    Clean the list of named entities by removing any entities that
+    match the numeric pattern.
 
     Args:
         named_entities (List[str]): A list of named entities.
@@ -336,7 +343,8 @@ def convert_date_string(date_string: str, date_format: str = "%d-%m-%Y") -> str:
 
     Args:
         date_string: The date string to be converted.
-        date_format: The format to which the date string will be converted. Defaults to "%d-%m-%Y".
+        date_format: The format to which the date string will be converted.
+        Defaults to "%d-%m-%Y".
 
     Returns:
         The formatted date string if it can be parsed otherwise it returns "NaT".
@@ -354,7 +362,7 @@ def convert_date_string(date_string: str, date_format: str = "%d-%m-%Y") -> str:
             date_object = parse(date_string)
             formatted_date = date_object.strftime(date_format)
         except Exception as e:
-            print(f"attempted to process date srtring {date_string}\n{str(e)}")
+            raise ValueError(f"Failed to process date string {date_string}: {str(e)}")
 
     return formatted_date
 
@@ -412,8 +420,10 @@ def prepare_for_sentence_parser_llama_sentence(
     return final_string
 
 
-# We start with a list of Document objects which are arbitrarily ordered and difficult to process for each collection
-# build a dictionary based on collection name and create separate lists for each collection
+# We start with a list of Document objects which are arbitrarily ordered
+# and difficult to process for each collection
+# build a dictionary based on collection name and create separate lists
+# for each collection
 # allows for simple access to grouped documents using "collection_names" list
 def restructure_documents_by_collection(documents):
     collection_dict = {}
@@ -446,17 +456,19 @@ def yield_n_documents(dictionary, n):
                 result_dict[key] = doc_list[:num_documents]
                 doc_list[:num_documents] = []
                 remaining_documents -= num_documents
-            # Stop yielding documents if we have reached the maximum number of documents for this iteration
+            # Stop yielding documents if we have reached the maximum
+            # number of documents for this iteration
             if remaining_documents == 0:
                 break
 
         # Yield the result dictionary for this iteration
         yield result_dict
 
+
 def fit_prompt_to_window(text, max_tokens):
     tokens = encoding.encode(text)
     num_tokens = len(tokens)
-    
+
     if num_tokens > max_tokens:
         # Keep only the first max_tokens
         limited_tokens = tokens[:max_tokens]
@@ -466,7 +478,9 @@ def fit_prompt_to_window(text, max_tokens):
 
         # Use the length of the limited_text to truncate the original text
         truncated_text = text[:len(limited_text)]
-        logger.debug(f"Prompt was truncated to fit within the max_tokens limit of {max_tokens}")
+        logger.debug(
+            f"Prompt was truncated to fit within the max_tokens limit of {max_tokens}"
+            )
         return truncated_text
     else:
         # If the original number of tokens is within the limit, return the original text
@@ -502,13 +516,16 @@ def call_llm_completion(model, system_prompt, input_prompt, max_tokens, temperat
         response_msg = choice.message.content
     except HTTPError as e:
         # If an HTTPError is caught, print out the error and the data sent
-        print(f"HTTPError occurred: {e}")
-        print(f"Max tokens: {max_tokens}\nData sent: system_prompt: {system_prompt}, \ninput_prompt: {input_prompt}")
+        logger.error(f"HTTPError occurred: {e}")
+        logger.info(
+            f"Max tokens: {max_tokens}\n"
+            f"Data sent: system_prompt: {system_prompt}\n"
+            f"input_prompt: {input_prompt}\n")
     except Exception as e:
         # Catch other exceptions
-        print(f"An exception occurred: {e}")
+        logger.error(f"An exception occurred: {e}")
 
-    sleep(3.5)
+    sleep(2.5)
     return response_msg
 
 
@@ -589,6 +606,23 @@ def get_sample_llm_response():
     return json.dumps(current_dict)
 
 
+def sanitize_output(output, expected_format):
+    # Define patterns based on the expected format
+    # Something is adding comments around LLM response.
+    # This is a workaround to attempt to trim that if it is encountered.
+
+    patterns = {
+        'list': (r'^```python\n', r'\n```$'),
+        'json': (r'^```json\n', r'\n```$')
+    }
+    start_pattern, end_pattern = patterns.get(expected_format, ('', ''))
+
+    # Use a single regex substitution to remove the markers
+    sanitized_output = re.sub(f'{start_pattern}|{end_pattern}', '', output)
+    print(f"Sanitzing llm output for {expected_format}\n{sanitized_output}")
+    return sanitized_output
+
+
 def evaluate_rake_keywords(
     model,
     row,
@@ -600,29 +634,40 @@ def evaluate_rake_keywords(
     text = row["normalized_tokens"]
     keywords = row["filtered_keywords"]
     keywords_list = convert_string_to_object(keywords)
-    # print(f"evaluating row -> {type(keywords_list)}, len {len(keywords_list)}, item 0 -> {keywords_list[0]}")
+    expected_value = None
+    if "expected_value" in row:
+        expected_value = row['expected_value']
 
     try:
         tokens = str(text).split()
     except Exception as e:
         # Handle the exception here, e.g., print an error message
         tokens = text
+        logger.info(f"Warning. Could not split 'normalized_tokens' into list of words.{e}")
 
     if len(tokens) > 2000:
         text = ' '.join(tokens[:2000])
         first_20_keywords = keywords_list[:20]
         keywords_string = ", ".join(f"({score}, '{text}')" for score, text in first_20_keywords)
-        input_prompt = f"Given the following keyword tuples: \n---\n{keywords_string}\n---\nThe email text: \n---\n{text}\n---\n, choose the top 7 keywords that communicate the core topic and purpose of the email. You must remove keywords that reference the author (eg. 'karl wester'). you must remove keywords with credentials (eg., 'philip elder mcts senior technical architect microsoft high availability mvp'). You must remove keywords that reference communication channels. You must remove semantically empty keywords, remove partial url keywords (eg., 'https :// support' or 'https :// www') and you must remove keywords with dates in them. Format your answer as a python list and only respond with the list: [keyword_1, keyword_2, ...]. Do not include any other dialog in your answer. If there are no good keywords, just output 'None'. Before you finish, evaluate your answer and remove keywords that are substrings of other keywords ['exe exit code', 'exit code'] -> ['exe exit code']."
+        input_prompt = f"Given the following keyword tuples: \n---\n{keywords_string}\n---\nThe email text: \n---\n{text}\n---\n, choose the top 7 keywords that communicate the core topic and purpose of the email. Remove keywords that reference the author (eg. 'karl wester'). Remove keywords with credentials (eg., 'philip elder mcts senior technical architect microsoft high availability mvp'). Remove keywords that reference communication channels. Remove semantically empty keywords, remove partial url keywords (eg., 'https :// support' or 'https :// www') and you must remove keywords with dates in them. Ignore all keywords extracted from an email signature. Important. Format your answer as a python list and only respond with the list: [keyword_1, keyword_2, ...]. Do not include any other dialog or language-specific markers in your answer. If there are no good keywords, just output 'None'. Before you finish, evaluate your answer and remove keywords that are substrings of other keywords ['exe exit code', 'exit code'] -> ['exe exit code']."
     elif len(keywords) == 0:
         keywords_string = 'None'
         input_prompt = f"There are no keywords for this document to evaluate. Your answer is {keywords_string}"
     else:
         # print(f"evaluating keywords -> {keywords}")
         keywords_string = keywords
-        input_prompt = f"Given the following keyword tuples: \n---\n{keywords_string}\n---\nThe email text: \n---\n{text}\n---\nchoose the top 4 keywords that communicate the core topic and purpose of the email. You must remove keywords that reference the author (eg. 'karl wester'). you must remove keywords with credentials (eg., 'philip elder mcts senior technical architect microsoft high availability mvp'). You must remove keywords that reference communication channels. You must remove semantically empty keywords, remove partial url keywords (eg., 'https :// support' or 'https :// www') and you must remove keywords with dates in them. Format your answer as a python list and only respond with the list: [keyword_1, keyword_2]. No not include any other dialog in your answer. If there are no good keywords, just output 'None'. Before you finish, evaluate your answer and remove keywords that are substrings of other keywords ['exe exit code', 'exit code'] -> ['exe exit code']"
-    # Define your input prompt to the GPT chat client
+        input_prompt = f"Given the following keyword tuples: \n---\n{keywords_string}\n---\nThe email text: \n---\n{text}\n---\nchoose the top 4 keywords that communicate the core topic and purpose of the email.Remove keywords that reference the author (eg. 'karl wester'). Remove keywords with credentials (eg., 'philip elder mcts senior technical architect microsoft high availability mvp'). Remove keywords that reference communication channels. Remove semantically empty keywords, remove partial url keywords (eg., 'https :// support' or 'https :// www') and you must remove keywords with dates in them. Ignore all keywords extracted from an email signature. Important. Format your answer as a python list and only respond with the list: [keyword_1, keyword_2, ...]. Do not include any other dialog or language-specific markers in your answer. If there are no good keywords, just output 'None'. Before you finish, evaluate your answer and remove keywords that are substrings of other keywords ['exe exit code', 'exit code'] -> ['exe exit code']."
 
+    # Define your input prompt to the GPT chat client
     json_safe_input_prompt = json.dumps(input_prompt)
+    context = (
+        f"Rake keyword tuples (0<=n<=20):\n---\n{keywords_string}\n---\n"
+        f"The email text:\n---\n{row['normalized_tokens']}\n"
+    )
+
+    row['keyword_context'] = context
+    # print(f"keyword context\n{row['keyword_context']}")
+
     current_datetime = datetime.now()
     llm_params = LLMParams(
         model=model,
@@ -644,7 +689,8 @@ def evaluate_rake_keywords(
             {"role": "user", "content": input_prompt}
             ],
         user_query=None,
-        context=None,
+        expected_response=expected_value,
+        context=row['keyword_context'],
         prompt_slug="evaluate_rake_keywords",
         environment="uplyft_dsm_1",
         customer_id="PortalFuse",
@@ -657,10 +703,11 @@ def evaluate_rake_keywords(
         llm_params=llm_params,
         athina_params=athina_params
         )
-    # print(f"response_content: {response_content}")
 
+    sanitized_response_content = sanitize_output(response_content, 'list')
+    # print(f"response_content: {sanitized_response_content}")
     time.sleep(2)
-    return response_content
+    return sanitized_response_content
 
 
 def evaluate_noun_chunks(
@@ -673,6 +720,11 @@ def evaluate_noun_chunks(
     # Extract text and keywords from the DataFrame row
     text = row["email_text_clean"]
     noun_chunks_str = row["noun_chunks"]
+    expected_value = None
+    if "expected_value" in row:
+        expected_value = row['expected_value']
+    # context = description + df['noun_chunks'] + description + df['email_text_clean']
+
     if not isinstance(noun_chunks_str, str):
         noun_chunks_str = ""
         noun_chunks = []
@@ -691,15 +743,19 @@ def evaluate_noun_chunks(
         text = ' '.join(tokens[:2000])
         first_20_noun_chunks = noun_chunks[:20]
         noun_chunks_string = ', '.join(first_20_noun_chunks)
-        input_prompt = f"""Given the following noun chunks: \n---\n{noun_chunks_string}\n---\n, and the email text: \n---\n {text} \n---\n, choose the top 7 noun chunks that communicate the core topic and purpose of the email. You must remove noun chunks that reference the author (eg. 'karl wester'). you must remove noun chunks with credentials (eg., 'philip elder mcts senior technical architect microsoft high availability mvp'). You must remove noun chunks that reference communication channels. You must remove semantically empty noun chunks, remove partial url noun chunks (eg., 'https :// support' or 'https :// www') and you must remove noun chunks with dates in them. Format your answer as a python list and only respond with the list: [noun_chunk_1, noun_chunk_2]. Do not include any other dialog in your answer. If there are no good noun chunks, just output 'None'. Before you finish, evaluate your answer and remove noun chunks that are substrings of other keywords ['exe exit code', 'exit code'] -> ['exe exit code']."""
+        input_prompt = f"""Given the following noun chunks: \n---\n{noun_chunks_string}\n---\n, and the email text: \n---\n {text} \n---\n, choose the top 7 noun chunks that communicate the core topic and purpose of the email. Remove noun chunks that reference the author (eg. 'karl wester'). Remove noun chunks with credentials (eg., 'philip elder mcts senior technical architect microsoft high availability mvp'). Remove noun chunks that reference communication channels. Remove semantically empty noun chunks, remove partial url noun chunks (eg., 'https :// support' or 'https :// www') and you must remove noun chunks with dates in them. Ignore all noun chunks extracted from an email signature. Important. Format your answer as a python list and only respond with the list: [keyword_1, keyword_2, ...]. Do not include any other dialog or language-specific markers in your answer. If there are no good noun chunks, just output 'None'. Before you finish, evaluate your answer and remove noun chunks that are substrings of other noun chunks ['exe exit code', 'exit code'] -> ['exe exit code']."""
     elif len(noun_chunks) == 0:
         noun_chunks_string = 'None'
         input_prompt = f"""There are no noun chunks for this document to evaluate. Your answer is {noun_chunks_string}"""
     else:
         noun_chunks_string = noun_chunks_str
-        input_prompt = f"""Given the following noun chunks: \n---\n{noun_chunks_string}\n---\n, and the email text: \n---\n{text}\n---\n, choose the top 4 noun chunks that communicate the core topic and purpose of the email. You must remove noun chunks that reference the author (eg. 'karl wester'). you must remove noun chunks with credentials (eg., 'philip elder mcts senior technical architect microsoft high availability mvp'). You must remove noun chunks that reference communication channels. You must remove semantically empty noun chunks, remove partial url noun chunks (eg., 'https :// support' or 'https :// www') and you must remove noun chunks with dates in them. Format your answer as a python list and only respond with the list: [noun_chunk_1, noun_chunk_2]. Do not include any other dialog in your answer. If there are no good noun chunks, just output 'None'. Before you finish, evaluate your answer and remove noun chunks that are substrings of other keywords ['exe exit code', 'exit code'] -> ['exe exit code']."""
-    
-    # print(f"noun chunks: {noun_chunks_string}")
+        input_prompt = f"""Given the following noun chunks: \n---\n{noun_chunks_string}\n---\n, and the email text: \n---\n{text}\n---\n, choose the top 4 noun chunks that communicate the core topic and purpose of the email. Remove noun chunks that reference the author (eg. 'karl wester'). Remove noun chunks with credentials (eg., 'philip elder mcts senior technical architect microsoft high availability mvp'). Remove noun chunks that reference communication channels. Remove semantically empty noun chunks, remove partial url noun chunks (eg., 'https :// support' or 'https :// www') and you must remove noun chunks with dates in them. Ignore all noun chunks extracted from an email signature. Important. Format your answer as a python list and only respond with the list: [keyword_1, keyword_2, ...]. Do not include any other dialog or language-specific markers in your answer. If there are no good noun chunks, just output 'None'. Before you finish, evaluate your answer and remove noun chunks that are substrings of other noun chunks ['exe exit code', 'exit code'] -> ['exe exit code']."""
+    context = (
+        f"Extracted Noun chunks:\n---\n{noun_chunks_string}\n---\n"
+        f"\n---\nThe email text:\n---\n{text}\n"
+    )
+    row['noun_context'] = context
+    # print(f"noun context\n{row['noun_context']}")
     json_safe_input_prompt = json.dumps(input_prompt)
     current_datetime = datetime.now()
     llm_params = LLMParams(
@@ -722,7 +778,8 @@ def evaluate_noun_chunks(
             {"role": "user", "content": input_prompt}
             ],
         user_query=None,
-        context=None,
+        expected_response=expected_value,
+        context=context,
         prompt_slug="evaluate_noun_chunks",
         environment="uplyft_dsm_1",
         customer_id="PortalFuse",
@@ -734,9 +791,11 @@ def evaluate_noun_chunks(
         llm_params=llm_params,
         athina_params=athina_params
         )
+    sanitized_response_content = sanitize_output(response_content, 'list')
+    # print(f"response_content: {sanitized_response_content}")
     # Store the response back in the DataFrame
     time.sleep(2)
-    return response_content
+    return sanitized_response_content
 
 
 def classify_email(
@@ -744,7 +803,9 @@ def classify_email(
     system_prompt,
     user_prompt,
     max_tokens,
-    temperature
+    temperature,
+    context=None,
+    expected_value=None,
 ):
     # Extract text and keywords from the DataFrame row
     # text = row["email_text_clean"]
@@ -752,22 +813,7 @@ def classify_email(
     # classifications_str = ", ".join(classifications)
     # if len(tokens) > 2000:
     #     text = ' '.join(tokens[:2000])
-        
-    #     input_prompt = f"the email text to evaluate: {text},\n the available selections: {classifications_str},\nClassify a post as 'Helpful tool' if it discusses a useful product, tool, or technology that is terrtiary/not directly related to the core purpose of the email but may be useful for other administrators to try.\n"
-    #     "Classify a post as 'conversational' if it is has less than 50 unique tokens (available in the metadata) and is dialog between users without a description of a tool or website or a problem or a solution. Do not generate your own answer for conversational messages, simply output the email message as-is. without any further analysis.\n"
-    #     "Classify a post as 'Problem statement' if it includes a description of a problem without a solution.\n"
-    #     "Classify a post as 'Solution provided' if it includes a detailed description of a solution to a particular patching issue.\n"
-    #     "Use the metadata fields 'evaluated_keywords' and 'evaluated_noun_chunks' to help your analysis.\n"
-    #     "Given the above information, classify the email message and with one of the selections. If there is too little text to evaluate, the email was very short and can be classified as, 'conversational'"
-    # elif len(tokens) == 0:
-    #     input_prompt = "There is no text for this email after cleaning, which means it was purely conversational. Format your answer as a single string 'conversational'. Do not include any other dialog in your answer."
-    # else:
-    #     input_prompt = f"the email text to evaluate: {text},\n the available selections: {classifications_str},\nClassify a post as 'Helpful tool' if it discusses a useful product, tool, or technology that is terrtiary/not directly related to the core purpose of the email but may be useful for other administrators to try.\n"
-    #     "Classify a post as 'conversational' if it is has less than 50 unique tokens (available in the metadata) and is dialog between users without a description of a tool or website or a problem or a solution. Do not generate your own answer for conversational messages, simply output the email message as-is. without any further analysis.\n"
-    #     "Classify a post as 'Problem statement' if it includes a description of a problem without a solution.\n"
-    #     "Classify a post as 'Solution provided' if it includes a detailed description of a solution to a particular patching issue.\n"
-    #     "Use the metadata fields 'evaluated_keywords' and 'evaluated_noun_chunks' to help your analysis.\n"
-    #     "Given the above information, classify the email message and with one of the selections. If there is too little text to evaluate, the email was very short and can be classified as, 'conversational'"
+
     current_datetime = datetime.now()
     llm_params = LLMParams(
         model=model,
@@ -788,7 +834,8 @@ def classify_email(
             {"role": "user", "content": user_prompt}
             ],
         user_query=None,
-        context=None,
+        context=context,
+        expected_response=expected_value,
         prompt_slug="classify_patch_email",
         environment="uplyft_dsm_1",
         customer_id="PortalFuse",
@@ -833,6 +880,7 @@ def extract_json_from_text(text):
             return json_string
     return None
 
+
 def clean_json_string(json_string):
     """
     Remove trailing commas from JSON strings to prevent JSONDecodeError.
@@ -849,7 +897,9 @@ def classify_post(
     system_prompt,
     user_prompt,
     max_tokens,
-    temperature
+    temperature,
+    context=None,
+    expected_value=None,
 ):
     current_datetime = datetime.now()
     llm_params = LLMParams(
@@ -872,7 +922,8 @@ def classify_post(
             {"role": "user", "content": user_prompt}
             ],
         user_query=None,
-        context=None,
+        context=context,
+        expected_response=expected_value,
         prompt_slug="classify_cve",
         environment="uplyft_dsm_1",
         customer_id="PortalFuse",
@@ -880,7 +931,13 @@ def classify_post(
         session_id=f"report_etl_{current_datetime.strftime('%d_%m_%Y')}",
         custom_attributes=custom_logging_attributes,
     )
-    # llm_response = call_llm_completion(model, system_prompt, user_prompt, max_tokens, temperature)
+    # llm_response = call_llm_completion(
+    #     model,
+    #     system_prompt,
+    #     user_prompt,
+    #     max_tokens,
+    #     temperature
+    #     )
     llm_response = call_llm_completion_with_logging(
         llm_params=llm_params,
         athina_params=athina_params
@@ -898,7 +955,16 @@ def classify_post(
     return json_result
 
 
-def summarize_post(model, system_prompt, user_prompt, max_tokens, temperature):
+def summarize_post(
+    model,
+    system_prompt,
+    user_prompt,
+    max_tokens,
+    temperature,
+    context=None,
+    expected_value=None,
+):
+
     current_datetime = datetime.now()
     llm_params = LLMParams(
         model=model,
@@ -920,7 +986,8 @@ def summarize_post(model, system_prompt, user_prompt, max_tokens, temperature):
             {"role": "user", "content": user_prompt}
             ],
         user_query=None,
-        context=None,
+        context=context,
+        expected_response=expected_value,
         prompt_slug="summarize_cve",
         environment="uplyft_dsm_1",
         customer_id="PortalFuse",
@@ -933,7 +1000,6 @@ def summarize_post(model, system_prompt, user_prompt, max_tokens, temperature):
             llm_params=llm_params,
             athina_params=athina_params
         )
-        # Assuming extract_json_from_text is a function that extracts JSON string from the response
         extracted_json = extract_json_from_text(llm_response)
         if extracted_json:
             try:
@@ -945,22 +1011,21 @@ def summarize_post(model, system_prompt, user_prompt, max_tokens, temperature):
                     json_result = json.loads(corrected_json)
                 except Exception as e:
                     logger.error(f"Error correcting JSON string: {e}\n{extracted_json}")
-                    # Assuming clean_json_string is a function designed to clean or fix the JSON string
                     try:
                         cleaned_json_string = clean_json_string(extracted_json)
                         json_result = json.loads(cleaned_json_string)
                     except Exception as e:
                         logger.error(f"Final attempt failed; proceeding without this record. Error: {e}")
-                        return {}  # Return an empty dict or a specific error indicator
+                        return {}
             except Exception as e:
                 logger.error(f"Unexpected error parsing JSON: {e}")
-                return {}  # Return an empty dict or a specific error indicator
+                return {}
         else:
             logger.debug("No JSON extracted from LLM response.")
-            return {}  # Considered a safe return value when no JSON is extracted
+            return {}
     except Exception as e:
         logger.error(f"Error calling LLM or processing response: {e}")
-        return {}  # Ensures that any error before JSON processing results in a safe return
+        return {}
 
     return json_result
 
@@ -980,7 +1045,8 @@ def apply_summarization(
         system_prompt,
         row['user_prompt'],
         max_tokens,
-        temperature
+        temperature,
+        row['summarization_context']
         )
 
     # Directly assign the llm_response (summarization payload) to the DataFrame
@@ -1033,11 +1099,20 @@ def create_metadata_string_for_user_prompt(row, metadata_keys):
     if 'unique_tokens' in metadata_keys and 'unique_tokens' in row and row['unique_tokens']:
         metadata_str += f"number unique tokens: {row['unique_tokens']}\n"
 
-    if 'evaluated_keywords' in metadata_keys and 'evaluated_keywords' in row and row['evaluated_keywords']:
-        metadata_str += f"rake keywords: {row['evaluated_keywords']}\n"
+    # if 'evaluated_keywords' in metadata_keys and 'evaluated_keywords' in row and row['evaluated_keywords']:
+    #     metadata_str += f"rake keywords: {row['evaluated_keywords']}\n"
 
-    if 'evaluated_noun_chunks' in metadata_keys and 'evaluated_noun_chunks' in row and row['evaluated_noun_chunks']:
-        metadata_str += f"noun chunks: {row['evaluated_noun_chunks']}\n"
+    if 'evaluated_keywords' in metadata_keys and 'evaluated_keywords' in row:
+        if row['evaluated_keywords'] and not (isinstance(row['evaluated_keywords'], float) and math.isnan(row['evaluated_keywords'])):
+            metadata_str += f"rake keywords: {row['evaluated_keywords']}\n"
+        else:
+            metadata_str += "rake keywords: None\n"
+            
+    if 'evaluated_noun_chunks' in metadata_keys and 'evaluated_noun_chunks' in row:
+        if row['evaluated_noun_chunks'] and not (isinstance(row['evaluated_noun_chunks'], float) and math.isnan(row['evaluated_noun_chunks'])):
+            metadata_str += f"noun chunks: {row['evaluated_noun_chunks']}\n"
+        else:
+            metadata_str += "noun chunks: None\n"
 
     if 'source' in metadata_keys and 'source' in row and row['source']:
         metadata_str += f"source: {row['source']}\n"
