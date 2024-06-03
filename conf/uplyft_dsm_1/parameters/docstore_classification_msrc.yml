@@ -13,6 +13,7 @@ user_prompt_metadata_keys_msrc:
   - post_id
   - revision
   - published
+  - description
 
 msrc_classifications:
   - Critical

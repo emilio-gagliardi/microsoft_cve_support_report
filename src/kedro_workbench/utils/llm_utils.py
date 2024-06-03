@@ -6,26 +6,30 @@ from kedro.config import ConfigLoader
 from kedro.framework.project import settings
 from kedro_workbench.utils.feature_engineering import (
     convert_string_to_object,
-    extract_summary
-    )
-from kedro_workbench.utils.athina_logging_utils import (AthinaParams)
+    extract_summary,
+)
+from kedro_workbench.utils.athina_logging_utils import AthinaParams
 import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re
 from dateutil.parser import parse
 from llama_index import Document
 from typing import List, Tuple
+
 # import openai
 from requests.exceptions import HTTPError
 from openai import OpenAI
+
 # from tenacity import retry, wait_exponential, stop_after_attempt
 import tiktoken
 import json
 import logging
 from athina_logger.api_key import AthinaApiKey
+
 # from athina_logger.openai_wrapper import openai
 from athina_logger.inference_logger import InferenceLogger
 from athina_logger.exception.custom_exception import CustomException
+
 # from athina_logger.athina_meta import AthinaMeta
 from dataclasses import dataclass
 
@@ -41,7 +45,7 @@ credentials = conf_loader["credentials"]
 openai_api_key = credentials["OPENAI"]["api_key"]
 
 athina_credentials = credentials["athina"]
-athina_api_key = athina_credentials['api_key']
+athina_api_key = athina_credentials["api_key"]
 AthinaApiKey.set_api_key(athina_api_key)
 
 
@@ -185,7 +189,7 @@ def extract_entities(text: str) -> List[str]:
         threshold (float): The threshold for entity recognition. Default is 0.1.
 
     Returns:
-        Tuple[List[str], List[str]]: A tuple containing two lists 
+        Tuple[List[str], List[str]]: A tuple containing two lists
         - sorted_nouns and entities.
         sorted_nouns (List[str]): A list of unique nouns extracted from the given text.
         entities (List[str]): A list of unique entity texts extracted
@@ -477,10 +481,10 @@ def fit_prompt_to_window(text, max_tokens):
         limited_text = encoding.decode(limited_tokens)
 
         # Use the length of the limited_text to truncate the original text
-        truncated_text = text[:len(limited_text)]
+        truncated_text = text[: len(limited_text)]
         logger.debug(
             f"Prompt was truncated to fit within the max_tokens limit of {max_tokens}"
-            )
+        )
         return truncated_text
     else:
         # If the original number of tokens is within the limit, return the original text
@@ -496,17 +500,11 @@ def call_llm_completion(model, system_prompt, input_prompt, max_tokens, temperat
     payload = {
         "model": model,
         "messages": [
-                {
-                    "role": "system",
-                    "content": system_prompt
-                },
-                {
-                    "role": "user",
-                    "content": input_prompt
-                }
-            ],
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": input_prompt},
+        ],
         "max_tokens": max_tokens,
-        "temperature": temperature
+        "temperature": temperature,
     }
 
     # print(payload)
@@ -520,7 +518,8 @@ def call_llm_completion(model, system_prompt, input_prompt, max_tokens, temperat
         logger.info(
             f"Max tokens: {max_tokens}\n"
             f"Data sent: system_prompt: {system_prompt}\n"
-            f"input_prompt: {input_prompt}\n")
+            f"input_prompt: {input_prompt}\n"
+        )
     except Exception as e:
         # Catch other exceptions
         logger.error(f"An exception occurred: {e}")
@@ -530,8 +529,7 @@ def call_llm_completion(model, system_prompt, input_prompt, max_tokens, temperat
 
 
 def call_llm_completion_with_logging(
-    llm_params: LLMParams,
-    athina_params: AthinaParams
+    llm_params: LLMParams, athina_params: AthinaParams
 ):
 
     client = OpenAI(api_key=openai_api_key)
@@ -539,17 +537,11 @@ def call_llm_completion_with_logging(
     payload = {
         "model": llm_params.model,
         "messages": [
-            {
-                "role": "system",
-                "content": llm_params.system_prompt
-            },
-            {
-                "role": "user",
-                "content": llm_params.input_prompt
-            }
+            {"role": "system", "content": llm_params.system_prompt},
+            {"role": "user", "content": llm_params.input_prompt},
         ],
         "max_tokens": llm_params.max_tokens,
-        "temperature": llm_params.temperature
+        "temperature": llm_params.temperature,
     }
 
     try:
@@ -563,13 +555,15 @@ def call_llm_completion_with_logging(
         response_dict = response.model_dump()
 
         log_params = athina_params.__dict__
-        log_params.update({
-            "prompt": payload["messages"],
-            "user_query": llm_params.input_prompt,
-            "response": response_dict,
-            "language_model_id": llm_params.model,
-            "response_time": response_time_ms
-        })
+        log_params.update(
+            {
+                "prompt": payload["messages"],
+                "user_query": llm_params.input_prompt,
+                "response": response_dict,
+                "language_model_id": llm_params.model,
+                "response_time": response_time_ms,
+            }
+        )
         # print(f'log params:\n{log_params}\n')
         try:
             InferenceLogger.log_inference(**log_params)
@@ -582,18 +576,19 @@ def call_llm_completion_with_logging(
 
     except HTTPError as e:
         print(f"HTTPError occurred: {e}")
-        print(f"Max tokens: {llm_params.max_tokens}\n"
-              f"Data sent: system_prompt: {llm_params.system_prompt},\n"
-              f"input_prompt: {llm_params.input_prompt}"
-              )
+        print(
+            f"Max tokens: {llm_params.max_tokens}\n"
+            f"Data sent: system_prompt: {llm_params.system_prompt},\n"
+            f"input_prompt: {llm_params.input_prompt}"
+        )
     except Exception as e:
         print(f"An exception occurred: {e}")
     return response_msg
 
 
 def get_sample_llm_response():
-    file_path = r'src\kedro_workbench\utils\sample_kg_entities.json'
-    with open(file_path, 'r') as file:
+    file_path = r"src\kedro_workbench\utils\sample_kg_entities.json"
+    with open(file_path, "r") as file:
         dicts = json.load(file)
     if "counter" not in get_sample_llm_response.__dict__:
         get_sample_llm_response.counter = 0
@@ -612,46 +607,44 @@ def sanitize_output(output, expected_format):
     # This is a workaround to attempt to trim that if it is encountered.
 
     patterns = {
-        'list': (r'^```python\n', r'\n```$'),
-        'json': (r'^```json\n', r'\n```$')
+        "list": (r"^```python\n", r"\n```$"),
+        "json": (r"^```json\n", r"\n```$"),
     }
-    start_pattern, end_pattern = patterns.get(expected_format, ('', ''))
+    start_pattern, end_pattern = patterns.get(expected_format, ("", ""))
 
     # Use a single regex substitution to remove the markers
-    sanitized_output = re.sub(f'{start_pattern}|{end_pattern}', '', output)
+    sanitized_output = re.sub(f"{start_pattern}|{end_pattern}", "", output)
     print(f"Sanitzing llm output for {expected_format}\n{sanitized_output}")
     return sanitized_output
 
 
-def evaluate_rake_keywords(
-    model,
-    row,
-    system_prompt,
-    max_tokens,
-    temperature
-):
+def evaluate_rake_keywords(model, row, system_prompt, max_tokens, temperature):
     # Extract text and keywords from the DataFrame row
     text = row["normalized_tokens"]
     keywords = row["filtered_keywords"]
     keywords_list = convert_string_to_object(keywords)
     expected_value = None
     if "expected_value" in row:
-        expected_value = row['expected_value']
+        expected_value = row["expected_value"]
 
     try:
         tokens = str(text).split()
     except Exception as e:
         # Handle the exception here, e.g., print an error message
         tokens = text
-        logger.info(f"Warning. Could not split 'normalized_tokens' into list of words.{e}")
+        logger.info(
+            f"Warning. Could not split 'normalized_tokens' into list of words.{e}"
+        )
 
     if len(tokens) > 2000:
-        text = ' '.join(tokens[:2000])
+        text = " ".join(tokens[:2000])
         first_20_keywords = keywords_list[:20]
-        keywords_string = ", ".join(f"({score}, '{text}')" for score, text in first_20_keywords)
+        keywords_string = ", ".join(
+            f"({score}, '{text}')" for score, text in first_20_keywords
+        )
         input_prompt = f"Given the following keyword tuples: \n---\n{keywords_string}\n---\nThe email text: \n---\n{text}\n---\n, choose the top 7 keywords that communicate the core topic and purpose of the email. Remove keywords that reference the author (eg. 'karl wester'). Remove keywords with credentials (eg., 'philip elder mcts senior technical architect microsoft high availability mvp'). Remove keywords that reference communication channels. Remove semantically empty keywords, remove partial url keywords (eg., 'https :// support' or 'https :// www') and you must remove keywords with dates in them. Ignore all keywords extracted from an email signature. Important. Format your answer as a python list and only respond with the list: [keyword_1, keyword_2, ...]. Do not include any other dialog or language-specific markers in your answer. If there are no good keywords, just output 'None'. Before you finish, evaluate your answer and remove keywords that are substrings of other keywords ['exe exit code', 'exit code'] -> ['exe exit code']."
     elif len(keywords) == 0:
-        keywords_string = 'None'
+        keywords_string = "None"
         input_prompt = f"There are no keywords for this document to evaluate. Your answer is {keywords_string}"
     else:
         # print(f"evaluating keywords -> {keywords}")
@@ -665,7 +658,7 @@ def evaluate_rake_keywords(
         f"The email text:\n---\n{row['normalized_tokens']}\n"
     )
 
-    row['keyword_context'] = context
+    row["keyword_context"] = context
     # print(f"keyword context\n{row['keyword_context']}")
 
     current_datetime = datetime.now()
@@ -674,23 +667,22 @@ def evaluate_rake_keywords(
         system_prompt=system_prompt,
         input_prompt=json_safe_input_prompt,
         max_tokens=max_tokens,
-        temperature=temperature
+        temperature=temperature,
     )
     custom_logging_attributes = {
-        'pipeline': 'docstore_feature_engineering_pm',
-        'node': 'evaluate_rake_keywords',
-        "description": "Evaluate and rank a set of Rake generated keywords extracted from a Patch Management email."
-
+        "pipeline": "docstore_feature_engineering_pm",
+        "node": "evaluate_rake_keywords",
+        "description": "Evaluate and rank a set of Rake generated keywords extracted from a Patch Management email.",
     }
     athina_params = AthinaParams(
         language_model_id=model,
         prompt=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": input_prompt}
-            ],
+            {"role": "user", "content": input_prompt},
+        ],
         user_query=None,
         expected_response=expected_value,
-        context=row['keyword_context'],
+        context=row["keyword_context"],
         prompt_slug="evaluate_rake_keywords",
         environment="uplyft_dsm_1",
         customer_id="PortalFuse",
@@ -700,29 +692,22 @@ def evaluate_rake_keywords(
     )
     # Generate a response using the GPT chat client
     response_content = call_llm_completion_with_logging(
-        llm_params=llm_params,
-        athina_params=athina_params
-        )
+        llm_params=llm_params, athina_params=athina_params
+    )
 
-    sanitized_response_content = sanitize_output(response_content, 'list')
+    sanitized_response_content = sanitize_output(response_content, "list")
     # print(f"response_content: {sanitized_response_content}")
     time.sleep(2)
     return sanitized_response_content
 
 
-def evaluate_noun_chunks(
-    model,
-    row,
-    system_prompt,
-    max_tokens,
-    temperature
-):
+def evaluate_noun_chunks(model, row, system_prompt, max_tokens, temperature):
     # Extract text and keywords from the DataFrame row
     text = row["email_text_clean"]
     noun_chunks_str = row["noun_chunks"]
     expected_value = None
     if "expected_value" in row:
-        expected_value = row['expected_value']
+        expected_value = row["expected_value"]
     # context = description + df['noun_chunks'] + description + df['email_text_clean']
 
     if not isinstance(noun_chunks_str, str):
@@ -740,12 +725,12 @@ def evaluate_noun_chunks(
         tokens = text
 
     if len(tokens) > 2000:
-        text = ' '.join(tokens[:2000])
+        text = " ".join(tokens[:2000])
         first_20_noun_chunks = noun_chunks[:20]
-        noun_chunks_string = ', '.join(first_20_noun_chunks)
+        noun_chunks_string = ", ".join(first_20_noun_chunks)
         input_prompt = f"""Given the following noun chunks: \n---\n{noun_chunks_string}\n---\n, and the email text: \n---\n {text} \n---\n, choose the top 7 noun chunks that communicate the core topic and purpose of the email. Remove noun chunks that reference the author (eg. 'karl wester'). Remove noun chunks with credentials (eg., 'philip elder mcts senior technical architect microsoft high availability mvp'). Remove noun chunks that reference communication channels. Remove semantically empty noun chunks, remove partial url noun chunks (eg., 'https :// support' or 'https :// www') and you must remove noun chunks with dates in them. Ignore all noun chunks extracted from an email signature. Important. Format your answer as a python list and only respond with the list: [keyword_1, keyword_2, ...]. Do not include any other dialog or language-specific markers in your answer. If there are no good noun chunks, just output 'None'. Before you finish, evaluate your answer and remove noun chunks that are substrings of other noun chunks ['exe exit code', 'exit code'] -> ['exe exit code']."""
     elif len(noun_chunks) == 0:
-        noun_chunks_string = 'None'
+        noun_chunks_string = "None"
         input_prompt = f"""There are no noun chunks for this document to evaluate. Your answer is {noun_chunks_string}"""
     else:
         noun_chunks_string = noun_chunks_str
@@ -754,7 +739,7 @@ def evaluate_noun_chunks(
         f"Extracted Noun chunks:\n---\n{noun_chunks_string}\n---\n"
         f"\n---\nThe email text:\n---\n{text}\n"
     )
-    row['noun_context'] = context
+    row["noun_context"] = context
     # print(f"noun context\n{row['noun_context']}")
     json_safe_input_prompt = json.dumps(input_prompt)
     current_datetime = datetime.now()
@@ -763,20 +748,19 @@ def evaluate_noun_chunks(
         system_prompt=system_prompt,
         input_prompt=json_safe_input_prompt,
         max_tokens=max_tokens,
-        temperature=temperature
+        temperature=temperature,
     )
     custom_logging_attributes = {
-        'pipeline': 'docstore_feature_engineering_pm',
-        'node': 'evaluate_noun_chunks',
-        "description": "Evaluate and rank a set of Spacy generated noun chunks extracted from a Patch Management email."
-
+        "pipeline": "docstore_feature_engineering_pm",
+        "node": "evaluate_noun_chunks",
+        "description": "Evaluate and rank a set of Spacy generated noun chunks extracted from a Patch Management email.",
     }
     athina_params = AthinaParams(
         language_model_id=model,
         prompt=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": input_prompt}
-            ],
+            {"role": "user", "content": input_prompt},
+        ],
         user_query=None,
         expected_response=expected_value,
         context=context,
@@ -788,10 +772,9 @@ def evaluate_noun_chunks(
         custom_attributes=custom_logging_attributes,
     )
     response_content = call_llm_completion_with_logging(
-        llm_params=llm_params,
-        athina_params=athina_params
-        )
-    sanitized_response_content = sanitize_output(response_content, 'list')
+        llm_params=llm_params, athina_params=athina_params
+    )
+    sanitized_response_content = sanitize_output(response_content, "list")
     # print(f"response_content: {sanitized_response_content}")
     # Store the response back in the DataFrame
     time.sleep(2)
@@ -820,19 +803,19 @@ def classify_email(
         system_prompt=system_prompt,
         input_prompt=user_prompt,
         max_tokens=max_tokens,
-        temperature=temperature
+        temperature=temperature,
     )
     custom_logging_attributes = {
-        'pipeline': 'docstore_feature_engineering_pm',
-        'node': 'classify_email',
-        "description": "Classify the content of a Patch Management email as one of 'Helpful tool', 'conversational', 'Problem statement', or 'Solution provided' based on the text and metadata."
+        "pipeline": "docstore_feature_engineering_pm",
+        "node": "classify_email",
+        "description": "Classify the content of a Patch Management email as one of 'Helpful tool', 'conversational', 'Problem statement', or 'Solution provided' based on the text and metadata.",
     }
     athina_params = AthinaParams(
         language_model_id=model,
         prompt=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt}
-            ],
+            {"role": "user", "content": user_prompt},
+        ],
         user_query=None,
         context=context,
         expected_response=expected_value,
@@ -844,9 +827,8 @@ def classify_email(
         custom_attributes=custom_logging_attributes,
     )
     response_content = call_llm_completion_with_logging(
-        llm_params=llm_params,
-        athina_params=athina_params
-        )
+        llm_params=llm_params, athina_params=athina_params
+    )
     # json_safe_input_prompt = json.dumps(input_prompt)
     # llm_response = call_llm_completion(
     #     model,
@@ -870,13 +852,13 @@ def classify_email(
 
 def extract_json_from_text(text):
     # Find the first '{' character
-    start_index = text.find('{')
+    start_index = text.find("{")
     if start_index != -1:
         # Find the last '}' character
-        end_index = text.rfind('}')
+        end_index = text.rfind("}")
         if end_index != -1:
             # Extract the JSON substring
-            json_string = text[start_index:end_index + 1]
+            json_string = text[start_index : end_index + 1]
             return json_string
     return None
 
@@ -886,9 +868,9 @@ def clean_json_string(json_string):
     Remove trailing commas from JSON strings to prevent JSONDecodeError.
     """
     # Remove trailing commas in objects
-    json_string = re.sub(r',\s*}', '}', json_string)
+    json_string = re.sub(r",\s*}", "}", json_string)
     # Remove trailing commas in arrays
-    json_string = re.sub(r',\s*\]', ']', json_string)
+    json_string = re.sub(r",\s*\]", "]", json_string)
     return json_string
 
 
@@ -907,20 +889,19 @@ def classify_post(
         system_prompt=system_prompt,
         input_prompt=user_prompt,
         max_tokens=max_tokens,
-        temperature=temperature
+        temperature=temperature,
     )
     custom_logging_attributes = {
-        'pipeline': 'docstore_classification_msrc',
-        'node': 'classify_post_msrc_node',
-        "description": "Classify a CVE post based on context provided in the input_prompt. 3 classes are available: 'Critical', 'Information only', 'Solution provided'."
-
+        "pipeline": "docstore_classification_msrc",
+        "node": "classify_post_msrc_node",
+        "description": "Classify a CVE post based on context provided in the input_prompt. 3 classes are available: 'Critical', 'Information only', 'Solution provided'.",
     }
     athina_params = AthinaParams(
         language_model_id=model,
         prompt=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt}
-            ],
+            {"role": "user", "content": user_prompt},
+        ],
         user_query=None,
         context=context,
         expected_response=expected_value,
@@ -939,8 +920,7 @@ def classify_post(
     #     temperature
     #     )
     llm_response = call_llm_completion_with_logging(
-        llm_params=llm_params,
-        athina_params=athina_params
+        llm_params=llm_params, athina_params=athina_params
     )
     time.sleep(2.5)
     # print(f"llm_response\n{llm_response}")
@@ -971,20 +951,19 @@ def summarize_post(
         system_prompt=system_prompt,
         input_prompt=user_prompt,
         max_tokens=max_tokens,
-        temperature=temperature
+        temperature=temperature,
     )
     custom_logging_attributes = {
-        'pipeline': 'periodic_report_CVE_WEEKLY_v1',
-        'node': 'summarize_section_1_periodic_report_CVE_WEEKLY_v1',
-        "description": "Summarize the CVE post based on the available text and criteria related to their technical nature and severity."
-
+        "pipeline": "periodic_report_CVE_WEEKLY_v1",
+        "node": "summarize_section_1_periodic_report_CVE_WEEKLY_v1",
+        "description": "Summarize the CVE post based on the available text and criteria related to their technical nature and severity.",
     }
     athina_params = AthinaParams(
         language_model_id=model,
         prompt=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt}
-            ],
+            {"role": "user", "content": user_prompt},
+        ],
         user_query=None,
         context=context,
         expected_response=expected_value,
@@ -997,8 +976,7 @@ def summarize_post(
     )
     try:
         llm_response = call_llm_completion_with_logging(
-            llm_params=llm_params,
-            athina_params=athina_params
+            llm_params=llm_params, athina_params=athina_params
         )
         extracted_json = extract_json_from_text(llm_response)
         if extracted_json:
@@ -1007,7 +985,9 @@ def summarize_post(
             except json.JSONDecodeError as e:
                 logger.error(f"JSON decoding error: {e}")
                 try:
-                    corrected_json = extracted_json.encode('utf-8').decode('unicode_escape')
+                    corrected_json = extracted_json.encode("utf-8").decode(
+                        "unicode_escape"
+                    )
                     json_result = json.loads(corrected_json)
                 except Exception as e:
                     logger.error(f"Error correcting JSON string: {e}\n{extracted_json}")
@@ -1015,7 +995,9 @@ def summarize_post(
                         cleaned_json_string = clean_json_string(extracted_json)
                         json_result = json.loads(cleaned_json_string)
                     except Exception as e:
-                        logger.error(f"Final attempt failed; proceeding without this record. Error: {e}")
+                        logger.error(
+                            f"Final attempt failed; proceeding without this record. Error: {e}"
+                        )
                         return {}
             except Exception as e:
                 logger.error(f"Unexpected error parsing JSON: {e}")
@@ -1037,28 +1019,28 @@ def apply_summarization(
     max_tokens,
     temperature,
     source_column_name,
-    key_to_extract
+    key_to_extract,
 ):
     # Call summarize_post with the appropriate arguments
     llm_response = summarize_post(
         model,
         system_prompt,
-        row['user_prompt'],
+        row["user_prompt"],
         max_tokens,
         temperature,
-        row['summarization_context']
-        )
+        row["summarization_context"],
+    )
 
     # Directly assign the llm_response (summarization payload) to the DataFrame
     row[source_column_name] = llm_response
 
     # Extract the summary from the llm_response using feat_eng.extract_summary
-    extracted_summary = extract_summary(
-        row,
-        source_column_name,
-        key_to_extract
-        )
-    if extracted_summary is not None and extracted_summary != '' and extracted_summary != {}:
+    extracted_summary = extract_summary(row, source_column_name, key_to_extract)
+    if (
+        extracted_summary is not None
+        and extracted_summary != ""
+        and extracted_summary != {}
+    ):
         # Update the 'summary' column with the extracted summary
         row[key_to_extract] = extracted_summary
     else:
@@ -1075,52 +1057,73 @@ def create_metadata_string_for_user_prompt(row, metadata_keys):
     #     print(column_name)
 
     # Check and build string for each key
-    if 'post_id' in metadata_keys and 'post_id' in row and row['post_id']:
+    if "post_id" in metadata_keys and "post_id" in row and row["post_id"]:
         metadata_str += f"post_id: {row['post_id']}\n"
 
-    if 'id' in metadata_keys and 'id' in row:
+    if "id" in metadata_keys and "id" in row:
         metadata_str += f"id: {row['id']}\n"
 
-    if 'doc_id' in metadata_keys and 'doc_id' in row:
+    if "doc_id" in metadata_keys and "doc_id" in row:
         metadata_str += f"id: {row['doc_id']}\n"
 
-    if 'revision' in metadata_keys and 'revision' in row and row['revision']:
+    if "revision" in metadata_keys and "revision" in row and row["revision"]:
         metadata_str += f"revision: {row['revision']}\n"
 
-    if 'published' in metadata_keys and 'published' in row:
+    if "published" in metadata_keys and "published" in row:
         metadata_str += f"published: {row['published']}\n"
 
-    if 'topic' in metadata_keys and 'topic' in row and row['topic']:
+    if "topic" in metadata_keys and "topic" in row and row["topic"]:
         metadata_str += f"subject: {row['topic']}\n"
 
-    if 'conversation_link' in metadata_keys and 'conversation_link' in row and row['conversation_link']:
+    if "description" in metadata_keys and "description" in row and row["description"]:
+        metadata_str += f"description: {row['description']}\n"
+
+    if (
+        "conversation_link" in metadata_keys
+        and "conversation_link" in row
+        and row["conversation_link"]
+    ):
         metadata_str += f"conversation_link: {row['conversation_link']}\n"
 
-    if 'unique_tokens' in metadata_keys and 'unique_tokens' in row and row['unique_tokens']:
+    if (
+        "unique_tokens" in metadata_keys
+        and "unique_tokens" in row
+        and row["unique_tokens"]
+    ):
         metadata_str += f"number unique tokens: {row['unique_tokens']}\n"
 
     # if 'evaluated_keywords' in metadata_keys and 'evaluated_keywords' in row and row['evaluated_keywords']:
     #     metadata_str += f"rake keywords: {row['evaluated_keywords']}\n"
 
-    if 'evaluated_keywords' in metadata_keys and 'evaluated_keywords' in row:
-        if row['evaluated_keywords'] and not (isinstance(row['evaluated_keywords'], float) and math.isnan(row['evaluated_keywords'])):
+    if "evaluated_keywords" in metadata_keys and "evaluated_keywords" in row:
+        if row["evaluated_keywords"] and not (
+            isinstance(row["evaluated_keywords"], float)
+            and math.isnan(row["evaluated_keywords"])
+        ):
             metadata_str += f"rake keywords: {row['evaluated_keywords']}\n"
         else:
             metadata_str += "rake keywords: None\n"
-            
-    if 'evaluated_noun_chunks' in metadata_keys and 'evaluated_noun_chunks' in row:
-        if row['evaluated_noun_chunks'] and not (isinstance(row['evaluated_noun_chunks'], float) and math.isnan(row['evaluated_noun_chunks'])):
+
+    if "evaluated_noun_chunks" in metadata_keys and "evaluated_noun_chunks" in row:
+        if row["evaluated_noun_chunks"] and not (
+            isinstance(row["evaluated_noun_chunks"], float)
+            and math.isnan(row["evaluated_noun_chunks"])
+        ):
             metadata_str += f"noun chunks: {row['evaluated_noun_chunks']}\n"
         else:
             metadata_str += "noun chunks: None\n"
 
-    if 'source' in metadata_keys and 'source' in row and row['source']:
+    if "source" in metadata_keys and "source" in row and row["source"]:
         metadata_str += f"source: {row['source']}\n"
 
-    if 'receivedDateTime' in metadata_keys and 'receivedDateTime' in row and row['receivedDateTime']:
+    if (
+        "receivedDateTime" in metadata_keys
+        and "receivedDateTime" in row
+        and row["receivedDateTime"]
+    ):
         metadata_str += f"receivedDateTime: {row['receivedDateTime']}\n"
 
-    if 'post_type' in metadata_keys and 'post_type' in row and row['post_type']:
+    if "post_type" in metadata_keys and "post_type" in row and row["post_type"]:
         metadata_str += f"post_type: {row['post_type']}\n"
 
     return metadata_str

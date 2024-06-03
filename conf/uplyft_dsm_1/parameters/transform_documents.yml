@@ -5,7 +5,7 @@
 # Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
 
 rss_1_keys:
-  keys_for_content: ["description"]
+  keys_for_content: []
   keys_for_metadata: ["revision", "id", "published", "title", "description", "source", "collection", "post_id"]
   catalog: rss_1_primary
 
@@ -17,13 +17,13 @@ rss_2_keys:
 
 #Windows 10
 rss_3_keys:
-  keys_for_content: ["description"]
+  keys_for_content: []
   keys_for_metadata: ["id", "source","title", "description", "collection", "published", "post_id"]
   catalog: rss_3_primary
 
 #Windows 11
 rss_4_keys:
-  keys_for_content: ["description"]
+  keys_for_content: []
   keys_for_metadata: ["id", "source","title", "description", "collection", "published", "post_id"]
   catalog: rss_4_primary
 

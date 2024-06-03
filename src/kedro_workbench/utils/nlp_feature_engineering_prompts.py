@@ -10,17 +10,67 @@ conf_path = str(settings.CONF_SOURCE)
 conf_loader = ConfigLoader(conf_source=conf_path)
 parameters = conf_loader["parameters"]
 post_classifications = {
-        'msrc_security_update': ['Critical', 'Solution provided', 'Information only'],
-        'windows_10': ['Critical', 'New feature', 'Solution provided', 'Information only', 'Fix for CVE'],
-        'windows_11': ['Critical', 'New feature', 'Solution provided', 'Information only', 'Fix for CVE'],
-        'windows_update': ['Critical', 'New feature', 'Solution provided', 'Information only', 'Fix for CVE'],
-        'stable_channel_notes': ['New availability', 'Features & Policies updates', 'Fix for CVE', 'Fixed bugs and performance issues'],
-        'security_update_notes': ['New availability', 'Features & Policies updates', 'Fix for CVE', 'Fixed bugs and performance issues'],
-        'mobile_stable_channel_notes': ['New availability', 'Features & Policies updates', 'Fix for CVE', 'Fixed bugs and performance issues'],
-        'beta_channel_notes': ['New availability', 'Features & Policies updates', 'Fix for CVE', 'Fixed bugs and performance issues'],
-        'archive_stable_channel_notes': ['New availability', 'Features & Policies updates', 'Fix for CVE', 'Fixed bugs and performance issues']
-    }
-patch_classifications = {'patch_management': ['Conversational', 'Helpful tool', 'Problem statement', 'Solution provided']}
+    "msrc_security_update": ["Critical", "Solution provided", "Information only"],
+    "windows_10": [
+        "Critical",
+        "New feature",
+        "Solution provided",
+        "Information only",
+        "Fix for CVE",
+    ],
+    "windows_11": [
+        "Critical",
+        "New feature",
+        "Solution provided",
+        "Information only",
+        "Fix for CVE",
+    ],
+    "windows_update": [
+        "Critical",
+        "New feature",
+        "Solution provided",
+        "Information only",
+        "Fix for CVE",
+    ],
+    "stable_channel_notes": [
+        "New availability",
+        "Features & Policies updates",
+        "Fix for CVE",
+        "Fixed bugs and performance issues",
+    ],
+    "security_update_notes": [
+        "New availability",
+        "Features & Policies updates",
+        "Fix for CVE",
+        "Fixed bugs and performance issues",
+    ],
+    "mobile_stable_channel_notes": [
+        "New availability",
+        "Features & Policies updates",
+        "Fix for CVE",
+        "Fixed bugs and performance issues",
+    ],
+    "beta_channel_notes": [
+        "New availability",
+        "Features & Policies updates",
+        "Fix for CVE",
+        "Fixed bugs and performance issues",
+    ],
+    "archive_stable_channel_notes": [
+        "New availability",
+        "Features & Policies updates",
+        "Fix for CVE",
+        "Fixed bugs and performance issues",
+    ],
+}
+patch_classifications = {
+    "patch_management": [
+        "Conversational",
+        "Helpful tool",
+        "Problem statement",
+        "Solution provided",
+    ]
+}
 
 # Create a variable based on the 'post_classifications' key in the YAML file
 # post_classifications = data["post_classifications"]
@@ -76,37 +126,29 @@ completion_post_type_classify_system_prompt = {
 }
 completion_post_type_classify_user_prompt = {
     "msrc_security_update": """
-Objective:
-Your task is to evaluate the text extracted from a post by the Microsoft Security Response Center and classify it according to the provided guidelines. Your output must be a valid JSON object, containing no text outside the JSON structure. The JSON object will be consumed by another process; extraneous text outside of the JSON structure will cause the process to crash.
+Objective: Your task is to evaluate the text extracted from a post by the Microsoft Security Response Center and classify it according to the provided guidelines. Your output must be a valid JSON object, containing no text outside the JSON structure. The JSON object will be consumed by another process; extraneous text outside of the JSON structure will cause the process to crash.
 
 Classification Guidelines:
 
-1. Source of Post:
-Posts can originate from two sources:
-    - Microsoft (for Microsoft products)
-    - Chrome (for Chrome)
-
-2. Classification Categories:
-   - Critical (Only Microsoft posts):
-     - Only posts missing an Official Fix in the 'Remediation Level' section can be classified as 'Critical'. 
-     - Posts where the vulnerability is actively being exploited in the wild.
-     - Posts originating from Chrome cannot be classified as 'Critical'.
+1. Classification Categories:
+   - Critical:
+     - If there is no Official Fix mentioned in the Remediation Level section, classify the post as 'Critical'.
+     - If the text of the post contains any reference to "operating in the wild" or "being actively exploited", classify the post as 'Critical'.
    - Solution Provided:
-     - Posts from Microsoft typically include an Official Fix at publication. This is the most common classification for posts.
-     - The Official Fix is noted near the "Remediation Level" in the Temporal score metrics section.
+     - If the revision is "1.0" or "1.0000000000" and there is an Official Fix available, classify the post as 'Solution provided'.
    - Information Only:
-     - Posts originating from Chrome, especially posts referencing Chromium must be classified as 'Information only'.
-     - Posts where the revision/version number is greater than '1.0'.
-       - Check for "revision" or "Last updated:" if explicit revision information is missing.
+     - If the revision/version number is greater than '1.0', classify the post as 'Information only' unless there are significant updates indicating an official fix or new threat information.
 
-3. Decision Hierarchy:
-    - Prioritize the revision/version criterion over the presence of an Official Fix if revision greater than 1.0. When an Official Fix is available AND the revision is greater than 1.0 you must classify as "Information only". If revision is 1.0 and there is an Official Fix, you must classify as "Solution provided".  
-    - Chromium specific posts must be classified as "Information only".
+2. Decision Hierarchy:
+   - Evaluate the post for any references to "operating in the wild" or "being actively exploited" first.
+   - Next, check for the presence of an Official Fix in the Remediation Level section.
+   - Finally, consider the revision number and evaluate the post description in the Metadata section.
+   - Multiple signals must be considered before making a final classification.
 
-4. Specific Instructions:
-- Proceed step-by-step to classify the post based on the text below.
-- Ensure that the JSON object follows the specified schema and is valid.
-- Do not output any dialog or text outside of the JSON object. Extraneous text will cause the ingestion script to fail.
+3. Specific Instructions:
+   - Proceed step-by-step to classify the post based on the text below.
+   - Ensure that the JSON object follows the specified schema and is valid.
+   - Do not output any dialog or text outside of the JSON object. Extraneous text will cause the ingestion script to fail.
 
 Generate a valid JSON object following this schema:
 {
