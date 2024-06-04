@@ -161,9 +161,9 @@ def fit_classification_prompt_msrc(data, max_prompt_tokens):
     )
     logger.info("User prompt fit to model token limit.")
     # print(f"new column added by fit_classification_prompt\n")
-    for index, row in data.iterrows():
-        print(f"{row['user_prompt']}\n")
-    mongo.client.close()
+    # for index, row in data.iterrows():
+    #     print(f"{row['user_prompt']}\n")
+    # mongo.client.close()
     return data
 
 
