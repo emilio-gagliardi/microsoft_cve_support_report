@@ -50,13 +50,20 @@ def wait_for_results(driver, class_name, timeout=20):
 
 def parse_package_details(link_text):
     pattern = re.compile(
-        r"(?P<date>\d{4}-\d{2})\s+"  # Capture the date
-        r"(?P<update_type>Dynamic Cumulative|Cumulative)\s+Update\s+for\s+"  # Capture the update type
-        r"Windows\s+(?P<product_version>\d+)"  # Capture the product version
-        r"(\s+Version\s+(?P<version>\d{2}H\d|\d+))?"  # Adjusted to capture versions like 21H2 or 1507
-        r"\s+for\s+"  # Intermediate text
-        r"(?P<architecture>x64|x86|arm64|ARM64)-based\s+Systems\s+"  # Capture the architecture
-        r"\(KB(?P<kb_number>\d+)\)"  # Capture the KB number
+        # Capture the date
+        r"(?P<date>\d{4}-\d{2})\s+"
+        # Capture the update type
+        r"(?P<update_type>Dynamic Cumulative|Cumulative)\s+Update\s+for\s+"
+        # Capture the product version
+        r"Windows\s+(?P<product_version>\d+)"
+        # Adjusted to capture versions like 21H2 or 1507
+        r"(\s+Version\s+(?P<version>\d{2}H\d|\d+))?"
+        # Intermediate text
+        r"\s+for\s+"
+        # Capture the architecture
+        r"(?P<architecture>x64|x86|arm64|ARM64)-based\s+Systems\s+"
+        # Capture the KB number
+        r"\(KB(?P<kb_number>\d+)\)"
     )
 
     details = {
@@ -152,10 +159,8 @@ def process_matching_link(link, driver, original_window, downloadable_package_de
         "last_modified": last_modified,
         "file_size": file_size,
     }
-    if (
-        downloadable_package_details.get("product_version") == None
-        or downloadable_package_details.get("product_version") == "None"
-    ):
+    product_version = downloadable_package_details.get("product_version")
+    if product_version is None or product_version == "None":
         print(f"link generating prodct_name windows_None: {link}")
         print(f"{downloadable_package_details}\n")
     # print("=== Finished extracting additional data from modal window. ===\n")
