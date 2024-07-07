@@ -133,7 +133,7 @@ def build_user_prompt_data_msrc(data, metadata_keys=None):
     data["metadata_context"] = data.apply(
         lambda row: create_metadata_string_for_user_prompt(row, metadata_keys), axis=1
     )
-    logger.info("msrc classificaiton prompts built.")
+    logger.info("msrc classification prompts built.")
     # for idx, row in data.iterrows():
     #     print(f"new column added by build user prompt\n{row}")
     return data

@@ -85,7 +85,7 @@ def extract_existing_product_build_data(
         logger.warning("Could not extract product build data from document store.")
 
     end_date = datetime.now(timezone.utc)
-    start_date = end_date - timedelta(days=day_interval + 60)
+    start_date = end_date - timedelta(days=day_interval + 30)
     mongo_to_fetch_existing_cves = MongoDBDocs(
         mongo_db="report_docstore",
         mongo_collection="microsoft_product_builds",

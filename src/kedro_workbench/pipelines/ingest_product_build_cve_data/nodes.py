@@ -1493,7 +1493,7 @@ def load_update_guide_update_package_data(update_package_data, overwrite=False):
     return True
 
 
-def begin_augment_proudct_build_pipeline_connector(ingestion_complete):
+def begin_augment_product_build_pipeline_connector(ingestion_complete):
     if ingestion_complete:
         logger.info("Ingest product build pipeline completed")
         return True

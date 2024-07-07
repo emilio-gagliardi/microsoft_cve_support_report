@@ -39,7 +39,7 @@ from .nodes import (
     load_update_guide_update_package_data,
     load_update_guide_kb_article_data,
     check_for_preprocessing_complete,
-    begin_augment_proudct_build_pipeline_connector,
+    begin_augment_product_build_pipeline_connector,
 )
 
 # remove flag from node inputs to run in isolation:
@@ -354,10 +354,10 @@ def create_pipeline(**kwargs) -> Pipeline:
                 name="load_update_guide_update_package_data",
             ),
             node(
-                func=begin_augment_proudct_build_pipeline_connector,
+                func=begin_augment_product_build_pipeline_connector,
                 inputs=["product_build_ingestion_complete"],
                 outputs="begin_augmenting_product_build_data",
-                name="begin_augment_proudct_build_pipeline_connector",
+                name="begin_augment_product_build_pipeline_connector",
             ),
         ]
     )
