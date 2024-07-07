@@ -159,10 +159,10 @@ def process_matching_link(link, driver, original_window, downloadable_package_de
         "last_modified": last_modified,
         "file_size": file_size,
     }
-    product_version = downloadable_package_details.get("product_version")
-    if product_version is None or product_version == "None":
-        print(f"link generating prodct_name windows_None: {link}")
-        print(f"{downloadable_package_details}\n")
+    # product_version = downloadable_package_details.get("product_version")
+    # if product_version is None or product_version == "None":
+    #     print(f"link generating prodct_name windows_None: {link.}")
+    #     print(f"{downloadable_package_details}\n")
     # print("=== Finished extracting additional data from modal window. ===\n")
     return downloadable_dict
 

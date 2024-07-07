@@ -85,7 +85,7 @@ def extract_existing_product_build_data(
         logger.warning("Could not extract product build data from document store.")
 
     end_date = datetime.now(timezone.utc)
-    start_date = end_date - timedelta(days=day_interval + 30)
+    start_date = end_date - timedelta(days=day_interval + 60)
     mongo_to_fetch_existing_cves = MongoDBDocs(
         mongo_db="report_docstore",
         mongo_collection="microsoft_product_builds",
@@ -169,7 +169,7 @@ def merge_product_build_data_with_msrc_docs(
                     filtered_rows["kb_id"], filtered_rows["article_url"]
                 )
             ]
-
+            # print(f"kbs for this cve:\n{kb_articles_list}")
             # Generate unique product strings by iterating over filtered rows
             unique_product_strs = {
                 f"{row['product_name'].replace('_', ' ')} {row['product_version']} {row['product_architecture']}"
@@ -184,12 +184,14 @@ def merge_product_build_data_with_msrc_docs(
             build_numbers_lists = [
                 list(bn_tuple) for bn_tuple in sorted_build_number_tuples
             ]
+            # print(f"impact_type: {filtered_rows['impact_type']}")
             # For 'impact_type'
             if filtered_rows["impact_type"].mode().empty:
                 impact_type_mode = None
             else:
                 impact_type_mode = filtered_rows["impact_type"].mode()[0]
 
+            # print(f"severity_type: {filtered_rows['severity_type']}")
             # For 'severity_type'
             if filtered_rows["severity_type"].mode().empty:
                 severity_type_mode = None
@@ -211,7 +213,9 @@ def merge_product_build_data_with_msrc_docs(
             }
         )
     # for item in existing_docs_to_augment[:dev_limit]:
-    #     print(f"{item['metadata']['id']} - {item['metadata']['source']} - {item['metadata']['products']} - {item['metadata']['kb_articles']}\n")
+    #     print(
+    #         f"{item['metadata']['id']} - {item['metadata']['source']} - {item['metadata']['products']} - {item['metadata']['kb_articles']}\n"
+    #     )
 
     return existing_docs_to_augment
 
@@ -331,7 +335,7 @@ def load_augmented_msrc_posts_product_build_docs(updated_msrc_docs):
 def extract_update_packages_for_augmenting(day_interval, begin_extracting=True):
     # augment the update package docs from the install details at the package_url
     end_date = datetime.now(timezone.utc)
-    start_date = end_date - timedelta(days=day_interval)
+    start_date = end_date - timedelta(days=day_interval + 21)
 
     update_packages_db_conn = MongoDBDocs(
         mongo_db="report_docstore",
@@ -391,7 +395,7 @@ def augment_update_packages_additional_details(update_package_docs, search_crite
     # We can't store an empty url key so we must handle empty package_urls
     # independently of the lookup table
     existing_update_packages = fetch_existing_update_packages(update_package_docs)
-
+    # print(f"update package cache:\n{existing_update_packages}")
     sorted_list = sorted(update_package_docs, key=lambda x: x["package_url"])
     num_new_update_packages = 0
 
@@ -415,9 +419,10 @@ def augment_update_packages_additional_details(update_package_docs, search_crite
         else:
             # extract the additional details from the html field and
             # create new fields with the data
-            print(f"This is a new package_url: {doc['package_url']}")
+            # Set headless to True or False below to monitor correct product pattern usage
+            # print(f"This is a new package_url: {doc['package_url']}")
             downloadable_packages = process_downloadable_package_additional_details(
-                doc, search_criteria, False
+                doc, search_criteria, True
             )
 
             downloadable_packages = [
@@ -443,8 +448,10 @@ def augment_update_packages_additional_details(update_package_docs, search_crite
                 item["hash"] = generate_hash_from_dict(item, keys_to_keep)
 
             doc["downloadable_packages"] = downloadable_packages
-
+            # print(f"adding download packages:\n{downloadable_packages}")
+            # update the cache with the new package_url
             existing_update_packages[package_url] = doc
+            logger.info(f"Updated the package_url cache with:\n{doc['package_url']}")
             num_new_update_packages += 1
 
     logger.info(
@@ -453,7 +460,9 @@ def augment_update_packages_additional_details(update_package_docs, search_crite
     )
     display_execution_time(start_time)
     # for doc in sorted_list:
-    #     print(f"{doc['id']}-{doc['package_url']}-{doc['downloadable_packages']}")
+    #     print(
+    #         f"{doc['id']}-build id: {doc['product_build_id']}-{doc['package_url']}-{doc['downloadable_packages']}\n\n"
+    #     )
     return sorted_list
 
 

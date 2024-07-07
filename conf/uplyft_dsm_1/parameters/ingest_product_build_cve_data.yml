@@ -20,8 +20,6 @@ product_build_ingestion_params:
 
 product_build_product_patterns:
   windows_10:
-    - "Windows 10 for x64-based Systems"
-    - "Windows 10 for 32-bit Systems"
     - "Windows 10 Version 22H2 for 32-bit Systems"
     - "Windows 10 Version 22H2 for x64-based Systems"
     - "Windows 10 Version 21H2 for x64-based Systems"

@@ -65,10 +65,21 @@ def extract_posts_to_classify(document_limit, begin_docstore_feature_engineering
 
     limit = convert_to_actual_type(document_limit)
     # collections: list of collection names to extract posts from mongo docstore
+    # search_dict = {
+    #     "$and": [
+    #         {"metadata.collection": {"$in": ["msrc_security_update"]}},
+    #         {"metadata.post_type": {"$exists": False}},
+    #     ]
+    # }
     search_dict = {
         "$and": [
-            {"metadata.collection": {"$in": ["msrc_security_update"]}},
-            {"metadata.post_type": {"$exists": False}},
+            {"metadata.collection": "msrc_security_update"},
+            {
+                "$or": [
+                    {"metadata.post_type": {"$exists": False}},
+                    {"metadata.post_type": {"$type": 1, "$eq": float("nan")}},
+                ]
+            },
         ]
     }
     # print(search_dict)

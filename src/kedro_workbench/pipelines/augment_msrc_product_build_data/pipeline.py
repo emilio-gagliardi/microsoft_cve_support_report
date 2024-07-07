@@ -70,7 +70,10 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_update_packages_for_augmenting,
-                inputs="proceed_with_augmenting_product_build_data",
+                inputs=[
+                    "params:day_interval",
+                    "proceed_with_augmenting_product_build_data",
+                ],
                 outputs="update_packages_to_augment",
                 name="extract_update_packages_for_augmenting",
             ),

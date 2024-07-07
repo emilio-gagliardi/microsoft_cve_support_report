@@ -3,7 +3,6 @@ This is a boilerplate pipeline 'docstore_feature_engineering_pm'
 generated using Kedro 0.18.11
 """
 
-
 from kedro.pipeline import Pipeline, node, pipeline
 from .nodes import (
     check_for_classification_msrc_complete,
@@ -21,7 +20,7 @@ from .nodes import (
     fit_classification_prompt_patch,
     classify_emails_node,
     batch_update_new_features_patch,
-    remove_mongo_duplicates_patch
+    remove_mongo_duplicates_patch,
 )
 
 # param
@@ -43,8 +42,8 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=extract_patch_managment_to_clean,
                 inputs=[
                     "params:document_limit",
-                    "begin_docstore_feature_engineering_pm"
-                    ],
+                    "begin_docstore_feature_engineering_pm",
+                ],
                 outputs="docstore_patch_data_to_transform",
                 name="extract_patch_managment_to_clean",
             ),
@@ -52,8 +51,8 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=transform_feature_engineering_data_patch,
                 inputs=[
                     "docstore_patch_data_to_transform",
-                    "params:mongo_metadata_keys_patch"
-                    ],
+                    "params:mongo_metadata_keys_patch",
+                ],
                 outputs="docstore_patch_data_to_clean",
                 name="transform_feature_engineering_data_patch",
             ),
@@ -99,8 +98,8 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "params:patch_evaluation_models.keywords",
                     "keywords_filtered_data_intermediate_patch",
                     "params:max_llm_output_tokens_classification_patch",
-                    "params:llm_temperature"
-                    ],
+                    "params:llm_temperature",
+                ],
                 outputs="keywords_evaluated_data_intermediate_patch",
                 name="evaluate_keywords_node",
             ),
@@ -110,8 +109,8 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "params:patch_evaluation_models.noun_chunks",
                     "keywords_evaluated_data_intermediate_patch",
                     "params:max_llm_output_tokens_classification_patch",
-                    "params:llm_temperature"
-                    ],
+                    "params:llm_temperature",
+                ],
                 outputs="noun_chunks_data_intermediate_patch",
                 name="evaluate_noun_chunks_node",
             ),
@@ -119,8 +118,8 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=build_user_prompt_data_patch,
                 inputs=[
                     "noun_chunks_data_intermediate_patch",
-                    "params:user_prompt_metadata_keys_patch"
-                    ],
+                    "params:user_prompt_metadata_keys_patch",
+                ],
                 outputs="emails_with_prompts",
                 name="build_user_prompt_data_patch",
             ),
@@ -128,8 +127,8 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=fit_classification_prompt_patch,
                 inputs=[
                     "emails_with_prompts",
-                    "params:max_prompt_tokens_classification_patch"
-                    ],
+                    "params:max_prompt_tokens_classification_patch",
+                ],
                 outputs="emails_with_fit_prompts",
                 name="fit_classification_prompt_patch",
             ),
@@ -139,8 +138,8 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "params:patch_classification_models.default",
                     "emails_with_fit_prompts",
                     "params:max_prompt_tokens_classification_patch",
-                    "params:llm_temperature"
-                    ],
+                    "params:llm_temperature",
+                ],
                 outputs="feature_engineering_data_patch",
                 name="classify_emails_node",
             ),
