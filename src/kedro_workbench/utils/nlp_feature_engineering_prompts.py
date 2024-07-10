@@ -1,14 +1,12 @@
 from kedro.config import ConfigLoader
 from kedro.framework.project import settings
-from pprint import pprint
-
-# Specify the path to the YAML file
-# yaml_file_path = "conf/base/parameters/docstore_feature_engineering_pm.yml"
 
 # Create an instance of the ConfigLoader class
 conf_path = str(settings.CONF_SOURCE)
 conf_loader = ConfigLoader(conf_source=conf_path)
 parameters = conf_loader["parameters"]
+# TODO: move post classifications to parameters/yaml
+
 post_classifications = {
     "msrc_security_update": ["Critical", "Solution provided", "Information only"],
     "windows_10": [
@@ -126,7 +124,7 @@ completion_post_type_classify_system_prompt = {
 }
 completion_post_type_classify_user_prompt = {
     "msrc_security_update": """
-Objective: Your task is to evaluate the text extracted from a post by the Microsoft Security Response Center and classify it according to the provided guidelines. Your output must be a valid JSON object, containing no text outside the JSON structure. The JSON object will be consumed by another process; extraneous text outside of the JSON structure will cause the process to crash.
+Objective: Your task is to evaluate the text extracted from a post by the Microsoft Security Response Center and classify it according to the provided guidelines. Your output must be a valid JSON dictionary, containing no text outside the JSON structure. The dictionary will be consumed by another process so only output the dictionary.
 
 Classification Guidelines:
 
@@ -150,7 +148,7 @@ Classification Guidelines:
    - Ensure that the JSON object follows the specified schema and is valid.
    - Do not output any dialog or text outside of the JSON object. Extraneous text will cause the ingestion script to fail.
 
-Generate a valid JSON object following this schema:
+Generate a valid dictionary following this schema. Ensure all keys and values are wrapped in double quotes:
 {
     "metadata": {
         "id": "b2cced8d-a552-f52a-6699-1da6b97d015d",
@@ -166,7 +164,7 @@ Generate a valid JSON object following this schema:
 Your goal is to differentiate between conversational emails and those emails that provide valuable technical content and to then classify those emails. Note. Many emails are very short because they only contain conversational dialog between the original poster and a responder, however, short emails can also contain links to information or tools. Ignore email signatures and any text that is not part of the email body.
 
 Primary Goal:
-Classify each email into one of the following categories and format the output as a valid JSON object. Valid classifications are ["Helpful tool", "Conversational", "Problem statement", "Solution provided"].
+Classify each email into one of the following categories and format the output as a valid dictionary. Valid classifications are ["Helpful tool", "Conversational", "Problem statement", "Solution provided"].
 
 Classification Criteria:
 
@@ -188,7 +186,7 @@ Utilize these features to supplement your analysis regarding the intent and subj
 Handling Ambiguities:
 Consider the length and context of emails to determine the appropriate category. When the text is limited, lean towards 'Conversational'. If a problem or solution is clearly defined, classify accordingly. When a link to a tool or blog is included, consider it a 'Helpful tool'.
 
-6. JSON Object Schema for Output:
+6. dictionary Schema for Output:
 {
     "metadata": {
         "id": "<post_id>",

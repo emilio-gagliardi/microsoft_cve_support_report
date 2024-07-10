@@ -18,7 +18,11 @@ from typing import List, Tuple
 
 # import openai
 from requests.exceptions import HTTPError
-from openai import OpenAI
+
+# from openai import OpenAI
+import os
+import litellm
+from litellm import completion as LiteLLMCompletion
 
 # from tenacity import retry, wait_exponential, stop_after_attempt
 import tiktoken
@@ -32,6 +36,7 @@ from athina_logger.exception.custom_exception import CustomException
 
 # from athina_logger.athina_meta import AthinaMeta
 from dataclasses import dataclass
+from pydantic import BaseModel
 
 
 logger = logging.getLogger(__name__)
@@ -43,7 +48,7 @@ conf_loader = ConfigLoader(conf_source=conf_path)
 parameters = conf_loader["parameters"]
 credentials = conf_loader["credentials"]
 openai_api_key = credentials["OPENAI"]["api_key"]
-
+os.environ["OPENAI_API_KEY"] = openai_api_key
 athina_credentials = credentials["athina"]
 athina_api_key = athina_credentials["api_key"]
 AthinaApiKey.set_api_key(athina_api_key)
@@ -56,6 +61,22 @@ class LLMParams:
     input_prompt: str
     max_tokens: int
     temperature: float
+
+
+class StringResponse(BaseModel):
+    content: str
+
+
+class StringListResponse(BaseModel):
+    content: list[str]
+
+
+class JsonResponse(BaseModel):
+    content: dict
+
+
+class JsonListResponse(BaseModel):
+    content: list[dict]
 
 
 def get_num_tokens(text):
@@ -532,7 +553,7 @@ def call_llm_completion_with_logging(
     llm_params: LLMParams, athina_params: AthinaParams
 ):
 
-    client = OpenAI(api_key=openai_api_key)
+    # client = OpenAI(api_key=openai_api_key)
     response_msg = ""
     payload = {
         "model": llm_params.model,
@@ -546,8 +567,10 @@ def call_llm_completion_with_logging(
 
     try:
         start_time = time.time()
-        response = client.chat.completions.create(**payload)
-        # response = openai.completions.create(**payload)
+        # response = client.chat.completions.create(**payload) # for use with openai direct requests
+        response = LiteLLMCompletion(**payload)  # Implement the LiteLLM abstraction
+        # TODO: implement Instructor package to enforce output classes
+        # significant change to function logic required
         end_time = time.time()
         response_time_ms = (end_time - start_time) * 1000
         choice = response.choices[0]
@@ -564,15 +587,19 @@ def call_llm_completion_with_logging(
                 "response_time": response_time_ms,
             }
         )
-        # print(f'log params:\n{log_params}\n')
+
         try:
             InferenceLogger.log_inference(**log_params)
+
         except Exception as e:
             if isinstance(e, CustomException):
-                print(e.status_code)
-                print(e.message)
+                logger.exception(
+                    f"An Athina CustomException was caught: {e.status_code}\n{e.message}"
+                )
             else:
-                print(e)
+                logger.exception(
+                    f"An exception occurred connecting to Athina Inference logging.\n{e}"
+                )
 
     except HTTPError as e:
         print(f"HTTPError occurred: {e}")
@@ -584,6 +611,14 @@ def call_llm_completion_with_logging(
     except Exception as e:
         print(f"An exception occurred: {e}")
     return response_msg
+
+
+# testing. adding instructor wrapper around LiteLLM wrapper.
+# Instructor enforces output formatting using pydantic data models
+# we're testing 3 pydantic data models, one for each type of response
+# (1) a list of strings, (2) a json dict,
+# and (3) a basic string
+# TODO: incorporate Instructor package to enforce LLM output parsing
 
 
 def get_sample_llm_response():
@@ -614,7 +649,7 @@ def sanitize_output(output, expected_format):
 
     # Use a single regex substitution to remove the markers
     sanitized_output = re.sub(f"{start_pattern}|{end_pattern}", "", output)
-    print(f"Sanitzing llm output for {expected_format}\n{sanitized_output}")
+    # print(f"Sanitzing llm output for {expected_format}\n{sanitized_output}")
     return sanitized_output
 
 
