@@ -1,0 +1,137 @@
+[pr_reviewer] # /review #
+# general options
+ask_and_reflect=true # modified from default
+enable_help_text=true # modified from default
+
+[pr_description] # /describe #
+extra_instructions = "Evaluate the import or removal of dependencies and point them out in a concise list." # modified from default
+enable_help_text=false
+enable_help_comment=true
+# describe as comment
+publish_description_as_comment=false
+publish_description_as_comment_persistent=true
+## changes walkthrough section
+enable_semantic_files_types=true
+collapsible_file_list='adaptive' # true, false, 'adaptive'
+inline_file_summary=false # false, true, 'table'
+
+[pr_questions] # /ask #
+enable_help_text=true # modified from default
+
+
+[pr_code_suggestions] # /improve #
+commitable_code_suggestions = true # modified from default
+rank_suggestions=true # modified from default
+enable_help_text=true # modified from default
+max_history_len=6 # modified from default
+# suggestions scoring
+self_reflect_on_suggestions=true
+suggestions_score_threshold=0 # [0-10]. highly recommend not to set this value above 8, since above it may clip highly relevant suggestions
+# params for '/improve --extended' mode
+auto_extended_mode=true
+rank_extended_suggestions = false
+# self-review checkbox
+demand_code_suggestions_self_review=true # add a checkbox for the author to self-review the code suggestions. modified from default
+code_suggestions_self_review_text= "**Author self-review**: I have reviewed the PR code suggestions, and addressed the relevant ones."
+
+[pr_custom_prompt] # /custom_prompt #
+prompt = """\
+The code suggestions should focus only on the following:
+- ...
+- ...
+...
+"""
+suggestions_score_threshold=0
+num_code_suggestions_per_chunk=4
+self_reflect_on_custom_suggestions=true
+enable_help_text=false
+
+
+[pr_add_docs] # /add_docs #
+extra_instructions = ""
+docs_style = "PEP257 " # "Google Style with Args, Returns, Attributes...etc", "Numpy Style", "Sphinx Style", "PEP257", "reStructuredText"
+file = ""              # in case there are several components with the same name, you can specify the relevant file
+class_name = ""        # in case there are several methods with the same name in the same file, you can specify the relevant class name
+
+[pr_update_changelog] # /update_changelog #
+push_changelog_changes=false
+extra_instructions = ""
+
+[pr_analyze] # /analyze #
+enable_help_text=true
+
+[pr_test] # /test #
+extra_instructions = ""
+testing_framework = "pytest" 
+
+
+[pr_improve_component] # /improve_component #
+num_code_suggestions=4
+extra_instructions = ""
+
+
+[checks] # /checks (pro feature) #
+
+
+[pr_help] # /help #
+
+[pr_config] # /config #
+
+[github]
+# The type of deployment to create. Valid values are 'app' or 'user'.
+deployment_type = "user"
+ratelimit_retries = 5
+base_url = "https://api.github.com"
+publish_inline_comments_fallback_with_verification = true
+try_fix_invalid_inline_comments = true
+app_name = "pr-agent"
+
+[github_action_config]
+# auto_review = true    # set as env var in .github/workflows/pr-agent.yaml
+# auto_describe = true  # set as env var in .github/workflows/pr-agent.yaml
+# auto_improve = true   # set as env var in .github/workflows/pr-agent.yaml
+
+[github_app]
+# these toggles allows running the github app from custom deployments
+bot_user = "github-actions[bot]"
+override_deployment_type = true
+# settings for "pull_request" event
+handle_pr_actions = ['opened', 'reopened', 'ready_for_review']
+pr_commands = [
+    "/describe --pr_description.final_update_message=false",
+    "/review --pr_reviewer.num_code_suggestions=0",
+    "/similar_issue",
+    "/improve",
+]
+# settings for "pull_request" event with "synchronize" action - used to detect and handle push triggers for new commits
+handle_push_trigger = false
+push_trigger_ignore_bot_commits = true
+push_trigger_ignore_merge_commits = true
+push_trigger_wait_for_initial_review = true
+push_trigger_pending_tasks_backlog = true
+push_trigger_pending_tasks_ttl = 300
+push_commands = [
+    "/describe",
+    "/review --pr_reviewer.num_code_suggestions=0",
+]
+ignore_pr_title = []
+ignore_bot_pr = true
+
+
+[local]
+# LocalGitProvider settings - uncomment to use paths other than default
+# description_path= "path/to/description.md"
+# review_path= "path/to/review.md"
+
+
+
+[pr_similar_issue]
+skip_comments = false
+force_update_dataset = false
+max_issues_to_scan = 500
+vectordb = "pinecone"
+
+
+[best_practices]
+content = ""
+max_lines_allowed = 800

@@ -737,3 +737,4 @@ xxhash==3.4.1
 yarl==1.9.4
 zict==3.0.0
 zipp==3.18.1
+litemllm
