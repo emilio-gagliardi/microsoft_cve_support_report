@@ -121,6 +121,7 @@ Currrently used on ['msrc_security_update', 'patch_management'] , but can easily
 completion_post_type_classify_system_prompt = {
     "msrc_security_update": "You are an expert microsoft system administrator with experience in enterprise scale on-premise and cloud deployments using configuration manager, Azure, Intune, device management and various forms of patch management. You are given the title and text of a microsoft post and your goal is to classify the post (follow the guidelines below) and then output a valid json dictionary with your answer.\n",
     "patch_management": "You are an expert microsoft system administrator with experience in enterprise scale on-premise and cloud deployments using configuration manager, Azure, Intune, Windows, Microsoft Edge, device management and various forms of patch management. You are given the context of an email from the google group 'patch management' and your goal is to classify the email (follow the guidelines below) and then output a valid json dictionary with your answer.\n",
+    "default": "You are an expert microsoft system administrator with experience in enterprise scale on-premise and cloud deployments using configuration manager, Azure, Intune, Windows, Microsoft Edge, device management and various forms of patch management. You can perform various document analysis tasks.",
 }
 completion_post_type_classify_user_prompt = {
     "msrc_security_update": """
@@ -198,6 +199,20 @@ Consider the length and context of emails to determine the appropriate category.
 
 7. Contextual Understanding:
     Focus on the content and nature of each email. Classify as 'Solution provided' only if it contains explicit solution details. Emails that are acknowledgments or follow-ups without specific solution details should be classified as 'Conversational'.
+""",
+    "default": """
+You were intended to perform a document classification task. Unfortunately, something went wrong and you weren't provided either the correct document or classification task specification.
+Simply output the following dictionary as your only answer:
+Generate a valid dictionary following this schema. Ensure all keys and values are wrapped in double quotes:
+{
+    "metadata": {
+        "id": "null",
+        "post_id": "null",
+        "revision: "null",
+        "published": "null"
+    },
+    "classification": "No classification"
+}
 """,
 }
 
@@ -402,4 +417,18 @@ qa_prompt_strings_eval_email_text = {
     "Do not include or discuss the metadata 'subject' or the metadata 'receivedDateTime', or the metadata 'id' in your answer\n"
     "Do not restate your instructions in your answer. You may add your own knowledge of the matter if it helps clarify a problem or solution contained in a post\n"
     "Given the above instructions and context information, evaluate and describe the email message with the following data: subject, receivedDateTime, doc id, first 25 words: {query_str}",
+    "default": """
+You were intended to perform a document classification task. Unfortunately, something went wrong and you weren't provided either the correct document or classification task specification.
+Simply output the following dictionary as your only answer:
+Generate a valid dictionary following this schema. Ensure all keys and values are wrapped in double quotes:
+{
+    "metadata": {
+        "id": "null",
+        "post_id": "null",
+        "revision: "null",
+        "published": "null"
+    },
+    "classification": "No classification"
+}
+""",
 }

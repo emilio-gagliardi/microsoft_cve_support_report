@@ -591,15 +591,14 @@ def call_llm_completion_with_logging(
         try:
             InferenceLogger.log_inference(**log_params)
 
+        except CustomException as ce:
+            logger.exception(
+                f"An Athina CustomException was caught: Status Code: {ce.status_code}, Message: {ce.message}"
+            )
         except Exception as e:
-            if isinstance(e, CustomException):
-                logger.exception(
-                    f"An Athina CustomException was caught: {e.status_code}\n{e.message}"
-                )
-            else:
-                logger.exception(
-                    f"An exception occurred connecting to Athina Inference logging.\n{e}"
-                )
+            logger.exception(
+                f"An unexpected exception occurred while connecting to Athina Inference logging: {str(e)}"
+            )
 
     except HTTPError as e:
         print(f"HTTPError occurred: {e}")
@@ -1162,3 +1161,19 @@ def create_metadata_string_for_user_prompt(row, metadata_keys):
         metadata_str += f"post_type: {row['post_type']}\n"
 
     return metadata_str
+
+
+def get_prompt(dictionary, key, default_key="default"):
+    """
+    Get the value for the given key from the dictionary.
+    If the key does not exist, return the value for the default key.
+
+    Parameters:
+    dictionary (dict): The dictionary to search.
+    key (str): The key to look up.
+    default_key (str): The default key to use if the key is not found.
+
+    Returns:
+    str: The value for the key or the default key.
+    """
+    return dictionary.get(key, dictionary.get(default_key))

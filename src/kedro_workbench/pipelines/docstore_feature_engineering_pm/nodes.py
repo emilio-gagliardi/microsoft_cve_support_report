@@ -17,6 +17,7 @@ from kedro_workbench.utils.llm_utils import (
     classify_email,
     create_metadata_string_for_user_prompt,
     fit_prompt_to_window,
+    get_prompt,
 )
 from kedro_workbench.extras.datasets.MongoDataset import MongoDBDocs
 from kedro_workbench.utils.json_utils import mongo_docs_to_dataframe
@@ -246,8 +247,11 @@ def fit_classification_prompt_patch(data, max_prompt_tokens):
     if data.empty:
         return data
     collection_label = "patch_management"
-    user_prompt_instructions = completion_post_type_classify_user_prompt.get(
-        collection_label
+    # user_prompt_instructions = completion_post_type_classify_user_prompt.get(
+    #     collection_label
+    # )
+    user_prompt_instructions = get_prompt(
+        completion_post_type_classify_user_prompt, collection_label
     )
     separator = "------------------------\n"
     data["user_prompt"] = data.apply(
