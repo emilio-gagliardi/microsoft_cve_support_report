@@ -194,12 +194,17 @@ def evaluate_keywords_node(model, data, max_tokens, temperature):
     system_prompt = completion_keyword_evaluation_system_prompt["patch_management"]
 
     tqdm.pandas(desc="Evaluating Keywords")
-    data["evaluated_keywords"] = data.progress_apply(
-        lambda x: evaluate_rake_keywords(
-            model, x, system_prompt, max_tokens, temperature
-        ),
-        axis=1,
-    )
+
+    try:
+        data["evaluated_keywords"] = data.progress_apply(
+            lambda x: evaluate_rake_keywords(
+                model, x, system_prompt, max_tokens, temperature
+            ),
+            axis=1,
+        )
+    except Exception as e:
+        logger.error(f"Error evaluating keywords: {e}")
+        raise
     logger.info("Completed evaluating keywords.")
     # print(f"evaluate_keywords all cols -> {data.columns}")
     # print(data[['filtered_keywords', 'evaluated_keywords']])
@@ -214,12 +219,18 @@ def evaluate_noun_chunks_node(model, data, max_tokens, temperature):
     system_prompt = completion_noun_chunk_evaluation_system_prompt["patch_management"]
 
     tqdm.pandas(desc="Evaluating Noun chunks")
-    data["evaluated_noun_chunks"] = data.progress_apply(
-        lambda x: evaluate_noun_chunks(
-            model, x, system_prompt, max_tokens, temperature
-        ),
-        axis=1,
-    )
+
+    try:
+        data["evaluated_noun_chunks"] = data.progress_apply(
+            lambda x: evaluate_noun_chunks(
+                model, x, system_prompt, max_tokens, temperature
+            ),
+            axis=1,
+        )
+    except Exception as e:
+        logger.error(f"Error evaluating noun chunks: {e}")
+        raise
+
     logger.info("Completed evaluating noun chunks.")
     # print(f"evaluate_noun_chunks all cols -> {data.columns}")
     # pprint(data[['filtered_keywords', 'evaluated_noun_chunks']])
@@ -290,17 +301,23 @@ def classify_emails_node(model, data, max_tokens, temperature):
 
     # update the following, pass context
     tqdm.pandas(desc="Classifying emails")
-    data[source_column_name] = data.progress_apply(
-        lambda row: classify_email(
-            model,
-            system_prompt,
-            row["user_prompt"],
-            max_tokens,
-            temperature,
-            row["classification_context"],
-        ),
-        axis=1,
-    )
+
+    try:
+        data[source_column_name] = data.progress_apply(
+            lambda row: classify_email(
+                model,
+                system_prompt,
+                row["user_prompt"],
+                max_tokens,
+                temperature,
+                row["classification_context"],
+            ),
+            axis=1,
+        )
+    except Exception as e:
+        logger.error(f"Error classifying emails: {e}")
+        raise
+
     data["post_type"] = data.apply(
         feat_eng.extract_post_type, axis=1, args=(source_column_name, key_to_extract)
     )
@@ -356,12 +373,16 @@ def batch_update_new_features_patch(data):
 
             # Update the MongoDB record and create fields if they don't exist
             # print(f"updating doc metadata: {update_data}")
-            update_result = mongo.collection.update_one(
-                {"metadata.id": record_id}, {"$set": update_data}, upsert=True
-            )
-            print_mongo_result_properties(update_result, verbose=False)
-            num_matched += update_result.matched_count
-            num_affected += update_result.modified_count
+            try:
+                update_result = mongo.collection.update_one(
+                    {"metadata.id": record_id}, {"$set": update_data}, upsert=True
+                )
+                print_mongo_result_properties(update_result, verbose=False)
+                num_matched += update_result.matched_count
+                num_affected += update_result.modified_count
+            except Exception as e:
+                logger.error(f"Error updating MongoDB record {record_id}: {e}")
+                raise
         logger.info(
             f"Completed patch management feature engineering save to Mongo."
             f"{num_matched} records matched and {num_affected} records affected."
