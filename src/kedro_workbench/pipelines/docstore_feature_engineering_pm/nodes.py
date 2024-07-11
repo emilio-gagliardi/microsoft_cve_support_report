@@ -392,25 +392,30 @@ def batch_update_new_features_patch(data):
 
 def remove_mongo_duplicates_patch(update_flag):
     if update_flag:
-        cursor = mongo.collection.aggregate(
-            [
-                {"$match": {"metadata.collection": "patch_management"}},
-                {
-                    "$group": {
-                        "_id": {
-                            "collection": "$metadata.collection",
-                            "id": "$metadata.id",
-                        },
-                        "count": {"$sum": 1},
-                        "duplicates": {"$push": "$_id"},
-                    }
-                },
-                {"$match": {"count": {"$gt": 1}}},
-            ]
-        )
-        dups_list = list(cursor)
-        if len(dups_list) > 0:
-            print(f"found {len(dups_list)} duplicates in docstore patch_management...")
-            deletion_summary = remove_duplicates(mongo.collection, dups_list)
-            # print(f"Deletion Summary: {deletion_summary}")
+        try:
+            cursor = mongo.collection.aggregate(
+                [
+                    {"$match": {"metadata.collection": "patch_management"}},
+                    {
+                        "$group": {
+                            "_id": {
+                                "collection": "$metadata.collection",
+                                "id": "$metadata.id",
+                            },
+                            "count": {"$sum": 1},
+                            "duplicates": {"$push": "$_id"},
+                        }
+                    },
+                    {"$match": {"count": {"$gt": 1}}},
+                ]
+            )
+            dups_list = list(cursor)
+            if len(dups_list) > 0:
+                print(
+                    f"found {len(dups_list)} duplicates in docstore patch_management..."
+                )
+                deletion_summary = remove_duplicates(mongo.collection, dups_list)
+        except Exception as e:
+            logger.error(f"Error removing MongoDB duplicates: {e}")
+            raise
     mongo.client.close()
