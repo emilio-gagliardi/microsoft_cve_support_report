@@ -411,10 +411,11 @@ def remove_mongo_duplicates_patch(update_flag):
             )
             dups_list = list(cursor)
             if len(dups_list) > 0:
-                print(
+                logger.warning(
                     f"found {len(dups_list)} duplicates in docstore patch_management..."
                 )
                 deletion_summary = remove_duplicates(mongo.collection, dups_list)
+                logger.info(f"Removed duplicates summary:\n {deletion_summary}")
         except Exception as e:
             logger.error(f"Error removing MongoDB duplicates: {e}")
             raise
