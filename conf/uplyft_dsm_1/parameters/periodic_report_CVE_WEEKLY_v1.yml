@@ -58,7 +58,7 @@ llm_temperature_periodic_report_CVE_WEEKLY_v1: 0.2
 
 periodic_report_CVE_WEEKLY_v1_summarization_models:
   custom: 
-  default: 'gpt-4o'
+  default: 'gpt-4o-mini'
 
 graph_index_params_periodic_report_CVE_WEEKLY_v1':
   persist_dir: 'data/06_models/graph_db/periodic_report_CVE_WEEKLY_v1'

@@ -1,7 +1,10 @@
 seven_day_periodic_report_CVE_WEEKLY_v1_prompt_strings = {
-    "msrc_security_update": {'user_prompt': """
-Use the provided Microsoft Security Response Center post details below, generate a valid JSON object with a detailed and comprehensive summary. The summary should be less than 15 sentences long, explaining the nature of the vulnerability, how an attacker may exploit it, the underlying cause, and the availability of an official fix. The post is classified as one of ['Critical', 'New feature', 'Solution provided', 'Information only']. 
-Use the post_type to guide your summary. If a post_type is 'Information only' it likely means Microsoft updated the FAQs but nothing substantive beyond the previous revision. So your summary can be brief - retsate the key concepts and scores. However, you still must evaluate the provided revision value and state what the actual revision value is. Chromium and Microsoft Edge posts at revision 1.0 can also be 'Information only' because the source of the solution is outside of Microsoft's control.
+    "msrc_security_update": {
+        "user_prompt": """
+Use the provided Microsoft Security Response Center post details below, generate a valid JSON object with a detailed and comprehensive summary. The summary should be less than 20 sentences long, explaining the nature of the vulnerability, how an attacker may exploit it, the underlying cause, and the availability of an official fix. The post is classified as one of ['Critical', 'New feature', 'Solution provided', 'Information only'].
+Use the post_type to guide your summary. If a post_type is 'Information only' it likely means Microsoft updated the FAQs but nothing substantive beyond the previous revision. So your summary can be brief - restate the key concepts and scores. However, you still must evaluate the provided revision value and state what the actual revision value is. 
+
+You must clearly insert any and all code or mitigation commands. For example, if you encounter 'RPC_C_AUTHN_LEVEL_PKT_INTEGRITY' or any PowerShell commands, regardless of the revision number, you must include all commands in your summary in a bullet or numbered list.
 
 If a post_type is 'Solution provided' you must mention the remedy or workaround and make it clear to the reader how to take action.
 If a post_type is not available, you can deduce the post_type by searching for 'Remediation Level' in the post body and whether it says 'Official Fix' or not.
@@ -43,17 +46,19 @@ What not to include in the summary guidelines:
 - DO NOT include any special thanks or acknowledgements. Just report on actionable facts.
 - The JSON object should be correctly formatted and include all required fields in the schema. Do not add any additional fields.
 - Do not output any text outside of the json object because an external script will parse the output. 
-""", 'system_prompt': """
+""",
+        "system_prompt": """
 As an expert Microsoft system administrator with extensive experience in enterprise-scale deployments, you are adept at Configuration Manager, Azure, Intune, and patch management. Your task is to analyze the content of a Microsoft security post, provided with its title, classification, and text. Your goal is to create a concise, accurate summary that highlights the key aspects of the vulnerability or update. Your summary should include the nature of the issue, affected Microsoft products, potential impact, and solutions or mitigations if available. Utilize your deep knowledge in enterprise systems to provide additional insights where relevant. Finally, format your response as a valid JSON dictionary.
-"""},
-    "windows_10": {'user_prompt': """ """, 'system_prompt': """ """},
-    "windows_11": {'user_prompt': """ """, 'system_prompt': """ """},
-    "windows_update": {'user_prompt': """ """, 'system_prompt': """ """},
-    "stable_channel_notes": {'user_prompt': """ """, 'system_prompt': """ """},
-    "security_update_notes": {'user_prompt': """ """, 'system_prompt': """ """},
-    "mobile_stable_channel_notes": {'user_prompt': """ """, 'system_prompt': """ """},
-    "beta_channel_notes": {'user_prompt': """ """, 'system_prompt': """ """},
-    "archive_stable_channel_notes": {'user_prompt': """ """, 'system_prompt': """ """},
+""",
+    },
+    "windows_10": {"user_prompt": """ """, "system_prompt": """ """},
+    "windows_11": {"user_prompt": """ """, "system_prompt": """ """},
+    "windows_update": {"user_prompt": """ """, "system_prompt": """ """},
+    "stable_channel_notes": {"user_prompt": """ """, "system_prompt": """ """},
+    "security_update_notes": {"user_prompt": """ """, "system_prompt": """ """},
+    "mobile_stable_channel_notes": {"user_prompt": """ """, "system_prompt": """ """},
+    "beta_channel_notes": {"user_prompt": """ """, "system_prompt": """ """},
+    "archive_stable_channel_notes": {"user_prompt": """ """, "system_prompt": """ """},
     "patch_management": """
 You are a Microsoft System administrator with expertise in both on-premises and azure cloud, Intune, and virtualization technologies.
 Below are details from recent post from the public Google Group 'Patch Management' where other microsoft system administrators discuss the how-to's and why's of security patch management across a broad spectrum of Operating Systems, Applications, and Network Devices. This list is meant as an aid to network and systems administrators and security professionals who are responsible for maintaining the security posture of their hosts and applications.
@@ -80,5 +85,5 @@ Your entire answer must be contained in the summary section.
 Do not include or discuss the metadata 'subject' or the metadata 'receivedDateTime', or the metadata 'id' in your answer
 Do not restate your instructions in your answer. You may add your own knowledge of the matter if it helps clarify a problem or solution contained in a post
 Given the above instructions and context information, evaluate and describe the email message with the following data: subject, receivedDateTime, doc id, first 25 words: {query_str}
-"""
+""",
 }

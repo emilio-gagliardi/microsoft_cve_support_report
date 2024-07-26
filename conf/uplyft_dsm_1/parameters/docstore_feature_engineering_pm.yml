@@ -31,6 +31,6 @@ patch_classification_models:
   default: 'gpt-4o'
 
 patch_evaluation_models:
-  keywords: gpt-4o
-  noun_chunks: gpt-4o
-  summarization: gpt-4o
+  keywords: gpt-4o-mini
+  noun_chunks: gpt-4o-mini
+  summarization: gpt-4o-mini

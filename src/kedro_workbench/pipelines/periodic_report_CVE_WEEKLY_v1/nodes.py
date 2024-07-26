@@ -1484,7 +1484,7 @@ def generate_periodic_report_CVE_WEEKLY_v1_html(report_data_container):
             env = Environment(loader=FileSystemLoader(template_dir))
 
             # Load the template
-            template = env.get_template("periodic_report_template_v3.8.html")
+            template = env.get_template("periodic_report_template_v3.9.html")
 
             # Render the template with the data
             rendered_template = template.render(report_data)
