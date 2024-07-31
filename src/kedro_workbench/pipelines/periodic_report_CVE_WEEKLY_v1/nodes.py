@@ -1360,6 +1360,7 @@ def compile_periodic_report_CVE_WEEKLY_v1(
     reshaped_documents = {}
 
     for group in results:
+        print(f"Group is: {group}")
         # Initialize the list for the current group if not already done
         if group["_id"] not in reshaped_documents:
             reshaped_documents[group["_id"]] = []
@@ -1508,6 +1509,7 @@ def generate_periodic_report_CVE_WEEKLY_v1_html(report_data_container):
             if not os.path.exists(thumbnail_path):
                 os.makedirs(thumbnail_path)
             create_thumbnail(absolute_html_path, full_thumbnail_path)
+
             report_data_container["sftp"].append(full_thumbnail_path)
             logger.info(f"HTML report thumbnail generated successfully.")
             return report_data_container
