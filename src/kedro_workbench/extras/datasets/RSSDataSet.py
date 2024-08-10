@@ -1,5 +1,6 @@
 from kedro.io import AbstractDataSet
 from typing import Any, Dict
+
 # from kedro_workbench.utils.feed_utils import (
 #     generate_feed_structure_text,
 #     generate_feed_structure_yaml,
@@ -10,22 +11,19 @@ from bs4 import BeautifulSoup
 import requests
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError
+
 # import hashlib
 import logging
 from icecream import ic
 from datetime import datetime, timedelta
+
 ic.configureOutput(includeContext=True)
 logger = logging.getLogger("kedro")
 
 
 class RSSFeedExtract(AbstractDataSet):
     def __init__(
-        self,
-        url,
-        collection,
-        day_interval=None,
-        output_format="text",
-        output_dir=None
+        self, url, collection, day_interval=None, output_format="text", output_dir=None
     ):
         self._url = url
         self._collection = collection
@@ -59,7 +57,7 @@ class RSSFeedExtract(AbstractDataSet):
         self._schema_dir = value
 
     def _load(self):
-        """ Load data from RSS feed, filtering items based on publication date. """
+        """Load data from RSS feed, filtering items based on publication date."""
         response = requests.get(self.url)
         xml_content = response.text
         soup = BeautifulSoup(xml_content, "xml")
@@ -105,40 +103,42 @@ class RSSFeedExtract(AbstractDataSet):
                 try:
                     # Convert pubDate to datetime object for comparison
                     pub_date_dt = datetime.strptime(
-                        pub_date.text.replace('Z', 'UTC'),
-                        '%a, %d %b %Y %H:%M:%S %Z'
-                        )
+                        pub_date.text.replace("Z", "UTC"), "%a, %d %b %Y %H:%M:%S %Z"
+                    )
 
                     # Filter based on the cutoff_date if _day_interval is not None
                     if self._day_interval is not None and pub_date_dt < cutoff_date:
                         logger.debug(
                             f"Skipping item due to pubDate {pub_date_dt} "
-                            f"being before cutoff_date {cutoff_date}")
+                            f"being before cutoff_date {cutoff_date}"
+                        )
                         continue
 
                 except ValueError as e:
                     logger.error(
                         f"Error parsing date {pub_date.text} for item with title"
-                        f" {title} and description {description}: {e}")
+                        f" {title} and description {description}: {e}"
+                    )
                     continue
 
                 except Exception as e:
                     logger.error(
                         f"Error parsing date {pub_date.text} for item with"
-                        f" title '{title}' and description '{description}': {e}")
+                        f" title '{title}' and description '{description}': {e}"
+                    )
                     continue
 
             else:
                 logger.error(
                     f"pubDate not found for item with title '{title}'"
                     f"and description '{description}'"
-                    )
+                )
 
             item_dict["collection"] = collection
             parsed_feed.append(item_dict)
         logger.info(f"Total RSS items extracted within threshold: {len(parsed_feed)}")
         # for item in parsed_feed:
-        #     print(f"{item['post_id']}-{item['published']}")
+        #     print(f"{item['title']}-{item['link']}")
         return parsed_feed
 
     def _save(self, data: Any) -> None:
@@ -176,7 +176,8 @@ class RSSDocuments(AbstractDataSet):
         documents = list(cursor)
         logger.info(
             f"Extracted {len(documents)} documents from mongo collection "
-            f"{self._mongo_collection}.")
+            f"{self._mongo_collection}."
+        )
         print(f"num docs {len(documents)} extracted from {self._mongo_collection}")
         return documents
 
@@ -210,7 +211,7 @@ class RSSDocuments(AbstractDataSet):
         else:
             logger.info(
                 f"No New RSS Data to store in Mongo collection {self._mongo_collection}"
-                )
+            )
         client.close()
 
     def _describe(self) -> Dict[str, Any]:

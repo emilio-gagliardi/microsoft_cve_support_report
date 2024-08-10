@@ -35,16 +35,19 @@ from .nodes import (
     extract_patchmanagement_docs,
     transform_patchmanagement_docs,
     load_patchmanagement_docs,
-    begin_consolidating_pipeline_connector
 )
 
 
+# add to extract_rss_1_docs
+# , "transform_docs_validator_flag"
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
         [
             node(
                 func=extract_rss_1_docs,
-                inputs="rss_1_augmented",
+                inputs=[
+                    "rss_1_augmented",
+                ],
                 outputs="rss_1_data_for_transforming",
                 name="extract_rss_1_docs",
                 tags=["msrc_security_update"],
@@ -65,7 +68,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_rss_2_docs,
-                inputs="rss_2_augmented",
+                inputs=[
+                    "rss_2_augmented",
+                ],
                 outputs="rss_2_data_for_transforming",
                 name="extract_rss_2_docs",
                 tags=["windows_update"],
@@ -86,7 +91,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_rss_3_docs,
-                inputs="rss_3_augmented",
+                inputs=[
+                    "rss_3_augmented",
+                ],
                 outputs="rss_3_data_for_transforming",
                 name="extract_rss_3_docs",
                 tags=["windows_10"],
@@ -107,7 +114,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_rss_4_docs,
-                inputs="rss_4_augmented",
+                inputs=[
+                    "rss_4_augmented",
+                ],
                 outputs="rss_4_data_for_transforming",
                 name="extract_rss_4_docs",
                 tags=["windows_11"],
@@ -128,7 +137,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_edge_1_docs,
-                inputs="edge_release_augmented_1",
+                inputs=[
+                    "edge_release_augmented_1",
+                ],
                 outputs="edge_1_data_for_transforming",
                 name="extract_edge_1_docs",
                 tags=["stable_channel_notes"],
@@ -149,7 +160,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_edge_2_docs,
-                inputs="edge_release_augmented_2",
+                inputs=[
+                    "edge_release_augmented_2",
+                ],
                 outputs="edge_2_data_for_transforming",
                 name="extract_edge_2_docs",
                 tags=["beta_channel_notes"],
@@ -170,7 +183,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_edge_3_docs,
-                inputs="edge_release_augmented_3",
+                inputs=[
+                    "edge_release_augmented_3",
+                ],
                 outputs="edge_3_data_for_transforming",
                 name="extract_edge_3_docs",
                 tags=["archive_stable_channel_notes"],
@@ -191,7 +206,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_edge_4_docs,
-                inputs="edge_release_augmented_4",
+                inputs=[
+                    "edge_release_augmented_4",
+                ],
                 outputs="edge_4_data_for_transforming",
                 name="extract_edge_4_docs",
                 tags=["mobile_stable_channel_notes"],
@@ -212,7 +229,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_edge_5_docs,
-                inputs="edge_release_augmented_5",
+                inputs=[
+                    "edge_release_augmented_5",
+                ],
                 outputs="edge_5_data_for_transforming",
                 name="extract_edge_5_docs",
                 tags=["security_update_notes"],
@@ -233,7 +252,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_patchmanagement_docs,
-                inputs="email_jsons_augmented_1",
+                inputs=[
+                    "email_jsons_augmented_1",
+                ],
                 outputs="email_jsons_for_transforming",
                 name="extract_patchmanagement_docs",
                 tags=["patch management"],
@@ -251,13 +272,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs=["patchmanagement_primary", "transforming_complete"],
                 name="load_patchmanagement_docs",
                 tags=["patch management"],
-            ),
-            node(
-                func=begin_consolidating_pipeline_connector,
-                inputs="transforming_complete",
-                outputs="begin_consolidating",
-                name="begin_consolidating_pipeline_connector",
-                tags=["pipeline connector"],
             ),
         ],
         tags=["prep for LLM"],

@@ -14,12 +14,16 @@ from .nodes import (
 )
 
 
+# add flag to extract_partitioned_json
+# , "ingest_validator_patch_flag"
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
         [
             node(
                 func=extract_partitioned_json,
-                inputs="partitioned_cleaned_emails_json",
+                inputs=[
+                    "partitioned_cleaned_emails_json",
+                ],
                 outputs="jsons_for_combining",
                 name="extract_partitioned_json",
                 tags=["daily", "ETL"],

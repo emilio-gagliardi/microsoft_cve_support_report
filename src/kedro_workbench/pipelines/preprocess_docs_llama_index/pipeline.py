@@ -14,39 +14,24 @@ from .nodes import (
     exclude_links_from_embeddings,
     load_index_documents,
     remove_docstore_source_files,
-    check_for_loading_complete,
-    begin_ingest_proudct_build_pipeline_connector
 )
-
-# , "proceed_with_preprocessing"
-# get_partitioned_index_data
 
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
         [
             node(
-                func=check_for_loading_complete,
-                inputs="source_loading_complete",
-                outputs="proceed_with_preprocessing",
-                name="check_for_loading_complete",
-            ),
-            node(
                 func=get_partitioned_index_data,
                 inputs=[
                     "get_partioned_index_source",
-                    "proceed_with_preprocessing"
-                    ],
+                ],
                 outputs="index_data_as_callable",
                 name="get_partitioned_index_data",
             ),
             node(
                 func=combine_callable_index_data,
                 inputs="index_data_as_callable",
-                outputs=[
-                    "index_data_for_documents",
-                    "files_to_remove"
-                    ],
+                outputs=["index_data_for_documents", "files_to_remove"],
                 name="combine_callable_index_data",
             ),
             node(
@@ -57,10 +42,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=validate_index_data,
-                inputs=[
-                    "documents_for_index",
-                    "params:validate_new_nodes"
-                    ],
+                inputs=["documents_for_index", "params:validate_new_nodes"],
                 outputs="data_and_descriptives_tuple",
                 name="validate_index_data",
             ),
@@ -78,10 +60,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=filter_documents,
-                inputs=[
-                    "documents_for_filtering",
-                    "data_and_descriptives_tuple"
-                    ],
+                inputs=["documents_for_filtering", "data_and_descriptives_tuple"],
                 outputs="all_documents_for_index_pkl",
                 name="filter_documents",
             ),
@@ -96,12 +75,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=["files_to_remove"],
                 outputs="preprocessing_complete",
                 name="remove_docstore_source_files",
-            ),
-            node(
-                func=begin_ingest_proudct_build_pipeline_connector,
-                inputs="preprocessing_complete",
-                outputs="begin_product_build_ingestion",
-                name="begin_ingest_proudct_build_pipeline_connector",
             ),
         ],
         tags=["preprocess index documents"],

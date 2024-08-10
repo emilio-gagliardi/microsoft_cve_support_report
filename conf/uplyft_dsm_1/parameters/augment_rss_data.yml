@@ -7,6 +7,9 @@ rss_1_augmented:
   elements: ['div', 'div', 'div']
   attributes: ['class', 'id', 'id']
   values: ['root-144', 'faq', 'securityUpdates']
+  ignore_elements: ['button', 'div', 'div']
+  ignore_attributes: ['class', 'id','class']
+  ignore_values: ['ms-Button.ms-Button--action.ms-Button--command.ms-Button--hasMenu root-362', 'disclaimer','ms-MessageBar.ms-MessageBar--success.ms-MessageBar-multiline.root-206']
   catalog: "rss_1_augmented"
 
 rss_2_augmented:
@@ -16,13 +19,19 @@ rss_2_augmented:
   catalog: "rss_2_augmented"
 
 rss_3_augmented:
-  elements: ['div']
+  elements: ['main']
   attributes: ['id']
   values: ['supArticleContent']
+  ignore_elements: ['div', 'div', 'div']
+  ignore_attributes: ['class','class','class']
+  ignore_values: ['ocArticleFooterShareContainer','ocArticleFooterShareLinksWrapper', 'ocArticleFooterSection ']
   catalog: "rss_3_augmented"
 
 rss_4_augmented:
-  elements: ['div']
-  attributes: ['id']
-  values: ['supArticleContent']
+  elements: ['main', 'main']
+  attributes: ['id', 'id']
+  values: ['main','supArticleContent']
+  ignore_elements: ['div', 'div', 'div']
+  ignore_attributes: ['class','class','class']
+  ignore_values: ['ocArticleFooterShareContainer','ocArticleFooterShareLinksWrapper', 'ocArticleFooterSection ']
   catalog: "rss_4_augmented"

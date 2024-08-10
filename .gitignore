@@ -195,3 +195,7 @@ venv.bak/
 kedro-workbench.code-workspace
 .vscode/settings.json
 src/kedro_workbench/extras/datasets/dummy_dataset.py
+
+command_times.csv
+failed_commands.log
+powershell_error.log

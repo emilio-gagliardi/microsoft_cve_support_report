@@ -27,28 +27,7 @@ credentials = conf_loader["credentials"]
 mongo_creds = credentials["mongo_atlas"]
 
 
-def check_for_product_build_ingestion_complete(ingestion_complete):
-    """
-    Ensures the sequential execution of the `augment_msrc_product_build_data` pipeline
-    after the `ingest_msrc_product_build_data` pipeline.
-
-    The last node of the ingestion pipeline outputs a memory dataset, which serves as
-    an input to this function.
-    This function, `check_for_product_build_ingestion_complete`,
-    then outputs a memory dataset that acts as an input for the first node in the
-    `augment_msrc_product_build_data` pipeline, `extract_existing_cve_docs_to_augment`.
-
-    Args:
-        inputs (bool): A boolean flag indicating the presence of the input memory dataset.
-        outputs (bool): A boolean flag indicating the presence of the output memory dataset.
-    """
-    print(f"product build ingestion complete: {ingestion_complete}")
-    return ingestion_complete
-
-
-def extract_existing_cve_docs_to_augment(day_interval, begin_augmenting=True):
-    if not begin_augmenting:
-        logger.warning("Product Build data ingestion didn't complete.")
+def extract_existing_cve_docs_to_augment(day_interval):
 
     end_date = datetime.now(timezone.utc)
     start_date = end_date - timedelta(days=day_interval)
@@ -79,10 +58,8 @@ def extract_existing_cve_docs_to_augment(day_interval, begin_augmenting=True):
 
 
 def extract_existing_product_build_data(
-    day_interval, products_to_keep, columns_to_extract, begin_augmenting=True
+    day_interval, products_to_keep, columns_to_extract
 ):
-    if not begin_augmenting:
-        logger.warning("Could not extract product build data from document store.")
 
     end_date = datetime.now(timezone.utc)
     start_date = end_date - timedelta(days=day_interval + 30)

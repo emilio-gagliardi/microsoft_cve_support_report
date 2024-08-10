@@ -28,7 +28,9 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=extract_stable_channel_docs,
-                inputs="edge_release_intermediate_1",
+                inputs=[
+                    "edge_release_intermediate_1",
+                ],
                 outputs="edge_release_for_augmenting_1",
                 name="extract_stable_channel_docs",
             ),
@@ -46,7 +48,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_beta_channel_docs,
-                inputs="edge_release_intermediate_2",
+                inputs=[
+                    "edge_release_intermediate_2",
+                ],
                 outputs="edge_release_for_augmenting_2",
                 name="extract_beta_channel_docs",
             ),
@@ -64,7 +68,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_archive_stable_channel_docs,
-                inputs="edge_release_intermediate_3",
+                inputs=[
+                    "edge_release_intermediate_3",
+                ],
                 outputs="edge_release_for_augmenting_3",
                 name="extract_archive_stable_channel_docs",
             ),
@@ -82,7 +88,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_mobile_stable_channel_docs,
-                inputs="edge_release_intermediate_4",
+                inputs=[
+                    "edge_release_intermediate_4",
+                ],
                 outputs="edge_release_for_augmenting_4",
                 name="extract_mobile_stable_channel_docs",
             ),
@@ -100,7 +108,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_security_update_docs,
-                inputs="edge_release_intermediate_5",
+                inputs=[
+                    "edge_release_intermediate_5",
+                ],
                 outputs="edge_release_for_augmenting_5",
                 name="extract_security_update_docs",
             ),

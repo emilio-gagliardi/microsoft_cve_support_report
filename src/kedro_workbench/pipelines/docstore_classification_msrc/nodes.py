@@ -51,17 +51,7 @@ mongo = MongoDBDocs(
 )
 
 
-def check_for_product_build_augment_complete(augmentation_complete):
-    if not augmentation_complete:
-        logger.warning("Product Build data augmentation didn't complete.")
-        return False
-    print("Proceed with feature engineering")
-    return True
-
-
-def extract_posts_to_classify(document_limit, begin_docstore_feature_engineering=True):
-    if not begin_docstore_feature_engineering:
-        logger.warning("Product Build data augmentation didn't complete.")
+def extract_posts_to_classify(document_limit):
 
     limit = convert_to_actual_type(document_limit)
     # collections: list of collection names to extract posts from mongo docstore
@@ -275,10 +265,4 @@ def remove_mongo_duplicates_msrc(update_flag):
             deletion_summary = remove_duplicates(mongo.collection, dups_list)
             print(f"Deletion Summary: {deletion_summary}")
     mongo.client.close()
-    return True
-
-
-def begin_classification_patch_pipeline_connector(msrc_classification_status):
-
-    logger.info(f"Classifying MSRC status: {msrc_classification_status}")
     return True

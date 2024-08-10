@@ -36,11 +36,6 @@ credentials = conf_loader["credentials"]
 mongo_creds = credentials["mongo_atlas"]
 
 
-def check_for_preprocessing_complete(preprocessing_complete):
-    logger.info(f"preprocessing complete: {preprocessing_complete}")
-    return preprocessing_complete
-
-
 def download_edge_product_build_data(
     skip_download, params, headless=True, begin_ingestion=True
 ):
@@ -1491,10 +1486,3 @@ def load_update_guide_update_package_data(update_package_data, overwrite=False):
         logger.info("INGESTION: No Update Package records to process.")
 
     return True
-
-
-def begin_augment_product_build_pipeline_connector(ingestion_complete):
-    if ingestion_complete:
-        logger.info("Ingest product build pipeline completed")
-        return True
-    return False

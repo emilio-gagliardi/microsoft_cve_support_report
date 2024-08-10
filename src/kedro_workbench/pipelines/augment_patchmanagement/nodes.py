@@ -2,6 +2,7 @@
 This is a boilerplate pipeline 'augment_patchmanagement'
 generated using Kedro 0.18.11
 """
+
 from kedro_workbench.utils.email_utils import get_day_of_week
 from kedro_workbench.utils.feed_utils import get_new_data
 from datetime import datetime
@@ -64,3 +65,9 @@ def augment_jsons(data, params):
 def load_jsons_augmented(data):
 
     return data
+
+
+def connector_transform_docs(data):
+    print("moving to transform docs")
+    flag = True
+    return flag

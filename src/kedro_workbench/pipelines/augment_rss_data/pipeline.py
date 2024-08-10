@@ -20,12 +20,15 @@ from .nodes import (
 )
 
 
+# , "augment_validator_rss_flag"
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
         [
             node(
                 func=extract_rss_1_data,
-                inputs="rss_1_intermediate",
+                inputs=[
+                    "rss_1_intermediate",
+                ],
                 outputs="rss_1_data_for_augmenting",
                 name="extract_rss_1_data",
             ),
@@ -43,7 +46,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_rss_2_data,
-                inputs="rss_2_intermediate",
+                inputs=[
+                    "rss_2_intermediate",
+                ],
                 outputs="rss_2_data_for_augmenting",
                 name="extract_rss_2_data",
             ),
@@ -61,7 +66,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_rss_3_data,
-                inputs="rss_3_intermediate",
+                inputs=[
+                    "rss_3_intermediate",
+                ],
                 outputs="rss_3_data_for_augmenting",
                 name="extract_rss_3_data",
             ),
@@ -79,7 +86,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_rss_4_data,
-                inputs="rss_4_intermediate",
+                inputs=[
+                    "rss_4_intermediate",
+                ],
                 outputs="rss_4_data_for_augmenting",
                 name="extract_rss_4_data",
             ),

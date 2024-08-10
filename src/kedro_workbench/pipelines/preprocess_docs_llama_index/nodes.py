@@ -2,6 +2,7 @@
 This is a boilerplate pipeline 'update_index'
 generated using Kedro 0.18.11
 """
+
 from llama_index import Document
 from llama_index.callbacks import CallbackManager, LlamaDebugHandler
 from llama_index.node_parser import SentenceWindowNodeParser
@@ -32,13 +33,8 @@ llama_debug = LlamaDebugHandler(print_trace_on_end=True)
 callback_manager = CallbackManager([llama_debug])
 
 
-def check_for_loading_complete(loading_complete):
-    print(f"indexed loading complete: {loading_complete}")
-    return loading_complete
-
-
 @timing_decorator
-def get_partitioned_index_data(data, proceed_with_preprocessing=True):
+def get_partitioned_index_data(data):
     """
     Load a partitioned dataset from a directory.
 
@@ -49,7 +45,6 @@ def get_partitioned_index_data(data, proceed_with_preprocessing=True):
         dict: A dictionary containing the file names of the data to load.
 
     """
-    print(f"proceed_with_preprocessing: {proceed_with_preprocessing}")
     developing = False
     # print(len(data))
 
@@ -126,7 +121,7 @@ def create_documents_from_index_data(data: List[Dict[str, Any]]) -> List[Documen
                 "cve_fixes",
                 "cve_mentions",
                 "email_text_original",
-                "unique_tokens"
+                "unique_tokens",
             ],
             excluded_embed_metadata_keys=[
                 "id",
@@ -136,7 +131,7 @@ def create_documents_from_index_data(data: List[Dict[str, Any]]) -> List[Documen
                 "cve_fixes",
                 "cve_mentions",
                 "email_text_original",
-                "unique_tokens"
+                "unique_tokens",
             ],
         )
         for data_dict in data
@@ -327,7 +322,9 @@ def compute_validation_metrics(data: Tuple[List[Any], List[Any], List[Dict]]) ->
             )
             all_df = pd.DataFrame(index=all_combinations).reset_index()
 
-            result_df = pd.merge(all_df, descriptives, on=["doc_id", "outlier"], how="left")
+            result_df = pd.merge(
+                all_df, descriptives, on=["doc_id", "outlier"], how="left"
+            )
             result_df = result_df.fillna(
                 {"sum": 0, "mean": np.nan, "std": np.nan, "count": 0}
             )
@@ -380,7 +377,9 @@ def compute_validation_metrics(data: Tuple[List[Any], List[Any], List[Dict]]) ->
             current_metrics = pd.read_csv("data/08_reporting/validation_metrics.csv")
             pbar.update(1)
             # Concatenate the current metrics with the new data and update the CSV file
-            current_metrics = pd.concat([current_metrics, new_data_df], ignore_index=True)
+            current_metrics = pd.concat(
+                [current_metrics, new_data_df], ignore_index=True
+            )
             # print(current_metrics)
             current_metrics.to_csv(
                 "data/08_reporting/validation_metrics.csv",
@@ -493,11 +492,7 @@ def remove_docstore_source_files(files_to_remove):
         account_key = azure_blob_credentials["account_key"]
 
         # Create an Azure Blob Storage filesystem instance
-        fs = filesystem(
-            "abfs",
-            account_name=account_name,
-            account_key=account_key
-        )
+        fs = filesystem("abfs", account_name=account_name, account_key=account_key)
 
         # Base path for the files to remove
         path = "abfs://report-data/"
@@ -512,12 +507,3 @@ def remove_docstore_source_files(files_to_remove):
                 print(f"File not found: {full_path}")
 
     return True
-
-
-def begin_ingest_proudct_build_pipeline_connector(preprocessing_complete):
-    if preprocessing_complete:
-        logger.info(
-            "\n=====================\nPreprocessing pipeline "
-            "completed\n=====================\n")
-        return True
-    return False

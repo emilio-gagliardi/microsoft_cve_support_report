@@ -33,13 +33,15 @@ def extract_rss_1_primary(data, document_limit):
     Returns:
         list: The data extracted from the primary collection.
     """
-    if isinstance(document_limit, str) and document_limit == 'None':
+    if isinstance(document_limit, str) and document_limit == "None":
         document_limit = None
     filtered_documents = filter_mongo_docs(
         data, "msrc_security_update", "report_docstore", "docstore"
     )
 
-    logger.info(f"rss_1_primary collection: {len(data)} records. rss_1 ids not in docstore: {len(filtered_documents)}")
+    logger.info(
+        f"rss_1_primary collection: {len(data)} records. rss_1 ids not in docstore: {len(filtered_documents)}"
+    )
 
     return filtered_documents[:document_limit]
 
@@ -56,12 +58,14 @@ def extract_rss_2_primary(data, document_limit):
     Returns:
         list: The data extracted from the primary collection.
     """
-    if isinstance(document_limit, str) and document_limit == 'None':
+    if isinstance(document_limit, str) and document_limit == "None":
         document_limit = None
     filtered_documents = filter_mongo_docs(
         data, "windows_update", "report_docstore", "docstore"
     )
-    logger.info(f"rss_2_primary collection: {len(data)} records. rss_2 ids not in docstore: {len(filtered_documents)}")
+    logger.info(
+        f"rss_2_primary collection: {len(data)} records. rss_2 ids not in docstore: {len(filtered_documents)}"
+    )
 
     return filtered_documents[:document_limit]
 
@@ -78,12 +82,14 @@ def extract_rss_3_primary(data, document_limit):
     Returns:
         list: The data extracted from the primary collection.
     """
-    if isinstance(document_limit, str) and document_limit == 'None':
+    if isinstance(document_limit, str) and document_limit == "None":
         document_limit = None
     filtered_documents = filter_mongo_docs(
         data, "windows_10", "report_docstore", "docstore"
     )
-    logger.info(f"rss_33_primary collection: {len(data)} records. rss_3 ids not in docstore: {len(filtered_documents)}")
+    logger.info(
+        f"rss_33_primary collection: {len(data)} records. rss_3 ids not in docstore: {len(filtered_documents)}"
+    )
 
     return filtered_documents[:document_limit]
 
@@ -100,12 +106,14 @@ def extract_rss_4_primary(data, document_limit):
     Returns:
         list: The data extracted from the primary collection.
     """
-    if isinstance(document_limit, str) and document_limit == 'None':
+    if isinstance(document_limit, str) and document_limit == "None":
         document_limit = None
     filtered_documents = filter_mongo_docs(
         data, "windows_11", "report_docstore", "docstore"
     )
-    logger.info(f"rss_4_primary collection: {len(data)} records. rss_4 ids not in docstore: {len(filtered_documents)}")
+    logger.info(
+        f"rss_4_primary collection: {len(data)} records. rss_4 ids not in docstore: {len(filtered_documents)}"
+    )
 
     return filtered_documents[:document_limit]
 
@@ -122,12 +130,14 @@ def extract_edge_1_primary(data, document_limit):
     Returns:
         list: The data extracted from the primary collection.
     """
-    if isinstance(document_limit, str) and document_limit == 'None':
+    if isinstance(document_limit, str) and document_limit == "None":
         document_limit = None
     filtered_documents = filter_mongo_docs(
         data, "stable_channel_notes", "report_docstore", "docstore"
     )
-    logger.info(f"edge_1_primary collection: {len(data)} records. edge_1 ids not in docstore: {len(filtered_documents)}")
+    logger.info(
+        f"edge_1_primary collection: {len(data)} records. edge_1 ids not in docstore: {len(filtered_documents)}"
+    )
 
     return filtered_documents[:document_limit]
 
@@ -144,12 +154,14 @@ def extract_edge_2_primary(data, document_limit):
     Returns:
         list: The data extracted from the primary collection.
     """
-    if isinstance(document_limit, str) and document_limit == 'None':
+    if isinstance(document_limit, str) and document_limit == "None":
         document_limit = None
     filtered_documents = filter_mongo_docs(
         data, "beta_channel_notes", "report_docstore", "docstore"
     )
-    logger.info(f"edge_2_primary collection: {len(data)} records. edge_2 ids not in docstore: {len(filtered_documents)}")
+    logger.info(
+        f"edge_2_primary collection: {len(data)} records. edge_2 ids not in docstore: {len(filtered_documents)}"
+    )
 
     return filtered_documents[:document_limit]
 
@@ -166,12 +178,14 @@ def extract_edge_3_primary(data, document_limit):
     Returns:
         list: The data extracted from the primary collection.
     """
-    if isinstance(document_limit, str) and document_limit == 'None':
+    if isinstance(document_limit, str) and document_limit == "None":
         document_limit = None
     filtered_documents = filter_mongo_docs(
         data, "archive_stable_channel_notes", "report_docstore", "docstore"
     )
-    logger.info(f"edge_3_primary collection: {len(data)} records. edge_3 ids not in docstore: {len(filtered_documents)}")
+    logger.info(
+        f"edge_3_primary collection: {len(data)} records. edge_3 ids not in docstore: {len(filtered_documents)}"
+    )
 
     return filtered_documents[:document_limit]
 
@@ -188,12 +202,14 @@ def extract_edge_4_primary(data, document_limit):
     Returns:
         list: The data extracted from the primary collection.
     """
-    if isinstance(document_limit, str) and document_limit == 'None':
+    if isinstance(document_limit, str) and document_limit == "None":
         document_limit = None
     filtered_documents = filter_mongo_docs(
         data, "mobile_stable_channel_notes", "report_docstore", "docstore"
     )
-    logger.info(f"edge_4_primary collection: {len(data)} records. edge_4 ids not in docstore: {len(filtered_documents)}")
+    logger.info(
+        f"edge_4_primary collection: {len(data)} records. edge_4 ids not in docstore: {len(filtered_documents)}"
+    )
 
     return filtered_documents[:document_limit]
 
@@ -210,12 +226,14 @@ def extract_edge_5_primary(data, document_limit):
     Returns:
         list: The data extracted from the primary collection.
     """
-    if isinstance(document_limit, str) and document_limit == 'None':
+    if isinstance(document_limit, str) and document_limit == "None":
         document_limit = None
     filtered_documents = filter_mongo_docs(
         data, "security_update_notes", "report_docstore", "docstore"
     )
-    logger.info(f"edge_5_primary collection: {len(data)} records. edge_5 ids not in docstore: {len(filtered_documents)}")
+    logger.info(
+        f"edge_5_primary collection: {len(data)} records. edge_5 ids not in docstore: {len(filtered_documents)}"
+    )
 
     return filtered_documents[:document_limit]
 
@@ -232,14 +250,17 @@ def extract_patch_primary(data, document_limit):
     Returns:
         list: The data extracted from the primary collection.
     """
-    if isinstance(document_limit, str) and document_limit == 'None':
+    if isinstance(document_limit, str) and document_limit == "None":
         document_limit = None
     filtered_documents = filter_mongo_docs(
         data, "patch_management", "report_docstore", "docstore"
     )
-    logger.info(f"patch_primary collection: {len(data)} records. patch ids not in docstore: {len(filtered_documents)}")
+    logger.info(
+        f"patch_primary collection: {len(data)} records. patch ids not in docstore: {len(filtered_documents)}"
+    )
 
     return filtered_documents[:document_limit]
+
 
 # EACH LOAD NODE GENERATES A DICTIONARY WHERE EACH KEY IS A PARTITION KEY (USED FOR FILENAME) AND
 # THE VALUE IS THE JSON OBJECT FOR THAT RECORD. THERE IS ONE JSON FOR EVERY RECORD
@@ -247,8 +268,9 @@ def extract_patch_primary(data, document_limit):
 # FILES NEED TO BE MOVED ONCE PROCESSED TO A DIFFERENT DIRECTORY TO AVOID REPROCESSING
 # {'index_source_stable_2024-01-20_1': {'page_content': 'Version 120.0.2210.133: January 11, 2024 \nVersion 120.0.2210.133: January 11, 2024 \nFixed various bugs and performance issues. \nStable channel security updates are listed  \nhere \n.', 'metadata': {'id': '19db971a-9bdb-0bae-3095-dcae81bb6470', 'source': 'https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel#version-12002210133-january-11-2024', 'subject': 'Version 120.0.2210.133: January 11, 2024', 'collection': 'stable_channel_notes', 'published': '11-01-2024', 'security_link:here': 'https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnotes-security#january-11-2024'}}, 'index_source_stable_2024-01-20_2': {'page_content': "Version 120.0.2210.89: December 20, 2023 \nVersion 120.0.2210.89: December 20, 2023 \nFixed various bugs and performance issues. \nFeature updates \nMicrosoft Edge Workspaces improvements for offline functionality.", 'metadata': {'id': '57be3be6-de42-a048-e09b-8808a4551235', 'source': 'https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel#version-1200221089-december-20-2023', 'subject': 'Version 120.0.2210.89: December 20, 2023', 'collection': 'stable_channel_notes', 'published': '20-12-2023', 'content_link:display_text_2': 'https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel#feature-updates'}}}
 
-# TODO. Add document hash to document schema and check document hashes instead of 
+# TODO. Add document hash to document schema and check document hashes instead of
 # requiring to move files after loading
+
 
 def load_rss_1_index(data, params):
     """
@@ -270,7 +292,7 @@ def load_rss_1_index(data, params):
     base = params["base"]
     payload = build_indexed_dictionary(data, prefix, base)
     # print(f"payload: {payload}")
-    return payload, True
+    return payload
 
 
 def load_rss_2_index(data, params):
@@ -293,7 +315,7 @@ def load_rss_2_index(data, params):
     base = params["base"]
     payload = build_indexed_dictionary(data, prefix, base)
     # print(f"payload: {payload}")
-    return payload, True
+    return payload
 
 
 def load_rss_3_index(data, params):
@@ -315,7 +337,7 @@ def load_rss_3_index(data, params):
     prefix = params["prefix"]
     base = params["base"]
     payload = build_indexed_dictionary(data, prefix, base)
-    return payload, True
+    return payload
 
 
 def load_rss_4_index(data, params):
@@ -337,7 +359,7 @@ def load_rss_4_index(data, params):
     prefix = params["prefix"]
     base = params["base"]
     payload = build_indexed_dictionary(data, prefix, base)
-    return payload, True
+    return payload
 
 
 def load_edge_1_index(data, params):
@@ -360,7 +382,7 @@ def load_edge_1_index(data, params):
     base = params["base"]
     payload = build_indexed_dictionary(data, prefix, base)
     # print(f"payload: {payload}")
-    return payload, True
+    return payload
 
 
 def load_edge_2_index(data, params):
@@ -383,7 +405,7 @@ def load_edge_2_index(data, params):
     base = params["base"]
     payload = build_indexed_dictionary(data, prefix, base)
     # print(f"payload: {payload}")
-    return payload, True
+    return payload
 
 
 def load_edge_3_index(data, params):
@@ -406,7 +428,7 @@ def load_edge_3_index(data, params):
     base = params["base"]
     payload = build_indexed_dictionary(data, prefix, base)
     # print(f"payload: {payload}")
-    return payload, True
+    return payload
 
 
 def load_edge_4_index(data, params):
@@ -428,7 +450,7 @@ def load_edge_4_index(data, params):
     prefix = params["prefix"]
     base = params["base"]
     payload = build_indexed_dictionary(data, prefix, base)
-    return payload, True
+    return payload
 
 
 def load_edge_5_index(data, params):
@@ -450,7 +472,7 @@ def load_edge_5_index(data, params):
     prefix = params["prefix"]
     base = params["base"]
     payload = build_indexed_dictionary(data, prefix, base)
-    return payload, True
+    return payload
 
 
 def load_patch_index(data, params):
@@ -472,7 +494,7 @@ def load_patch_index(data, params):
     prefix = params["prefix"]
     base = params["base"]
     payload = build_indexed_dictionary(data, prefix, base)
-    return payload, True
+    return payload
 
 
 def extract_partitioned_index_source(data):
@@ -494,7 +516,7 @@ def combine_partitioned_index_source(data):
     """
     Combine the partitioned index source data into a single list.
     Note. Function not currently called in the pipeline.
-    
+
     Args:
         data (dict): A dictionary containing the partition keys as keys and the partition load functions as values.
 
@@ -523,7 +545,7 @@ def load_index_jsonl(data, params):
     """
     Load the JSONL index file with the provided data and parameters.
     Note. Function not currently called in the pipeline.
-    
+
     Args:
         data (list): The data to be loaded into the index file.
         params (dict): The parameters for loading the index file.
@@ -539,23 +561,3 @@ def load_index_jsonl(data, params):
     sample_set = data[:9]
     save_dicts_to_jsonl(azure_blob_credentials, sample_set, file_path)
     return data
-
-
-def begin_preprocessing_pipeline_connector(
-    load_1_complete,
-    load_2_complete,
-    load_3_complete,
-    load_4_complete,
-    load_5_complete,
-    load_6_complete,
-    load_7_complete,
-    load_8_complete,
-    load_9_complete,
-    load_10_complete
-):
-    if load_1_complete and load_2_complete and load_3_complete and load_4_complete and load_5_complete and load_6_complete and load_7_complete and load_8_complete and load_9_complete and load_10_complete:
-        logger.info(
-            "\n=====================\nConsolidate pipeline "
-            "completed\n=====================\n")
-        return True
-    return False

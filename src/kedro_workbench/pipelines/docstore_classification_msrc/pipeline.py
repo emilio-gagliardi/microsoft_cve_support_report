@@ -5,7 +5,6 @@ generated using Kedro 0.18.11
 
 from kedro.pipeline import Pipeline, node, pipeline
 from .nodes import (
-    check_for_product_build_augment_complete,
     extract_posts_to_classify,
     transform_classification_data_msrc,
     build_user_prompt_data_msrc,
@@ -13,28 +12,16 @@ from .nodes import (
     classify_post_msrc_node,
     batch_update_post_types_msrc,
     remove_mongo_duplicates_msrc,
-    begin_classification_patch_pipeline_connector,
 )
-
-# applies to:
-# extract_posts_to_classify
-# , "proceed_with_docstore_feature_engineering"
 
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
         [
             node(
-                func=check_for_product_build_augment_complete,
-                inputs="begin_docstore_feature_engineering",
-                outputs="proceed_with_docstore_feature_engineering",
-                name="check_for_product_build_augment_complete",
-            ),
-            node(
                 func=extract_posts_to_classify,
                 inputs=[
                     "params:document_limit",
-                    "proceed_with_docstore_feature_engineering",
                 ],
                 outputs="docstore_to_classify_msrc",
                 name="extract_posts_to_classify",
@@ -88,12 +75,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=["batch_classification_update_flag_msrc"],
                 outputs="classification_msrc_status",
                 name="remove_mongo_duplicates_msrc",
-            ),
-            node(
-                func=begin_classification_patch_pipeline_connector,
-                inputs="classification_msrc_status",
-                outputs="proceed_with_classification_patch",
-                name="begin_classification_patch_pipeline_connector",
             ),
         ]
     )

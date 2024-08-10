@@ -6,25 +6,25 @@
 
 rss_1_keys:
   keys_for_content: []
-  keys_for_metadata: ["revision", "id", "published", "title", "description", "source", "collection", "post_id"]
+  keys_for_metadata: ["revision", "id", "published", "title", "description", "source", "collection", "post_id", "hash"]
   catalog: rss_1_primary
 
 #Windows update
 rss_2_keys:
   keys_for_content: ["description"]
-  keys_for_metadata: ["id", "source","title", "description", "collection", "published", "post_id"]
+  keys_for_metadata: ["id", "source","title", "description", "collection", "published", "post_id", "hash"]
   catalog: rss_2_primary
 
 #Windows 10
 rss_3_keys:
   keys_for_content: []
-  keys_for_metadata: ["id", "source","title", "description", "collection", "published", "post_id"]
+  keys_for_metadata: ["id", "source","title", "description", "collection", "published", "post_id", "hash"]
   catalog: rss_3_primary
 
 #Windows 11
 rss_4_keys:
   keys_for_content: []
-  keys_for_metadata: ["id", "source","title", "description", "collection", "published", "post_id"]
+  keys_for_metadata: ["id", "source","title", "description", "collection", "published", "post_id", "hash"]
   catalog: rss_4_primary
 
 edge_1_keys:  

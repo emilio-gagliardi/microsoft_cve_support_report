@@ -1,5 +1,6 @@
 import hashlib
 import logging
+
 # import pprint
 import re
 import time
@@ -8,11 +9,13 @@ from urllib.parse import urljoin
 
 # import requests
 from bs4 import BeautifulSoup
+
 # from icecream import ic
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+
 # from selenium.webdriver.common.keys import Keys
 from typing import Any, Dict
 
@@ -20,12 +23,10 @@ from kedro.io import AbstractDataSet
 from kedro_workbench.utils.feed_utils import (
     generate_custom_uuid,
     remove_day_suffix,
+    setup_selenium_browser,
 )
 
 logger = logging.getLogger(__name__)
-
-chrome_options = Options()
-chrome_options.add_argument("--headless")
 
 
 class HTMLExtract(AbstractDataSet):
@@ -36,7 +37,7 @@ class HTMLExtract(AbstractDataSet):
 
     def _load(self) -> dict:
         # Initialize WebDriver to fetch page content
-        driver = webdriver.Chrome(options=chrome_options)
+        driver = setup_selenium_browser(download_path=None, headless=True)
         try:
             # Retrieve the HTML content from the specified URL
             driver.get(self._url)
@@ -84,7 +85,7 @@ class HTMLExtract(AbstractDataSet):
 
                 chunks.append(chunk)
 
-            # Process each chunk to extract and format required 
+            # Process each chunk to extract and format required
             # information into JSON objects
             json_objects = []
             # current_year = datetime.now().year
@@ -97,7 +98,9 @@ class HTMLExtract(AbstractDataSet):
                 version = self.parse_version_string(raw_id)
 
                 # Validate complete date; skip processing if 'NaT' or incomplete
-                if date_published_raw == "NaT" or not re.search(r'\d{4}', date_published_raw):
+                if date_published_raw == "NaT" or not re.search(
+                    r"\d{4}", date_published_raw
+                ):
                     continue
 
                 # date_published = convert_date_string(date_published_raw, current_year)
@@ -170,10 +173,29 @@ class HTMLExtract(AbstractDataSet):
         partial_date_match = re.search(partial_date_pattern, input_string)
         if partial_date_match:
             months = [
-                "january", "february", "march", "april", "may", "june", 
-                "july", "august", "september", "october", "november", "december",
-                "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep", "oct",
-                "nov", "dec"
+                "january",
+                "february",
+                "march",
+                "april",
+                "may",
+                "june",
+                "july",
+                "august",
+                "september",
+                "october",
+                "november",
+                "december",
+                "jan",
+                "feb",
+                "mar",
+                "apr",
+                "jun",
+                "jul",
+                "aug",
+                "sep",
+                "oct",
+                "nov",
+                "dec",
             ]
             if partial_date_match.group(1).split("-")[0].lower() not in months:
                 return "NaT"
@@ -191,7 +213,7 @@ class HTMLExtract(AbstractDataSet):
         return "NaT"
 
     def parse_version_string(self, input_string):
-        match = re.search(r'version-(\d+)-', input_string)
+        match = re.search(r"version-(\d+)-", input_string)
         if match:
             return match.group(1)
 
@@ -214,7 +236,7 @@ class HTMLDocuments(AbstractDataSet):
         self._mongo_url = (
             f"mongodb+srv://{self._username}:"
             f"{self._password}@bighatcluster.wamzrdr.mongodb.net/"
-            )
+        )
 
     def _load(self):
         # extract rss documents from mongo atlas
@@ -254,7 +276,9 @@ class HTMLDocuments(AbstractDataSet):
         # ic(existing_hashs)
         new_entries = [doc for doc in data if doc["hash"] not in existing_hashs]
         ids_to_insert = [doc["id"] for doc in new_entries]
-        logger.info(f"Loaded {len(new_entries)} new entries in {self._mongo_collection}")
+        logger.info(
+            f"Loaded {len(new_entries)} new entries in {self._mongo_collection}"
+        )
         if len(new_entries):
             logger.info(f"Inserting IDs: {ids_to_insert}")
             collection.insert_many(new_entries)

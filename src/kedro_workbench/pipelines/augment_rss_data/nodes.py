@@ -57,9 +57,9 @@ def augment_rss_1_data(data, params: Dict[Any, Any]):
     augmented_new_data = []
 
     if len(new_data):
-        print("There are new MSRC documents to augment")
         augmented_new_data = extract_link_content(new_data, params, chrome_options)
-    print(f"num records to augment: {len(new_data)}")
+
+    print(f"There are ({len(new_data)}) new MSRC documents to augment")
     # for item in new_data:
     #     print(f"{item['post_id']}-{item['revision']}-{item['published']}")
     #     print()
@@ -130,6 +130,7 @@ def augment_rss_3_data(data, params: Dict[Any, Any]):
 
     data_with_id = add_id_key(data)
     new_data = get_new_data(mongo_url, mongo_db, mongo_collection, data_with_id)
+
     augmented_new_data = []
 
     if len(new_data):

@@ -23,26 +23,14 @@ from .nodes import (
     remove_mongo_duplicates_patch,
 )
 
-# param
-# , "begin_docstore_feature_engineering_pm"
-# removed from:
-# extract_patch_managment_to_clean
-
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
         [
             node(
-                func=check_for_classification_msrc_complete,
-                inputs="proceed_with_classification_patch",
-                outputs="begin_docstore_feature_engineering_pm",
-                name="check_for_classification_msrc_complete",
-            ),
-            node(
                 func=extract_patch_managment_to_clean,
                 inputs=[
                     "params:document_limit",
-                    "begin_docstore_feature_engineering_pm",
                 ],
                 outputs="docstore_patch_data_to_transform",
                 name="extract_patch_managment_to_clean",

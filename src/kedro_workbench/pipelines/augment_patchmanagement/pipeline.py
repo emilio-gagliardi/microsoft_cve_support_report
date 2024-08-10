@@ -17,7 +17,9 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=extract_jsons_interm,
-                inputs="email_jsons_interm_1",
+                inputs=[
+                    "email_jsons_interm_1",
+                ],
                 outputs="jsons_for_sorting",
                 name="extract_jsons_interm",
             ),

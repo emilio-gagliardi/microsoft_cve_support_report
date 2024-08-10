@@ -38,33 +38,18 @@ from .nodes import (
     load_update_guide_product_data,
     load_update_guide_update_package_data,
     load_update_guide_kb_article_data,
-    check_for_preprocessing_complete,
-    begin_augment_product_build_pipeline_connector,
 )
-
-# remove flag from node inputs to run in isolation:
-# , "proceed_with_product_build_ingestion"
-# download_windows10_product_build_data
-# download_windows11_product_build_data
-# download_edge_product_build_data
 
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
         [
             node(
-                func=check_for_preprocessing_complete,
-                inputs=["begin_product_build_ingestion"],
-                outputs="proceed_with_product_build_ingestion",
-                name="check_for_preprocessing_complete",
-            ),
-            node(
                 func=download_windows10_product_build_data,
                 inputs=[
                     "params:skip_download",
                     "params:product_build_ingestion_params",
                     "params:scrape_build_data_headless",
-                    "proceed_with_product_build_ingestion",
                 ],
                 outputs="windows_10_download_node_status",
                 name="download_windows10_product_build_data",
@@ -75,7 +60,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "params:skip_download",
                     "params:product_build_ingestion_params",
                     "params:scrape_build_data_headless",
-                    "proceed_with_product_build_ingestion",
                 ],
                 outputs="windows_11_download_node_status",
                 name="download_windows11_product_build_data",
@@ -86,7 +70,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "params:skip_download",
                     "params:product_build_ingestion_params",
                     "params:scrape_build_data_headless",
-                    "proceed_with_product_build_ingestion",
                 ],
                 outputs="edge_download_node_status",
                 name="download_edge_product_build_data",
@@ -352,12 +335,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=["transformed_update_packages_for_loading", "params:overwrite"],
                 outputs="product_build_ingestion_complete",
                 name="load_update_guide_update_package_data",
-            ),
-            node(
-                func=begin_augment_product_build_pipeline_connector,
-                inputs=["product_build_ingestion_complete"],
-                outputs="begin_augmenting_product_build_data",
-                name="begin_augment_product_build_pipeline_connector",
             ),
         ]
     )

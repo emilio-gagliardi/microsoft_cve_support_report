@@ -2,12 +2,14 @@
 This is a boilerplate pipeline 'ingest_patchmanagement'
 generated using Kedro 0.18.11
 """
+
 from typing import Any, Dict, List
 
 import hashlib
 import logging
 from datetime import datetime
 from tqdm import tqdm
+
 # import fsspec
 # from icecream import ic
 from kedro.config import ConfigLoader
@@ -26,6 +28,8 @@ from kedro_workbench.utils.feed_utils import (
 )
 
 logger = logging.getLogger(__name__)
+
+
 # ic.configureOutput(includeContext=True)
 
 
@@ -74,9 +78,8 @@ def combine_partitioned_json(partitioned_jsons) -> List[Dict[str, Any]]:
             json["hash"] = dict_hash
             merged_list.append(json)
     logger.info(
-        f"Total patch managment emails pulled from blob storage"
-        f"{len(merged_list)}"
-        )
+        f"Total patch managment emails pulled from blob storage" f"{len(merged_list)}"
+    )
     return merged_list
 
 

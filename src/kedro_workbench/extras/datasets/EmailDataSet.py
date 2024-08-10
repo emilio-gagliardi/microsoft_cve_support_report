@@ -54,7 +54,7 @@ class EmailDocuments(AbstractDataSet):
         existing_hashs = [doc["hash"] for doc in mongo_cursor]
         # ic(existing_hashs)
         new_entries = [doc for doc in data if doc["hash"] not in existing_hashs]
-        ic(f"new entries: {len(new_entries)}")
+        print(f"new entries: {len(new_entries)}")
         if len(new_entries):
             collection.insert_many(new_entries)
 

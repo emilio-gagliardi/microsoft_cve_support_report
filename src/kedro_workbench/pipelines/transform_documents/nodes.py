@@ -2,6 +2,7 @@
 This is a boilerplate pipeline 'transform_documents'
 generated using Kedro 0.18.11
 """
+
 from kedro_workbench.utils.json_utils import reshape_json
 from kedro_workbench.utils.feed_utils import get_new_data
 from kedro.config import ConfigLoader
@@ -30,7 +31,7 @@ def transform_rss_1(data, params):
     mongo_collection = mongo_info["mongo_collection"]
     new_data = get_new_data(mongo_url, mongo_db, mongo_collection, data, nested_id=True)
     transformed_new_data = []
-    print(f"Reshaping {len(new_data)} augmented docs into nested docs.")
+    # print(f"Reshaping {len(new_data)} augmented docs into nested docs.")
     if len(new_data):
         transformed_new_data = reshape_json(
             new_data, keys_for_content, keys_for_metadata
@@ -84,6 +85,7 @@ def transform_rss_3(data, params):
     mongo_info = catalog[catalog_entry]
     mongo_db = mongo_info["mongo_db"]
     mongo_collection = mongo_info["mongo_collection"]
+    # print(f"len of data: {len(data)}\n{data[0]}")
     new_data = get_new_data(mongo_url, mongo_db, mongo_collection, data, nested_id=True)
     transformed_new_data = []
 
@@ -281,10 +283,10 @@ def transform_patchmanagement_docs(data, params):
     mongo_info = catalog[catalog_entry]
     mongo_db = mongo_info["mongo_db"]
     mongo_collection = mongo_info["mongo_collection"]
-    print("transform patch management docs")
+    # print("transform patch management docs")
     new_data = get_new_data(mongo_url, mongo_db, mongo_collection, data, nested_id=True)
     transformed_new_data = []
-    print(f"len new data {len(new_data)}")
+    # print(f"len new data {len(new_data)}")
     if len(new_data):
         transformed_new_data = reshape_json(
             new_data, keys_for_content, keys_for_metadata
@@ -296,8 +298,3 @@ def transform_patchmanagement_docs(data, params):
 def load_patchmanagement_docs(data):
 
     return data, True
-
-
-def begin_consolidating_pipeline_connector(consolidated_10):
-
-    return True

@@ -23,7 +23,9 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=extract_edge_release_1,
-                inputs=["html_1_extract"],
+                inputs=[
+                    "html_1_extract",
+                ],
                 outputs="html_for_loading_1",
                 name="extract_edge_release_1",
             ),
@@ -35,7 +37,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_edge_release_2,
-                inputs=["html_2_extract"],
+                inputs=[
+                    "html_2_extract",
+                ],
                 outputs="html_for_loading_2",
                 name="extract_edge_release_2",
             ),
@@ -47,7 +51,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_edge_release_3,
-                inputs=["html_3_extract"],
+                inputs=[
+                    "html_3_extract",
+                ],
                 outputs="html_for_loading_3",
                 name="extract_edge_release_3",
             ),
@@ -59,7 +65,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_edge_release_4,
-                inputs=["html_4_extract"],
+                inputs=[
+                    "html_4_extract",
+                ],
                 outputs="html_for_loading_4",
                 name="extract_edge_release_4",
             ),
@@ -71,7 +79,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=extract_edge_release_5,
-                inputs=["html_5_extract"],
+                inputs=[
+                    "html_5_extract",
+                ],
                 outputs="html_for_loading_5",
                 name="extract_edge_release_5",
             ),
