@@ -1,15 +1,15 @@
 seven_day_periodic_report_CVE_WEEKLY_v1_prompt_strings = {
     "msrc_security_update": {
         "user_prompt": """
-Use the provided Microsoft Security Response Center post details below, generate a valid JSON object with a detailed and comprehensive summary. The summary should be less than 20 sentences long, explaining the nature of the vulnerability, how an attacker may exploit it, the underlying cause, and the availability of an official fix. The post is classified as one of ['Critical', 'New feature', 'Solution provided', 'Information only'].
+Use the provided Microsoft Security Response Center post details below, generate an deeply informative summary that should be less than 20 sentences long, explaining the nature of the vulnerability, how an attacker may exploit it, the underlying cause, and the availability of an official fix. The post is classified as one of ['Critical', 'New feature', 'Solution provided', 'Information only'].
 Use the post_type to guide your summary. If a post_type is 'Information only' it likely means Microsoft updated the FAQs but nothing substantive beyond the previous revision. So your summary can be brief - restate the key concepts and scores. However, you still must evaluate the provided revision value and state what the actual revision value is. 
 
-You must clearly insert any and all code or mitigation commands. For example, if you encounter 'RPC_C_AUTHN_LEVEL_PKT_INTEGRITY' or any PowerShell commands, regardless of the revision number, you must include all commands in your summary in a bullet or numbered list.
+You must clearly insert any and all code or mitigation commands. For example, if you encounter policy names or other configuration details like 'RPC_C_AUTHN_LEVEL_PKT_INTEGRITY' or any PowerShell commands, regardless of the revision number, you must include all policies and commands in your summary in a bullet or numbered list.
 
 If a post_type is 'Solution provided' you must mention the remedy or workaround and make it clear to the reader how to take action.
 If a post_type is not available, you can deduce the post_type by searching for 'Remediation Level' in the post body and whether it says 'Official Fix' or not.
 
-Clearly identify the affected Microsoft product(s), services, and or features. Use your knowledge to add any related facts or comments for a better explanation. Do not restate the post title or use redundant metadata information. The metadata provided includes id, post_id, title, post_type, and published date.
+Do not include a list of product versions and KB articles, as this information can be found in the elsewhere in the report and it wastes precious space in the report. The summary should help the reader understand the nature of the CVE and the risks it poses. The metadata provided includes id, post_id, title, post_type, and published date.
 
 Example summary below, Do not copy verbatim. Generate unique summaries for each post based on the context provided. The following is a zero-shot example only. You must generate a complete, concise and accurate summary for each post.
 
@@ -36,8 +36,7 @@ Notes for LLM:
     - is a specific feature affected?
     - what is the attack vector?
     - is there an official fix? If not, is there a temporary workaround?
-- make sure you scan all sections looking for explicit workarounds, mitigations or powershell commands. These are the most valuable pieces of information for system administrators.
-- Include relevant details from your training data to enhance the summary.
+- make sure you scan all sections looking for explicit workarounds, policies, mitigations or powershell commands. These are the most valuable pieces of information for system administrators.
 - Avoid redundancy with provided metadata. Do not re-state the title or post_type in your summary. The reader already has this information.
 - Do not include FAQ information in your summary unless it specifically mentions additional technical details or links for further research.
 What not to include in the summary guidelines:
@@ -45,7 +44,7 @@ What not to include in the summary guidelines:
 - DO NOT generate any text like 'Users can check their browser version by clicking on the three dots (...) ...'.
 - DO NOT include any special thanks or acknowledgements. Just report on actionable facts.
 - The JSON object should be correctly formatted and include all required fields in the schema. Do not add any additional fields.
-- Do not output any text outside of the json object because an external script will parse the output. 
+- Do not output any text outside of the json object because an external script will parse the output.
 """,
         "system_prompt": """
 As an expert Microsoft system administrator with extensive experience in enterprise-scale deployments, you are adept at Configuration Manager, Azure, Intune, and patch management. Your task is to analyze the content of a Microsoft security post, provided with its title, classification, and text. Your goal is to create a concise, accurate summary that highlights the key aspects of the vulnerability or update. Your summary should include the nature of the issue, affected Microsoft products, potential impact, and solutions or mitigations if available. Utilize your deep knowledge in enterprise systems to provide additional insights where relevant. Finally, format your response as a valid JSON dictionary.
