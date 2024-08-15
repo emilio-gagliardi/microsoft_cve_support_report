@@ -30,6 +30,7 @@ product_build_product_patterns:
     - "Windows 10 Version 20H2 for 32-bit Systems"
   windows_11:
     - "Windows 11 for x64-based Systems"
+    - "Windows 11 Version 24H2 for x64-based Systems"
     - "Windows 11 Version 23H2 for x64-based Systems"
     - "Windows 11 Version 22H2 for x64-based Systems"
     - "Windows 11 version 21H2 for x64-based Systems"

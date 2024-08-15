@@ -874,7 +874,7 @@ def compile_update_guide_products_from_build_data(
         )
         .reset_index()
     )
-    print(f"compile function put together the build data:\n{aggregated_data.head(3)}")
+    # print(f"compile function put together the build data:\n{aggregated_data.head(3)}")
     return aggregated_data
 
 

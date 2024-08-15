@@ -1360,7 +1360,7 @@ def compile_periodic_report_CVE_WEEKLY_v1(
     reshaped_documents = {}
 
     for group in results:
-        print(f"Group is: {group}")
+        # print(f"Group is: {group}")
         # Initialize the list for the current group if not already done
         if group["_id"] not in reshaped_documents:
             reshaped_documents[group["_id"]] = []

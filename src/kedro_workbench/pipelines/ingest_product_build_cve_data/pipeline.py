@@ -326,13 +326,19 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=load_update_guide_kb_article_data,
-                inputs=["transformed_kb_articles_for_loading", "params:overwrite"],
+                inputs=[
+                    "transformed_kb_articles_for_loading",
+                    "params:overwrite",
+                ],
                 outputs=None,
                 name="load_update_guide_kb_article_data",
             ),
             node(
                 func=load_update_guide_update_package_data,
-                inputs=["transformed_update_packages_for_loading", "params:overwrite"],
+                inputs=[
+                    "transformed_update_packages_for_loading",
+                    "params:overwrite",
+                ],
                 outputs="product_build_ingestion_complete",
                 name="load_update_guide_update_package_data",
             ),

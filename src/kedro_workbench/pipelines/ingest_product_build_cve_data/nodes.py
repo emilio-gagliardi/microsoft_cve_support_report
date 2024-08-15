@@ -531,7 +531,7 @@ def download_windows11_product_build_data(
             )
         )
         windows_option_button.click()
-        # time.sleep(3)
+        time.sleep(1)
 
         # close the product family dropdown before proceeding
         product_family_button.click()
@@ -541,7 +541,7 @@ def download_windows11_product_build_data(
             EC.element_to_be_clickable((By.XPATH, "//button[@title='Product']"))
         )
         product_button.click()
-        # time.sleep(4)
+        time.sleep(1)
         # select windows 11 options
         # windows 11 product
         windows_11_21H2_x64_button = WebDriverWait(driver, 10).until(
@@ -565,6 +565,7 @@ def download_windows11_product_build_data(
         )
         windows_11_22H2_x64_button.click()
         # time.sleep(4)
+
         # windows 11 product
         windows_11_23H2_x64_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable(
@@ -576,12 +577,24 @@ def download_windows11_product_build_data(
         )
         windows_11_23H2_x64_button.click()
         # time.sleep(4)
+
+        # windows 11 product
+        windows_11_24H2_x64_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable(
+                (
+                    By.XPATH,
+                    "//button[.//span[text()='Windows 11 Version 24H2 for x64-based Systems']]",
+                )
+            )
+        )
+        windows_11_24H2_x64_button.click()
+        # time.sleep(4)
         # close the product dropdown
         product_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, "//button[@title='Product']"))
         )
         product_button.click()
-        # time.sleep(4)
+        time.sleep(1)
         # initiate download, open the flyout menu
         download_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable(
@@ -606,7 +619,7 @@ def download_windows11_product_build_data(
             logger.info("Download did not complete within the expected timeframe.")
             node_status = {"download_complete": False}
         driver.close()
-        time.sleep(3)
+        time.sleep(2)
         driver.quit()
         total_time = time.time() - start_time
         logger.info(
@@ -816,7 +829,7 @@ def extract_product_build_cve_windows_11_node(
         logger.info(
             f"[Existing download. Product build - win11] num rows after cleanup: {data_to_keep_df.shape[0]}."
         )
-    # print(filtered_df.head())
+    # print(data_to_keep_df.head())
     return data_to_keep_df
 
 
@@ -909,7 +922,11 @@ def preprocess_update_guide_product_build_data_windows11(params, data):
         return pd.DataFrame(columns=columns_to_keep)
     prepped_df = preprocess_update_guide_product_build_data(data, columns_to_keep)
     # print(f"preprocess data shape: {prepped_df.shape}, columns: {prepped_df.columns}")
-    # print(prepped_df.sample(n=prepped_df.shape[0]))
+    # if prepped_df.shape[0] <= 10:
+    #     n_value = prepped_df.shape[0]
+    # else:
+    #     n_value = 10
+    # print(prepped_df.sample(n=n_value))
 
     return prepped_df
 
@@ -952,7 +969,11 @@ def compile_update_guide_products_from_build_data_windows11(params, data):
         return pd.DataFrame(columns=columns_to_keep)
     products_df = compile_update_guide_products_from_build_data(columns_to_keep, data)
     # print(products_df.columns)
-    # print(products_df.head(n=5))
+    # if products_df.shape[0] <= 10:
+    #     n_value = products_df.shape[0]
+    # else:
+    #     n_value = 10
+    # print(products_df.sample(n=n_value))
 
     return products_df
 
@@ -985,7 +1006,7 @@ def compile_update_guide_kb_article_data_windows10(params, data):
     # unique_kb_articles = kb_articles.drop_duplicates(subset=['kb_id']).copy()
     kb_articles["summary"] = ""
     # print(kb_articles.columns)
-    print(f"total kb articles win10: {kb_articles.shape[0]}")
+    logger.info(f"\ntotal kb articles win10: {kb_articles.shape[0]}")
     # with pd.option_context('display.max_colwidth', 400):
     #     print(kb_articles[['kb_id','product_build_id','article_url', 'published']].sample(n=kb_articles.shape[0]))
 
@@ -1003,7 +1024,7 @@ def compile_update_guide_kb_article_data_windows11(params, data):
     # unique_kb_articles = kb_articles.drop_duplicates(subset=['kb_id']).copy()
     kb_articles["summary"] = ""
     # print(kb_articles.columns)
-    print(f"total kb articles win11: {kb_articles.shape[0]}")
+    logger.info(f"total kb articles win11: {kb_articles.shape[0]}")
     # with pd.option_context('display.max_colwidth', 400):
     #     print(kb_articles[['kb_id','product_build_id','article_url', 'published']].sample(n=kb_articles.shape[0]))
 
@@ -1021,7 +1042,7 @@ def compile_update_guide_kb_article_data_edge(params, data):
     # unique_kb_articles = kb_articles.drop_duplicates(subset=['kb_id']).copy()
     kb_articles["summary"] = ""
     # print(kb_articles.columns)
-    print(f"total kb articles edge: {kb_articles.shape[0]}")
+    logger.info(f"total kb articles edge: {kb_articles.shape[0]}\n")
     # with pd.option_context('display.max_colwidth', 400):
     #     print(kb_articles[['kb_id', 'product_build_id', 'article_url', 'published']].sample(n=kb_articles.shape[0]))
 
@@ -1158,7 +1179,7 @@ def concatenate_update_guide_product_build_data(params, windows10, windows11, ed
 
 def concatenate_update_guide_kb_article_data(params, windows10, windows11, edge):
     columns_to_keep = params["columns_to_keep"]
-    print(f"columns to keep kb: \n{columns_to_keep}")
+    # print(f"columns to keep kb: \n{columns_to_keep}")
     if windows10.empty and windows11.empty and edge.empty:
         logger.info("No KB Article data to concatenate. Returning empty dataframe.")
         return pd.DataFrame(columns=columns_to_keep)
@@ -1169,9 +1190,9 @@ def concatenate_update_guide_kb_article_data(params, windows10, windows11, edge)
     # print(
     #     f"all kb data shape: {correct_cols_df.shape}, cols: {correct_cols_df.columns}"
     # )
-    with pd.option_context("display.max_colwidth", 400, "display.max_columns", None):
-        print(correct_cols_df["article_url"].unique())
-        # print(correct_cols_df.sample(n=50))
+    # with pd.option_context("display.max_colwidth", 400, "display.max_columns", None):
+    #     print(correct_cols_df["article_url"].unique())
+    # print(correct_cols_df.sample(n=50))
 
     return correct_cols_df
 
@@ -1185,8 +1206,8 @@ def concatenate_update_guide_products_data(params, windows10, windows11, edge):
     concatenated_df = pd.concat([windows10, windows11, edge], ignore_index=True)
     # print(f"concatenated_df -products cols: {concatenated_df.columns}")
     correct_cols_df = concatenated_df[columns_to_keep]
-    # print(f"all products data shape: {correct_cols_df.shape}, cols: {correct_cols_df.columns}")
-    # with pd.option_context('display.max_colwidth', None, "display.max_columns", None):
+    # print(f"products data shape: {correct_cols_df.shape}, cols: {correct_cols_df.columns}")
+    # with pd.option_context("display.max_colwidth", None, "display.max_columns", None):
     #     print(correct_cols_df.sample(n=correct_cols_df.shape[0]))
 
     return correct_cols_df
@@ -1206,9 +1227,9 @@ def concatenate_update_guide_update_packages_data(params, windows10, windows11, 
     # )
     # with pd.option_context('display.max_colwidth', 400):
     #     print(correct_cols_df.sample(n=correct_cols_df.shape[0]))
-    with pd.option_context("display.max_colwidth", 400, "display.max_columns", None):
-        print(correct_cols_df["package_url"].unique())
-        # print(correct_cols_df.sample(n=50))
+    # with pd.option_context("display.max_colwidth", 400, "display.max_columns", None):
+    #     print(correct_cols_df["package_url"].unique())
+    # print(correct_cols_df.sample(n=50))
     return correct_cols_df
 
 
@@ -1227,15 +1248,14 @@ def transform_update_guide_product_build_data_to_list(data: pd.DataFrame) -> lis
     # unique_data = data.drop_duplicates(subset=['build_number', 'cve_id', 'kb_id']).copy()
     # unique_data['build_number'] = unique_data['build_number'].apply(list)
     # print(data.sample(n=3))
-    print(f"num product build data as list: {data.shape[0]}")
+    # print(f"num product build data as list: {data.shape[0]}")
     return data.to_dict(orient="records"), True
 
 
 def transform_update_guide_product_data_to_list(data: pd.DataFrame) -> list:
     if data.empty:
         return []
-    # print(data.sample(n=3))
-    print(f"num products data as list: {data.shape[0]}")
+
     return data.to_dict(orient="records")
 
 
@@ -1243,8 +1263,7 @@ def transform_update_guide_kb_articles_to_list(data: pd.DataFrame) -> list:
     if data.empty:
         return []
     data["build_number"] = data["build_number"].apply(list)
-    # print(data.sample(n=3))
-    print(f"num kb articles data as list: {data.shape[0]}")
+
     return data.to_dict(orient="records")
 
 
@@ -1252,8 +1271,7 @@ def transform_update_guide_update_package_data_to_list(data: pd.DataFrame) -> li
     if data.empty:
         return []
     data["build_number"] = data["build_number"].apply(list)
-    # print(data.sample(n=3))
-    print(f"num update packages data as list: {data.shape[0]}")
+
     return data.to_dict(orient="records")
 
 
@@ -1330,6 +1348,7 @@ def load_update_guide_product_data(product_data):
             }
             # print(f"query: {query}")
             if mongo.collection.find_one(query) is None:
+                logger.info("Product does not exist. Inserting...")
                 record["published"] = datetime.combine(
                     datetime.now().date(), datetime.min.time()
                 )
@@ -1373,7 +1392,7 @@ def load_update_guide_product_data(product_data):
         logger.info(f"INGESTION: Num inserted products: {num_inserted}")
         logger.info(f"INGESTION: Num updated products: {num_updated}")
     else:
-        logger.info(f"INGESTION: Num product records inserted: 0")
+        logger.info("INGESTION: Num product records inserted: 0")
 
 
 def load_update_guide_kb_article_data(kb_article_data, overwrite=False):

@@ -445,6 +445,10 @@
             content: ", ";
         }
 
+        a.kb-link:visited {
+            color: #4a4a4a;
+        }
+
         .pill-banner {
             background: linear-gradient(90deg, rgb(253, 253, 253) 0%, rgb(184, 245, 225) 10%);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
@@ -608,8 +612,9 @@
                                             <li style="list-style-type: none;"
                                                 class="inline  after:mr-1 last:after:content-['']">
                                                 <a href="{{ pair.kb_link }}" target="_blank"
-                                                    class="text-blue-500 hover:text-blue-600"
-                                                    style="font-size: 12.5px;line-height:12.5px;">{{ pair.kb_id }}</a>
+                                                    class="kb-link text-blue-500 hover:text-blue-600"
+                                                    style="font-size: 13.5px;line-height:13.5px;letter-spacing: 0.6px;">{{
+                                                    pair.kb_id }}</a>
                                             </li>
                                             {% endfor %}
                                         </ul>

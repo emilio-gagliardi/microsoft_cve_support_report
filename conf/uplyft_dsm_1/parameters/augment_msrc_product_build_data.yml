@@ -52,6 +52,9 @@ update_package_install_search_criteria:
     version: "23H2"
     architecture: "x64-based"
   - product: "Windows 11"
+    version: "24H2"
+    architecture: "x64-based"
+  - product: "Windows 11"
     version: null
     architecture: "x64-based"
   - product: "Windows 11"
